@@ -1,0 +1,32 @@
+<RCC>
+    <qresource prefix="/img">
+        <file>images/btnerror.png</file>
+        <file>images/btnnormal.png</file>
+        <file>images/logo.png</file>
+        <file>images/btnwarn.png</file>
+        <file>images/netBtn1.png</file>
+        <file>images/btn1.png</file>
+        <file>images/printer.png</file>
+        <file>images/err.png</file>
+        <file>images/warn1.png</file>
+        <file>images/help.png</file>
+        <file>images/normal1.png</file>
+        <file>images/normal.png</file>
+        <file>images/warn.png</file>
+        <file>images/btn.png</file>
+        <file>images/query.png</file>
+        <file>images/noN.png</file>
+        <file>images/user.png</file>
+        <file>images/png-0749.png</file>
+        <file>images/png-0804.png</file>
+        <file>images/png-0049.png</file>
+        <file>images/png-0651.png</file>
+        <file>images/reboot.png</file>
+        <file>images/cut.png</file>
+        <file>images/monSet.png</file>
+        <file>images/unable.png</file>
+        <file>images/blue.png</file>
+        <file>images/green.png</file>
+        <file>images/red.png</file>
+    </qresource>
+</RCC>

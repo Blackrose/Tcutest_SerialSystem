@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SysForm</class>
+ <widget class="QWidget" name="SysForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../img.qrc">
+    <normaloff>:/img/images/user.png</normaloff>:/img/images/user.png</iconset>
+  </property>
+  <widget class="QListWidget" name="listWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>30</y>
+     <width>121</width>
+     <height>541</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="lineWidth">
+    <number>1</number>
+   </property>
+   <property name="textElideMode">
+    <enum>Qt::ElideLeft</enum>
+   </property>
+   <property name="gridSize">
+    <size>
+     <width>0</width>
+     <height>22</height>
+    </size>
+   </property>
+   <property name="viewMode">
+    <enum>QListView::ListMode</enum>
+   </property>
+   <property name="modelColumn">
+    <number>0</number>
+   </property>
+   <property name="sortingEnabled">
+    <bool>false</bool>
+   </property>
+   <item>
+    <property name="text">
+     <string>  探测器设置</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>  主机设置</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>  用户管理</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>  修改密码</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>  关闭窗口</string>
+    </property>
+   </item>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../../img.qrc"/>
+ </resources>
+ <connections/>
+</ui>
