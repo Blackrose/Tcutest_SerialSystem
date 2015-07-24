@@ -142,6 +142,7 @@ Ui_SysSetForm ()
   connect (btn_reset, SIGNAL (clicked ()), this, SLOT (reset ()));
   connect (btn_ok, SIGNAL (clicked ()), this, SLOT (ok ()));
   connect (btn_clear_warn, SIGNAL (clicked ()), this, SLOT (clear_warn ()));
+  connect (btn_clear_err, SIGNAL (clicked ()), this, SLOT (clear_err ()));
   connect (btn_clear_opt, SIGNAL (clicked ()), this, SLOT (clear_opt ()));
   connect (btn_calibration, SIGNAL (clicked()), this, SLOT (touch_calibration()));
 
@@ -271,6 +272,29 @@ SysSet::clear_warn ()
 }
 
 void
+SysSet::clear_err ()
+{
+  if (QMessageBox::
+      question (this, "提示信息", "真的要删除故障数据吗?",
+        "确定", "取消") != 0)
+    return;
+  if (WarnMsg::delerrAll ())
+    {
+      OptMsg::insertClearErrDat ();
+      QMessageBox::question (this, "提示信息",
+                 "故障数据记录清除成功！", "确定",
+                 "取消");
+    }
+  else
+    {
+      QMessageBox::question (this, "提示信息",
+                 "故障数据记录清除失败！", "确定",
+                 "取消");
+    }
+  Db::vacuum ();
+}
+
+void
 SysSet::clear_opt ()
 {
   if (QMessageBox::
@@ -313,12 +337,12 @@ SysSet::touch_calibration()
 void
 SysSet::set ()
 {
-  if ((txtNet0->text().toInt() > 110) || (txtNet1->text().toInt() > 110)) {
-    QMessageBox::information(this, tr("输入错误"), tr("最多110节点."), tr("确定"));
+  if ((txtNet0->text().toInt() > 128) || (txtNet1->text().toInt() > 128)) {
+    QMessageBox::information(this, tr("输入错误"), tr("最多128节点."), tr("确定"));
     return;
   }
-  if (txtTimer->text().toInt() > 3) {
-    QMessageBox::information(this, tr("输入错误"), tr("重发最多3次."), tr("确定"));
+  if (txtTimer->text().toInt() > 5) {
+    QMessageBox::information(this, tr("输入错误"), tr("重发最多5次."), tr("确定"));
     return;
   }
   if ((local_slave_address_txt->text().toInt() < 1) || (local_slave_address_txt->text().toInt() > 247)) {
@@ -424,6 +448,7 @@ void
 SysSet::resend ()
 {
   txtNet0->setText (QString::number (Mater::readNet0Count ()));
+  //txtNet0->setText (QString::number (128));//debug zhq
   txtNet1->setText (QString::number (Mater::readNet1Count ()));
   txtTimer->setText (QString::number (Mater::readSendTimer ()));
   local_slave_address_txt->setText(QString::number(Mater::readLocalAddress()));

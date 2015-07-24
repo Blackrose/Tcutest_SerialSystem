@@ -49,12 +49,12 @@ void Bell::write(char arg )
 }
 void Bell::on()
 {
-	printf("bell on\n");
+    //printf("bell on\n");
 	Bell::write('1');
 }
 void Bell::off()
 {
-	 printf("bell off\n");
+     //printf("bell off\n");
 	Bell::write('2');
 }
 void Bell::error()//故障

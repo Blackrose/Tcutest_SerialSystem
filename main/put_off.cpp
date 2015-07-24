@@ -56,7 +56,7 @@ void PutOff::currentTextCh(const QString & text)
 	int i=0;
 	//写下C型的节点
 	cbNode->clear();
-	for(i = 0; i < 110 ;i ++)
+    for(i = 0; i < 128 ;i ++)
 	{
 		sn = Module::getNodeSN( text.toInt(), i);
 		if( sn == MC)

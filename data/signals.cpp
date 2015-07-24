@@ -46,52 +46,53 @@ void Signals::send()
 		isRun = false;
 		sendInsert();
 	}
-if(Main::com_led==1)
-{
-	if (ModbusRx::dataStatus == 0)
-	{//没数据
-		Led::commLightOff();
-	}
-	else if (ModbusRx::dataStatus == 1)
-	{//crc 错误
-		si_i = ++ si_i % 2; 
-		if ( si_i == 1 )
-			Led::commLightOn();
-		else if(si_i == 0)
-			Led::commLightOff();
-	}
-	else if (ModbusRx::dataStatus == 2)
-	{//id error
-		si_i = ++ si_i % 20; 
-		if ( si_i == 0)
-			Led::commLightOn();
-		else if(si_i == 2)
-			Led::commLightOff();
-	}
-	else if (ModbusRx::dataStatus == 3)
-	{//data error
-		si_i = ++ si_i % 10; 
-		if ( si_i == 0)
-			Led::commLightOn();
-		else  if(si_i == 5)
-			Led::commLightOff();
-	}
-	else if (ModbusRx::dataStatus == 4)
-	{//right
-	//	if(Main::com_led==1)
-	//	{
-		    si_i = ++ si_i % 10;//原来为60 
-		    if ( si_i == 1)
-			    Led::commLightOn();
-		    else  if(si_i == 6)//原来为20
-			    Led::commLightOff();
-	//	}
-	//	else
-	//	{
-	//		Led::commLightOn();
-	//	}
-	}
-}
+    if(Main::com_led==1)
+    {
+        if (ModbusRx::dataStatus == 0)
+        {//没数据
+            Led::commLightOff();
+        }
+        else if (ModbusRx::dataStatus == 1)
+        {//crc 错误
+            si_i = ++ si_i % 2;
+            if ( si_i == 1 )
+                Led::commLightOn();
+            else if(si_i == 0)
+                Led::commLightOff();
+        }
+        else if (ModbusRx::dataStatus == 2)
+        {//id error
+            si_i = ++ si_i % 20;
+            if ( si_i == 0)
+                Led::commLightOn();
+            else if(si_i == 2)
+                Led::commLightOff();
+        }
+        else if (ModbusRx::dataStatus == 3)
+        {//data error
+            si_i = ++ si_i % 10;
+            if ( si_i == 0)
+                Led::commLightOn();
+            else  if(si_i == 5)
+                Led::commLightOff();
+        }
+        else if (ModbusRx::dataStatus == 4)
+        {//right
+        //	if(Main::com_led==1)
+        //	{
+            //printf("now ModbusRx led on or off\n");
+                si_i = ++ si_i % 10;//原来为60
+                if ( si_i == 1)
+                    Led::commLightOn();
+                else  if(si_i == 6)//原来为20
+                    Led::commLightOff();
+        //	}
+        //	else
+        //	{
+        //		Led::commLightOn();
+        //	}
+        }
+    }
 	
 }
 void Signals::doNet(int net)
@@ -102,7 +103,7 @@ void Signals::doNet(int net)
 		if ( ModbusRx::sendDataToPake(net , netCurId[net]) == false)
 		{//节点掉线处理
 			Can::reSetNet(net);
-			mo = ((Main*)p_main)->p_mod -> getNode( net, netCurId[net]);
+            mo = ((Main*)p_main)->p_mod -> getNode( net, netCurId[net]);
 			if(mo -> flag == ERROR)
 			{
 				netCurId[net] = ++netCurId[net] % netCount[net];
@@ -115,10 +116,13 @@ void Signals::doNet(int net)
 				netCurId[net] = ++netCurId[net] % netCount[net];
 				if(netCurId[net] == 0 ) netCurId[net] = netCount[net];
 				netTimer[net] = 0; //网络0从发次数
+                //((Main*)p_main)->p_mod->unreg( net, netCurId[net]);
+                //mod_list[net * BtnNodeNUm + netCurId[net]-1].sn = NO_SN;
+                mo->sn = NO_SN;
 			}
 		}
 		else
-		{
+		{            
 			((Main*)p_main)->slot_reg( net, netCurId[net]);
 			netCurId[net] = ++netCurId[net] % netCount[net];
 			if(netCurId[net] == 0 ) netCurId[net] = netCount[net];
@@ -164,13 +168,15 @@ void Signals::doInsert()
 			Pake::next();
 			insertTimer = 0;
 			((Main*)p_main)->slot_error( pak->net, pak->id);
+            //((Main*)p_main)->p_mod->unreg( pak->net, pak->id);
+            mo->sn = NO_SN;
 		}
 	}
 	else
 	{
 		toDo();
 		Pake::next();
-		insertTimer = 0;
+		insertTimer = 0;        
 		((Main*)p_main)->slot_reg(pak->net, pak->id);
 	}
 } 

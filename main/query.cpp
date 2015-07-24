@@ -21,7 +21,7 @@ Query::Query(QWidget *parent): QDialog(parent),Ui_QueryForm()
 	currentCount = 0;
 	modelSql = new QSqlQueryModel;
 	qtw = NULL;
-	for(int i = 0 ; i < 110 ; i++)
+    for(int i = 0 ; i < 128 ; i++)
 	{
 		cmb_node->insertItem(i+1,QString::number(i));
 	}
@@ -34,7 +34,6 @@ Query::Query(QWidget *parent): QDialog(parent),Ui_QueryForm()
 	connect(btnBefore, SIGNAL(clicked()), this, SLOT(beforePage()));
 	connect(btnNext, SIGNAL(clicked()), this, SLOT(nextPage()));
 	connect(cmb_note_type, SIGNAL(currentIndexChanged(int)), this, SLOT(changedIndex(int)));
-
 	connect(dte_begin,SIGNAL(dateTimeChanged ( const QDateTime&)),this,SLOT(datTimCha(const QDateTime &)));
 	connect(dte_end,SIGNAL(dateTimeChanged ( const QDateTime&)),this,SLOT(datTimCha(const QDateTime &)));
 	printf("init Query ok\n");
@@ -51,6 +50,7 @@ void Query::_show()
 	printf("2\n");
 	init_time( *dte_begin, 10);
 	printf("3\n");
+    //cmb_note_type -> setCurrentItem(0);
 	init_parameter();
 	printf("4\n");
 	init_table();
@@ -70,22 +70,24 @@ void Query::ok()
 	init_parameter();
 	init_table();
 }
-// 上一页
+// 上一条
 void Query::beforePage()
 {
 	tableWidget->clearSelection();
-	currentNumber = ( -- currentNumber ) % countNumber;
+    //currentNumber = ( -- currentNumber ) % countNumber;
+    currentNumber = (  --currentNumber ) % count;
 	if(currentNumber < 1)
-		currentNumber = countNumber;
+        currentNumber = count;
 	init_table();
 }
-// 下一页
+// 下一条
 void Query::nextPage()
 {
 	tableWidget->clearSelection();
-	currentNumber = (  ++currentNumber ) % countNumber;
-	if(currentNumber == 0)
-		currentNumber = countNumber;
+    //currentNumber = (  ++currentNumber ) % countNumber;
+    currentNumber = (  ++currentNumber ) % count;
+    if(currentNumber == 0)
+        currentNumber = count;
 	init_table();
 }
 // 加载数据
@@ -94,13 +96,18 @@ void Query::init_table()
 	modelSql->clear();
 	delete[] qtw;
 	qtw = NULL;
-	par[3] = (currentNumber - 1)  * 9 ;
-        lblNumber -> setText(QString::number(currentNumber) + tr("/") + QString::number(countNumber));
-	if( typeQuery == 0)
+    par[3] = (currentNumber - 1)  * 1 ;
+     //printf("init_table currentCount===%d\n",currentCount);
+        lblNumber -> setText(QString::number(currentNumber) + tr("/") + QString::number(count));
+    if( typeQuery == 0 )
 	{
-		init_warn();
-	}
-	else if( typeQuery == 1 )
+        init_warn();
+    }
+    else if( typeQuery == 1 )
+    {
+        init_warn();
+    }
+    else if( typeQuery == 2 )
 	{
 		init_opt();
 	}
@@ -117,17 +124,23 @@ void Query::init_parameter()
 		par[1] = cmb_node->currentIndex() - 1;
 		par[2] = cmb_sub_node->currentIndex() - 1;
 		count = WarnMsg::getCount( timer_start, timer_end, par[0], par[1], par[2]);//一共有几条数据 
-	}
+    }else if(typeQuery == 1)
+    {
+        par[0] = cmb_net->currentIndex() - 1;
+        par[1] = cmb_node->currentIndex() - 1;
+        par[2] = cmb_sub_node->currentIndex() - 1;
+        count = WarnMsg::geterrCount( timer_start, timer_end, par[0], par[1], par[2]);//一共有几条数据
+    }
 	else
 	{
 		count = OptMsg::getCount( timer_start, timer_end); //一共有几条数据 
 	}
 	
-	countNumber = count / 9;
-	if( count % 9 )
-		countNumber ++;
+//	countNumber = count / 9;
+//	if( count % 9 )
+//		countNumber ++;
 
-	if(countNumber == 0)
+    if(count < 10)
 	{
 		btnBefore->setEnabled(false);
 		btnNext->setEnabled(false);
@@ -142,9 +155,18 @@ void Query::init_parameter()
 }
 void Query::init_warn()
 {
-	WarnMsg::getTable( timer_start, timer_end, par[0], par[1], par[2] , par[3], modelSql);
+    if(typeQuery == 0)
+    {
+        WarnMsg::getTable( timer_start, timer_end, par[0], par[1], par[2] , par[3], modelSql);
+    }else
+    {
+        WarnMsg::geterrTable( timer_start, timer_end, par[0], par[1], par[2] , par[3], modelSql);
+    }
+
 	currentCount = modelSql->rowCount();
+    printf("currentCount===%d\n",currentCount);
  	qtw = new QTableWidgetItem[ 7 * (currentCount + 1) ];
+    tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);//表格对用户只读
 	tableWidget->setColumnCount(7);
 	tableWidget->setRowCount(currentCount);
 
@@ -152,9 +174,22 @@ void Query::init_warn()
 	qtw[1].setText( tr("网络号") );
 	qtw[2].setText( tr("节点号") );
 	qtw[3].setText( tr("子节点") );
-	qtw[4].setText( tr("报警类型") );
+    if(typeQuery == 0)
+    {
+        qtw[4].setText( tr("报警类型") );
+    }else
+    {
+        qtw[4].setText( tr("故障类型") );
+    }
 	qtw[5].setText( tr("数值") );
-	qtw[6].setText( tr("报警时间") );
+
+    if(typeQuery == 0)
+    {
+        qtw[6].setText( tr("报警时间") );
+    }else
+    {
+        qtw[6].setText( tr("故障时间") );
+    }
 
 	tableWidget->setColumnWidth ( 0, 55);
 	tableWidget->setColumnWidth ( 1, 55);
@@ -175,20 +210,36 @@ void Query::init_warn()
 		re = modelSql->record(i);
 		ind = (i + 1) * 7;
 		c = 0;
+
 		for( ; c < 4; c ++){
+            if(i == 0)
+            {
+                qtw[ind].setBackgroundColor(Qt::yellow);
+            }
 			qtw[ind].setText(re.value(c).toString());
 			tableWidget->setItem( i, c, &qtw[ind++]);
 		}
-
+        if(i == 0)
+        {
+            qtw[ind].setBackgroundColor(Qt::yellow);
+        }
 		qtw[ind].setText(  tr(Db::warnigData[re.value(c).toInt()].str) );
 		tableWidget->setItem( i, c++, &qtw[ind++]);
 
+        if(i == 0)
+        {
+            qtw[ind].setBackgroundColor(Qt::yellow);
+        }
 		qtw[ind].setText(re.value(c).toString());
 		tableWidget->setItem( i, c++, &qtw[ind++]);
 
+        if(i == 0)
+        {
+            qtw[ind].setBackgroundColor(Qt::yellow);
+        }
 		qtw[ind].setText(re.value(c).toString());
 		tableWidget->setItem( i, c++, &qtw[ind++]);
-	}
+	}    
 }
 void Query::init_opt()
 {
@@ -217,7 +268,7 @@ void Query::init_opt()
 	{
 		re = modelSql->record(i);
 		ind = (i + 1) * 4;
-	
+
 		qtw[ind].setText(re.value(0).toString());
 		tableWidget->setItem( i, 0, &qtw[ind ++]);
 
@@ -292,9 +343,15 @@ void Query::changedIndex(int index)
 		}
 		else if(index == 1)
 		{
-			cmb_net->setEnabled( false );
-			cmb_node->setEnabled( false );
-			cmb_sub_node->setEnabled( false );
+            cmb_net->setEnabled( true );
+            cmb_node->setEnabled( true );
+            cmb_sub_node->setEnabled( true );
 		}
+        else if(index == 2)
+        {
+            cmb_net->setEnabled( false );
+            cmb_node->setEnabled( false );
+            cmb_sub_node->setEnabled( false );
+        }
 	}
 }

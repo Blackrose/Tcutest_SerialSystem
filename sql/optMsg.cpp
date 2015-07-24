@@ -40,6 +40,10 @@ void OptMsg::insertClearWarnDat()//清除报警数据
 {
 	OptMsg::insert(CLEAR_WARN_DAT);
 }
+void OptMsg::insertClearErrDat()//清除故障数据
+{
+    OptMsg::insert(CLEAR_ERR_DAT);
+}
 void OptMsg::insertClearDoDat()//清除操作数据
 {
 	OptMsg::insert(CLEAR_DO_DAT);

@@ -12,11 +12,13 @@ int Db::purview = 2; //权限 0 1 2
 QSqlDatabase Db::db = QSqlDatabase::addDatabase("QSQLITE");
 struct MyString* Db::warnigData = NULL;
 struct MyString* Db::doData = NULL;
+struct MyString* Db::errData = NULL;
 
 void Db::init()
 {
 	Db::username  = new char[20]; //用户名
  	Db::warnigData = new struct MyString[15];
+    Db::errData = new struct MyString[7];
 	Db::doData = new struct MyString[8];
 	Db::db.setDatabaseName("./db.db"); //数据库名与路径
 	if(!Db::db.isOpen())
@@ -46,6 +48,14 @@ void Db::init()
 	strcpy(warnigData[12].str, "主电正常了");
 	strcpy(warnigData[13].str, "备电正常了");//报警类型
 	strcpy(warnigData[14].str, "传感器故障");
+
+//    strcpy(errData[0].str,"模块故障");
+//    strcpy(errData[1].str, "传感器故障");
+//    strcpy(errData[2].str, "漏电报警");
+//    strcpy(errData[3].str, "主电欠压");
+//    strcpy(errData[4].str, "备电欠压");
+//    strcpy(errData[5].str, "备电短路");
+//    strcpy(errData[6].str, "备电断路");
 }
 void Db::isOpen()
 {

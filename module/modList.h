@@ -12,8 +12,9 @@
 #include <QDateTime>
 
 #define TIME (18)
-#define MODCOUNT 220
+#define MODCOUNT 256//220
 #define SUBNODECOUNT 8
+#define BtnNodeNUm 128
 
 #define NORMAL 	1
 #define WARN	2
@@ -34,6 +35,7 @@
 #define ML8     0x0B
 #define MT8     0x0C
 #define DL1T1   0x0D
+
 
 struct myTime
 {

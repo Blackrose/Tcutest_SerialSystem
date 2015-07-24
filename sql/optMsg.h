@@ -25,6 +25,7 @@ public:
 	static void insertUserInsert();//增加用户
 	static void insertSysTimeSet();//设置系统时间
 	static void insertClearWarnDat();//清除报警数据
+    static void insertClearErrDat();//清除故障数据
 	static void insertClearDoDat();//清除操作数据
 
 };

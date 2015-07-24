@@ -25,8 +25,5 @@
         <file>images/cut.png</file>
         <file>images/monSet.png</file>
         <file>images/unable.png</file>
-        <file>images/blue.png</file>
-        <file>images/green.png</file>
-        <file>images/red.png</file>
     </qresource>
 </RCC>

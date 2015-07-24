@@ -31,6 +31,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	Can::init();		//初始化can设备
 	Bell::init();		//初始化蜂鸣器设备
 	Led::init();		//初始化指示灯设备
+    Led::relayinit();   //初始化relay
 	Power::init();		//初始化电源设备
 	Watchdog::kellLive();	//喂狗
 	PicProtocol::pic_port_init(&PicProtocol::pic_port, Can::fd[2]);
@@ -77,7 +78,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	sig.p_putOff = p_putOff;
 	sig.p_nodeStatus = p_nodeStatus;
 
-	curNet = 0;		//当前显示的网络 默认0
+    curNet = 0;		//当前显示的网络 默认0
 	curNode = -1;		//当前选择的节点 默认0
 	whoReset = 0;		//谁复位 :0 启动复位 1 按钮复位
 	mainpower = 0;		//主电源
@@ -143,6 +144,13 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 void Main::slot_reg(int net,int id)
 {
 	struct  mod* mo = p_mod -> getNode( net, id);
+    //printf("注册信息 \n");
+//    if(mo->sn == 0)
+//    {//读取SN
+//        //printf("注册信息 mo->sn==%d\n",mo->sn);
+//        ModbusTx::readMem( net, id, 201, 1);
+//    }//add by zhq
+    //Main::slot_mod();//型号
 	if(mo -> flag == ERROR)
 	{
 		mo -> flag = NORMAL;
@@ -243,8 +251,7 @@ void Main::slot_warn()
 			}
 
 			warn = 1;
-			warnLed = 1;
-			//LED::CtlOn();
+			warnLed = 1;			
 			setBellAndLedStatus();
 			Led::LCDLightOn();
 			if(p_nodeStatus->curNet == net && p_nodeStatus->curId == id )
@@ -519,7 +526,7 @@ void Main::slot_timer()
 		screenCount = 0;
 	}
     if( timer_countPower >= 3500)//愿为3500
-    {
+    {//printf("timer_countPower==%d\n",timer_countPower);
 		timer_countPower = ModbusTx::timer;
 		powerCheck();
 
@@ -560,6 +567,7 @@ void Main::slot_timer()
 			Pake::send( curNet, curNode, QUE_CUR_VAL, NULL, 0);
 		}
 		//printf("time_count\n");
+        //printf("timer_countPower2222==%d\n",timer_countPower);
 	}
  	sig.send();
 	if(timer_count >= 5000)//WIAT_SEC )
@@ -574,7 +582,7 @@ void Main::slot_timer()
 		p_timer->start(500);
 		return ;
 	}
-
+    //printf("ModbusTx::timerModbusTx::timer===%d\n",ModbusTx::timer);
 	p_timer->start(ModbusTx::timer);//启动定时器
 }
 
@@ -593,7 +601,7 @@ void Main::pic_handle()
 void Main::clearScreenCount()
 {
 	screenCount = 0;
-	printf("clear screenCount!!!!!!!!\n");
+    //printf("clear screenCount!!!!!!!!\n");
 }
 
 //================ 电源检测 ================
@@ -624,6 +632,8 @@ void Main::powerCheck()
 			Message::_show(tr("主电欠压！"));
 			setBellAndLedStatus();
 		}        
+        Power::offRelay();
+        relayStats = 0;
 		Led::mainLightOff();//主灯灭
 	}
 	
@@ -713,7 +723,7 @@ void Main::powerCheck()
 				Message::_show(tr("备电不欠压了！"));
 				WarnMsg::insertPreMainOk();
 				setBellAndLedStatus();
-			}
+			}            
 			Led::preMainLightOn();
 		}
 		else
@@ -736,8 +746,8 @@ void Main::powerCheck()
         {
             Power::onRelay();
             relayStats = 1;
-            if(preStat == 1){
-                preStat = 0;
+            if(preStat == 0){
+                preStat = 1;
                 Message::_show(tr("电池充电!"));
             }
             printf("on relay\n");
@@ -751,8 +761,8 @@ void Main::powerCheck()
     } else if((Power::isChargeHigh() == true) && (on == 0) && (off == 0)){
         Power::offRelay();
         relayStats = 0;
-        if(preStat == 0){
-            preStat = 1;
+        if(preStat == 1){
+            preStat = 0;
             Message::_show(tr("电池电量充足!"));
         }
         printf("off relay when full\n");
@@ -840,7 +850,7 @@ void Main::showCurrentNet(int net)
 void  Main::initCurrentNode()
 {
 	struct mod *mo;
-	for(int id = 1 ; id <= 110 ; id++)
+    for(int id = 1 ; id <= BtnNodeNUm ; id++)
 	{
 		mo = p_mod -> getNode( curNet, id);
 		if(mo == NULL) continue;
@@ -892,7 +902,7 @@ void Main::slot_no_sound()
 //======== 试验 =========
 void Main::slot_btn_try()
 {
-	if(curNet >= 0 && curNode > 0 && curNet < 2 && curNode <= 110)
+    if(curNet >= 0 && curNode > 0 && curNet < 2 && curNode <= BtnNodeNUm)
 	{
 		Pake::send( curNet, curNode, SET_MOD_TRY, NULL, 0);
 	}
@@ -912,17 +922,17 @@ void Main::initBtnNode()
 {
 	int i ;
 //	int x = 30, y = 15, w = 40, h = 31;
-	int x = 25, y = 15, w = 52, h = 38;
+    int x = 25, y = 15, w = 44, h = 38;//52
 //	int xw = 41, xh = 33;
-	int xw = 52, xh = 46;
-	btn_node = new BtnNode[110];
-	for( i = 0; i < 110 ; i++)
+    int xw = 44, xh = 46;//52
+    btn_node = new BtnNode[BtnNodeNUm];
+    for( i = 0; i < BtnNodeNUm ; i++)
         {//初始化报警
 		btn_node[i].btn.setParent(nodePerent);
 		btn_node[i].btn.setFocusPolicy(Qt::NoFocus);
 		btn_node[i].btn.setFlat(true);
 		btn_node[i].btn.setText(QString::number(i+1));
-		if(i%11 == 0 && i != 0)
+        if(i%13 == 0 && i != 0)
 		{
 			x = 25;
 			y += xh;
@@ -1024,7 +1034,7 @@ void Main::check_pwd()
 			p_printer->_show();
 			break;
 		case LOGOUT:
-			if(curNet >= 0 && curNode >= 0 && curNet < 2 && curNode < 110)
+            if(curNet >= 0 && curNode >= 0 && curNet < 2 && curNode < BtnNodeNUm)
 			{
 				p_mod->unreg( curNet, curNode);
 				setBtnFalg(curNode, ERROR);
@@ -1059,7 +1069,7 @@ void Main::check_pwd()
 			setBellAndLedStatus();
 			for( int i = 0 ; i < 2; i ++)
 			{
-				for(int j = 1 ; j <= 110; j ++)
+                for(int j = 1 ; j <= BtnNodeNUm; j ++)
 				{
 					p_mod->setIsReset( i, j, true);
 				}
@@ -1069,7 +1079,7 @@ void Main::check_pwd()
 			//checkWarn();
 			powerCheck();
 		   // setBellAndLedStatus();
-			for(int id=1;id<=110;id++)
+            for(int id=1;id<=BtnNodeNUm;id++)
 			{
 				mo=p_mod->getNode(curNet,id);
 				if(mo==NULL) continue;
@@ -1133,7 +1143,7 @@ void Main::check_pwd()
 	        relayStats=1;//
 	        Led::CtlOff();//
 			setBellAndLedStatus();*/
-			for(int id=1;id<=110;id++)
+            for(int id=1;id<=BtnNodeNUm;id++)
 			{
 				mo = p_mod->getNode(curNet,id);
 				if(mo==NULL) continue;
@@ -1222,7 +1232,7 @@ void Main::initSubNode()
 }
 void Main::initConnect()
 {//连接信号于槽
-	for(int i = 0; i < 110 ; i++)
+    for(int i = 0; i < BtnNodeNUm ; i++)
 	connect(&btn_node[i].btn,SIGNAL(clicked()),this,SLOT(slot_btn_node()),Qt::QueuedConnection);//节点按钮
 	connect(btn_reset,SIGNAL(clicked()),this,SLOT(slot_btn_reset()));//复位
 	connect(btn_query,SIGNAL(clicked()),this,SLOT(slot_query()));//查询
@@ -1492,7 +1502,7 @@ void Main::LCDmain()
 //    bgdefaultPalette.setBrush(QPalette::Background,bgImages);
 //    this->setPalette(bgPalette);
     if(flagcolor == 0)
-    {printf("now enter flagcolor == %d\n",flagcolor);
+    {//printf("now enter flagcolor == %d\n",flagcolor);
         bgdefaultPalette = this->palette();
         flagcolor = 1;
     }
@@ -1569,6 +1579,5 @@ void Main::LCDmain()
  void Main::paintEvent( QPaintEvent * )
  {
     //QPalette bgdefaultPalette = this->palette();
-    printf("colorcount == %d  now enter paintEvent\n",colorcount);
-
+    //printf("colorcount == %d  now enter paintEvent\n",colorcount);
  }

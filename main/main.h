@@ -71,6 +71,7 @@
 
 #define DATCOU	9 //当前显示的数据9个
 #define WIAT_SEC 900000//
+#define BtnNodeNUm 128
 
 /*====================================
 	结构体：显示节点封装;

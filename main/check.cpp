@@ -37,7 +37,7 @@ void Check::_show()
 }
 void Check::ch()
 {
-    hide();
+    //hide();
 	Main::whoChePwd=6;
     ((Main*)par)->check_pwd();
     //((Main*)par)->LCDmain();
@@ -45,8 +45,10 @@ void Check::ch()
 //开始检测
 void Check::start()
 {
-	int i, j;
+    //int i, j;
     timer.stop();
+    timer.start(500);
+    count = 1;
 	Main::com_led=0;
 	Bell::off();
 	Led::mainLightOff();
@@ -54,10 +56,9 @@ void Check::start()
 	Led::commLightOff();
 	Led::modErrorLightOff();
 	Led::warnLightOff(); 
-    usleep(1500000);//1.5s
+    usleep(500000);//0.5s
     //Led::LCDLightOff();
-    timer.start(1000);
-    count = 1;
+
 //	printf("check: after off before delay1!\n");
 //	for(i=0;i<500;i++)
 //        {
@@ -125,8 +126,9 @@ void Check::b()
 			Led::modErrorLightOn();
 			Led::warnLightOn();
 			//timer.start(1000);
-            //Led::CtlOn();
-            usleep(1500000);//1.5s
+            Led::CtlOn();
+            //Led::onRelay();
+            usleep(1000000);//1.0s
 }
 void Check::a()
 {
@@ -140,8 +142,9 @@ void Check::a()
 			Led::warnLightOff();
 			Led::LCDLightOn();
 			//timer.stop();
-            //Led::CtlOff();
-            usleep(1000000);//1.0s
+            Led::CtlOff();
+            //Led::offRelay();
+            usleep(500000);//0.5s
 
 }
 
@@ -150,7 +153,8 @@ void Check::slot_timer()
     switch(count)
     {
     case 1:
-        timer.start(1000);
+        timer.start(500);//0.5s
+        hide();
         ((Main*)par)->LCDmain();
         count = 2;
         break;
@@ -173,6 +177,7 @@ void Check::slot_timer()
     case 6:
         ((Main*)par)->LCDmain();
         //count = 2;
+        show();
         timer.stop();
         break;
     }

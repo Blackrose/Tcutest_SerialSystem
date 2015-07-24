@@ -92,7 +92,7 @@ void Mset::net_currentIndexChanged(int index)
 	if(cmbNet->count() < 1) return ;
 	int net = cmbNet->currentText().toInt();
 	cmbNode->clear();
-	for(int  node = 1; node < 111 ; node ++ )
+    for(int  node = 1; node < BtnNodeNUm + 1; node ++ )
 	{
 		sn = Module::getNodeSN( net, node );
 		if( sn != NO_SN && sn != MC) cmbNode->insertItem( ind ++, QString::number(node));

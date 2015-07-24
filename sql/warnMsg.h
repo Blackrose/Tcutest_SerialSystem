@@ -11,7 +11,8 @@
 
 #include "db.h"
 
-
+#define SQLMAX 10000
+#define SQLMAXDATA 10
 
 class WarnMsg
 {
@@ -19,9 +20,12 @@ public:
 	static int insert(int netId,int nodeId,int subNodeId,int warn,int value);
 	static int insertNodeDo(int netId, int nodeId, int wDo);
 	static void getTable(QString time_bg,QString timer_end, int net,int id, int subId, int big , QSqlQueryModel *model);
-	static int getCount(QString time_bg,QString timer_end, int net,int id, int subId);
+    static void geterrTable(QString time_bg,QString timer_end, int net,int id, int subId, int big , QSqlQueryModel *model);
+    static int getCount(QString time_bg,QString timer_end, int net,int id, int subId);
+    static int geterrCount(QString time_bg,QString timer_end, int net,int id, int subId);
 	static bool delAll();
-	
+    static bool delerrAll();
+
 	static void insertCAlarm(int netId,int nodeId,int subNodeId,int value);//电流报警
 	static void insertTAlarm(int netId,int nodeId,int subNodeId,int value);//温度报警
 	static void insertMAlarm(int netId,int nodeId,int subNodeId,int value);//漏电报警

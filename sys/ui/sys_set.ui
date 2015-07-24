@@ -303,7 +303,7 @@
     <widget class="QPushButton" name="btn_clear_warn">
      <property name="geometry">
       <rect>
-       <x>80</x>
+       <x>10</x>
        <y>30</y>
        <width>141</width>
        <height>31</height>
@@ -319,7 +319,7 @@
     <widget class="QPushButton" name="btn_clear_opt">
      <property name="geometry">
       <rect>
-       <x>240</x>
+       <x>310</x>
        <y>30</y>
        <width>141</width>
        <height>31</height>
@@ -335,7 +335,7 @@
     <widget class="QPushButton" name="btn_calibration">
      <property name="geometry">
       <rect>
-       <x>400</x>
+       <x>460</x>
        <y>30</y>
        <width>141</width>
        <height>31</height>
@@ -343,6 +343,22 @@
      </property>
      <property name="text">
       <string>重新校准屏幕</string>
+     </property>
+     <property name="default">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_clear_err">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>30</y>
+       <width>141</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>清除故障数据</string>
      </property>
      <property name="default">
       <bool>true</bool>
@@ -481,7 +497,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>(0~3)</string>
+      <string>(0~5)</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_2">
@@ -494,7 +510,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>(0~110)</string>
+      <string>(0~128)</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_3">
@@ -507,7 +523,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>(0~110)</string>
+      <string>(0~128)</string>
      </property>
     </widget>
     <widget class="QComboBox" name="usart1_badurate_comboBox">

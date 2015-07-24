@@ -82,6 +82,7 @@ public slots:
 	void reset();
 	void ok();
 	void clear_warn();
+    void clear_err();
 	void clear_opt();
 	void touch_calibration();
 	void txtChange(const QString &str);

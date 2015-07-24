@@ -167,8 +167,9 @@ void ModbusTx::haveLoogTimerGetDat(int cmd,unsigned size)
 {
 	if(cmd == 0x3)
 	{
-		ModbusTx::timer =((5 + size * 2) % 8 ? (5 + size * 2) / 8 + 1 : (5 + size * 2) / 8 + 1 ) * PAKETIMER;
-		ModbusTx::timer *= 3;
+        ModbusTx::timer =((5 + size * 2) % 8 ? (5 + size * 2) / 8 + 1 : (5 + size * 2) / 8 + 1 ) * PAKETIMER;
+        //printf("ModbusTx::timer===%d\n",ModbusTx::timer);//三目运算符不起作用，考虑优先级 当size为1时为30
+        ModbusTx::timer *= 3;
 	}
 	else if(cmd == 0x10)
 	{

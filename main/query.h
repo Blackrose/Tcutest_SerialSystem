@@ -26,7 +26,7 @@ public :
 	void init_time(QDateTimeEdit &dte,int day);
 	void init_table();
 	void init_opt();
-	void init_warn();
+    void init_warn();
 	void init_parameter();
 	void _show();
 private:

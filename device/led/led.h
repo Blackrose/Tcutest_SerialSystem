@@ -16,6 +16,7 @@ public:
 	static int fd1;
 	static char status[7];
 	static int init(); //初始化
+    static int relayinit();//初始化
 	/*========================================
 	number:  0    1    2    3   4    5
 		主电   备电    通讯    预警  报警    液晶

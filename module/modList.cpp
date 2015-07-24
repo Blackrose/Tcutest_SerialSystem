@@ -47,19 +47,19 @@ Module::Module()
 	strcpy( moTyp[DL1T1].name, "SL6D11");
 
 	net0All = Mater::readNet0Count();
-	if (net0All > 110)
-		net0All = 110;
+    if (net0All > BtnNodeNUm)
+        net0All = BtnNodeNUm;
 	net1All = Mater::readNet1Count();
-        if (net1All > 110)
-                net1All = 110;
+        if (net1All > BtnNodeNUm)
+                net1All = BtnNodeNUm;
 	int i ;
-	for(i = 0; i < net0All && i < 110; i++)
+    for(i = 0; i < net0All && i < BtnNodeNUm; i++)
 	{
 		mod_list[i].isHave = true;
 	}
-	for(i = 0; i < net1All && i < 110; i++)
+    for(i = 0; i < net1All && i < BtnNodeNUm; i++)
 	{
-		mod_list[110 + i].isHave = true;
+        mod_list[BtnNodeNUm + i].isHave = true;
 	}
 }
 Module::~Module()
@@ -69,7 +69,7 @@ Module::~Module()
 }
 bool Module::nodeIsHave(int net, int id)//是否有节点
 {
-	int i = net * 110 + id-1; 
+    int i = net * BtnNodeNUm + id-1;
 	if( i >= MODCOUNT) return false;
 	if(mod_list[i].isHave == true)
 	{
@@ -80,14 +80,14 @@ bool Module::nodeIsHave(int net, int id)//是否有节点
 //返回sn
 int Module::getSN(int net,int id)
 {
-	int i = net * 110 + id-1; 
+    int i = net * BtnNodeNUm + id-1;
 	if( i >= MODCOUNT) return 0;
 	return mod_list[i].sn;
 }
 //==============注销=============
 void Module::unreg(int net,int id)
 {
-	int i = net * 110 + id-1;
+    int i = net * BtnNodeNUm + id-1;
 	if(i >= MODCOUNT) return;
 	mod_list[i].isHave = true;
 	mod_list[i].sn = NO_SN;
@@ -101,9 +101,9 @@ void Module::unreg(int net,int id)
 int Module::nodeCount(int net)
 {
 	int sum = 0;
-	int count = ( net + 1 ) * 110;
+    int count = ( net + 1 ) * BtnNodeNUm;
 	if(count > MODCOUNT) return 0;
-	for(int i = net*110 ; i <  count; i++)
+    for(int i = net*BtnNodeNUm ; i <  count; i++)
 	{
 		if(mod_list[i].isHave == true )
 			 sum ++;
@@ -113,14 +113,14 @@ int Module::nodeCount(int net)
 //============返回一个节点指针============
 struct mod* Module::getNode(int net,int id)
 {
-	int i = net * 110 + id-1; 
+    int i = net * BtnNodeNUm + id-1;
 	if( i >= MODCOUNT) return NULL;
 	return &mod_list[i];
 }
 //================打印===============
 void Module::display(int net,int id)
 {
-	int i = net * 110 + id-1; 
+    int i = net * BtnNodeNUm + id-1;
 	if( i >= MODCOUNT) return;
 	//for(int i = 0; i < MODCOUNT; i ++)
 	//{
@@ -136,7 +136,7 @@ void Module::display(int net,int id)
 //=================清除报警===============
 void Module::cleWarn(int net,int id)
 {
-	int i = net * 110 + id -1 ;
+    int i = net * BtnNodeNUm + id -1 ;
 	if( i >= MODCOUNT ) return;
 	mod_list[i].flag = NORMAL;
 	for(int j = 0 ; j < SUBNODECOUNT;  j++)
@@ -147,7 +147,7 @@ void Module::cleWarn(int net,int id)
 //=================清除报警===============
 void Module::cleSubWarn(int net,int id)
 {
-	int i = net * 110 + id -1 ;
+    int i = net * BtnNodeNUm + id -1 ;
 	if( i >= MODCOUNT ) return;
 	for(int j = 0 ; j < SUBNODECOUNT;  j++)
 	{
@@ -157,7 +157,7 @@ void Module::cleSubWarn(int net,int id)
 //================= 写下子节点报警 ===============
 void Module::setSubWarn(int net,int id,int subId,int flag,int value)
 {
-	int i = net * 110 + id - 1;
+    int i = net * BtnNodeNUm + id - 1;
 	if( i >= MODCOUNT || subId >= SUBNODECOUNT) return;
 	mod_list[i].subNodIsWar[subId] = flag;
 	mod_list[i].flag = NORMAL;
@@ -173,7 +173,7 @@ void Module::setSubWarn(int net,int id,int subId,int flag,int value)
 =====================================*/
 bool Module::getSubWarn(int net, int id , int subId)
 {
-	int i = net* 110 + id -1 ;
+    int i = net* BtnNodeNUm + id -1 ;
 	if( i >= MODCOUNT || subId >= SUBNODECOUNT) return false;
 	if(mod_list[i].subNodIsWar[subId] == WARN)
 	{
@@ -185,7 +185,7 @@ bool Module::getSubWarn(int net, int id , int subId)
 //================= 写下子节点故障 ===============
 void Module::setSubError(int net, int id, int subId, int flag)
 {
-	int i = net * 110 + id - 1;
+    int i = net * BtnNodeNUm + id - 1;
 	if( i >= MODCOUNT || subId >= SUBNODECOUNT) return;
 	mod_list[i].subNodIsWar[subId] = flag;
 	mod_list[i].flag = NORMAL;
@@ -203,7 +203,7 @@ void Module::setSubError(int net, int id, int subId, int flag)
 =====================================*/
 bool Module::getSubError(int net, int id, int subId)
 {
-	int i = net* 110 + id -1 ;
+    int i = net* BtnNodeNUm + id -1 ;
 	if( i >= MODCOUNT || subId >= SUBNODECOUNT) return false;
 	if(mod_list[i].subNodIsWar[subId] == ERROR)
 	{
@@ -219,7 +219,7 @@ bool Module::getSubError(int net, int id, int subId)
 =====================================*/
 bool Module::getSubErrorRecovery(int net, int id, int subId)
 {
-    int i = net* 110 + id -1 ;
+    int i = net* BtnNodeNUm + id -1 ;
     if( i >= MODCOUNT || subId >= SUBNODECOUNT) return false;
     if(mod_list[i].recovery[subId] == ERROR)
     {
@@ -232,9 +232,9 @@ bool Module::getSubErrorRecovery(int net, int id, int subId)
 int Module::warnCount(int net)
 {
 	int sum = 0;
-	int i = net * 110;
+    int i = net * BtnNodeNUm;
 	if(i > MODCOUNT ) return 0;
-	int count = (net + 1)*110;
+    int count = (net + 1)*BtnNodeNUm;
 	if(count > MODCOUNT ) return 0;
 	for(; i < count ; i++)
 	{
@@ -274,14 +274,14 @@ int Module::errorCount()
 //================返回 sn=============
 int Module::getNodeSN(int net,int id)
 {
-	int i = net * 110 + id - 1 ; 
+    int i = net * BtnNodeNUm + id - 1 ;
 	if( i >= MODCOUNT ) return NO_SN;
 	return mod_list[i].sn;
 }
 //================== 注册 sn===================
 bool Module::regSN(int net,int id,int sn)
 {
-	int i = net * 110 + id -1;
+    int i = net * BtnNodeNUm + id -1;
 	if (i >= MODCOUNT) return false;
 	if (sn >= MC && sn <= DL1T1)//新修改
 	{
@@ -297,7 +297,7 @@ int Module::getNet()
 	{
 		if(mod_list[i].isHave == true)
 		{
-			if( i < 110)
+            if( i < BtnNodeNUm)
 			{
 				ret = 0;
 			}
@@ -320,26 +320,26 @@ int Module::getNet()
 }
 int  Module::getNodeStats(int net,int id)//返回节点的状态 
 {
-	int i = net * 110 + id -1;
+    int i = net * BtnNodeNUm + id -1;
 	if(i >= MODCOUNT ) return -1;
 	return mod_list[i].flag;
 }
  int  Module::s_getNodeStats(int net,int id)//返回节点的状态 
 {
-	int i = net * 110 + id -1 ;
+    int i = net * BtnNodeNUm + id -1 ;
 	if(i >= MODCOUNT ) return -1;
 	return mod_list[i].flag;
 }
 bool Module::getIsReset(int net, int id)
 {
-	int i = net * 110 + id -1;
+    int i = net * BtnNodeNUm + id -1;
 	if(i >= MODCOUNT ) return false;
 	return mod_list[i].isReset;
 }
 //写下复位状态
 void Module::setIsReset(int net, int id,bool val)
 {
-	int i = net * 110 + id -1 ;
+    int i = net * BtnNodeNUm + id -1 ;
 	if(i >= MODCOUNT ) return;
 	mod_list[i].isReset = val;
 }
@@ -352,7 +352,7 @@ void Module::setIsReset(int net, int id,bool val)
 =====================================*/
 int Module::getWhatWarn(int net,int id,int subId)
 {
-	int i = net * 110 + id - 1;
+    int i = net * BtnNodeNUm + id - 1;
 	if(i >= MODCOUNT ) return 0;
 	if(mod_list[i].isHave == true)
 	{
@@ -398,7 +398,7 @@ int Module::getWhatWarn(int net,int id,int subId)
 =====================================*/
 int Module::getWhatErr(int net,int id,int subId)
 {
-    int i = net * 110 + id - 1;
+    int i = net * BtnNodeNUm + id - 1;
     if(i >= MODCOUNT ) return 0;
     if(mod_list[i].isHave == true)
     {
@@ -446,7 +446,7 @@ int Module::getWhatErr(int net,int id,int subId)
 =====================================*/
 void Module::getWarnTimeAndVal(int net,int id,int subId,char** time,int* value)
 {
-	int i = net * 110 + id -1;
+    int i = net * BtnNodeNUm + id -1;
 	if( i >= MODCOUNT || subId >= SUBNODECOUNT) return;
 	*time = mod_list[i].subNodTimer[subId].time;
 	*value = mod_list[i].subNodValue[subId];

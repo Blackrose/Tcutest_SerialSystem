@@ -24,7 +24,7 @@
 #define PREMAIN_OFF	11//备电断路
 #define MAIN_OK		12 //主电正常
 #define PREMAIN_OK	13//备电正常
-#define SUB_ERROR       14
+#define SUB_ERROR   14//传感器故障
 
 #define UPATA_PWD	0 	//修改密码
 #define USER_LOGIN	1 	//用户登录
@@ -34,7 +34,7 @@
 #define SYS_TIME_SET	5 	//设置系统时间
 #define CLEAR_WARN_DAT	6 	//清除报警数据
 #define CLEAR_DO_DAT	7 	//清除操作数据
-
+#define CLEAR_ERR_DAT	8 	//清除故障数据
 
 #define ALL -1
 
@@ -47,6 +47,7 @@ class  Db
 {
 public:
 	static struct MyString *warnigData;
+    static struct MyString *errData;
 	static struct MyString *doData;
 	static QSqlDatabase db;
 	static char* username;//登录名称

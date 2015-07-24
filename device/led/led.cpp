@@ -8,13 +8,14 @@ int Led::init()
 {
 	int i;
 
-	Led::fd1 = open("/dev/relay", O_RDWR);
-	if (Led::fd1 < 0)
-	{
-		printf("Open relay device failed.\n");
-		return Led::fd1;
-	}
-    printf("Open relay device success.\n");
+//    Led::fd1 = open("/dev/relay", O_RDWR);
+//    //Led::fd1 = open("/dev/irda", O_RDWR);
+//	if (Led::fd1 < 0)
+//	{
+//		printf("Open relay device failed.\n");
+//		return Led::fd1;
+//	}
+//    printf("Open relay device success.\n");
 	Led::fd = open("/dev/leds", O_RDWR);
 	if (Led::fd < 0)
 	{
@@ -29,6 +30,24 @@ int Led::init()
 	printf("---led init ok---\n");
 	return 1;
 }
+
+int Led::relayinit()
+{
+    int i;
+
+    Led::fd1 = open("/dev/relay", O_RDWR);
+    //Led::fd1 = open("/dev/irda", O_RDWR);
+    if (Led::fd1 < 0)
+    {
+        printf("Open relay device failed.\n");
+        return Led::fd1;
+    }
+    printf("Open relay device success.\n");
+    printf("---relay init ok---\n");
+    return 1;
+}
+
+
 /*========================================
 number:  0    1    2    3   4    5
 	主电   备电    通讯    预警  报警    液晶
@@ -147,15 +166,21 @@ void Led::CtlOn()//控制输出有效
 {
 	char on = 1;
 	
-	if (fd1 > 0)
-		::write(fd1, &on, 1);
+    if (Led::fd1 > 0)
+        ::write(Led::fd1, &on, 1);
+        int i = ::ioctl(Led::fd1, 1, 1);
+    //printf("CtlOn  i====%d\n",i);
+        //::write(fd1,1,1);
 }
 void Led::CtlOff()//控制输出无效
 {
 	char off = 0;
 	
-	if (fd1 > 0)
-		::write(fd1, &off, 1);	
+    if (Led::fd1 > 0)
+        ::write(fd1, &off, 1);
+        int i = ::ioctl(Led::fd1, 0, 1);
+        //::write(fd1,0,1);
+    //printf("CtlOff   i=====%d\n",i);
 }
 
 void Led::onRelay()
