@@ -53,7 +53,7 @@ void Mset::_show()
 	else if(n == 2)
 	{
 		cmbNet->insertItem(0, "0");
-                cmbNet->insertItem(1, "1");
+        cmbNet->insertItem(1, "1");
 	}
 	timer.start(1000);
 	isReadData = false;
@@ -80,6 +80,7 @@ void Mset::slot_timer()
 	if(isReadData == true)
 	{
 		txtDelay->setText(QString::number(nodeParm[8]));
+        printf("cmbSubNode->currentText().toInt()===%d\n",cmbSubNode->currentText().toInt());
 		subNode_currentIndexChanged(cmbSubNode->currentText().toInt());
 		isReadData =  false;
 	}
@@ -111,6 +112,8 @@ void Mset::node_currentIndexChanged (int index)
 		{
 			case ML1T1:
             case DL1T1:
+                insertNewSubItem(sn,8);
+                break;
 			case ML4T4:
 			case ML8: 
 				insertSubItem(8);
@@ -121,16 +124,16 @@ void Mset::node_currentIndexChanged (int index)
 }
 //子节点改变
 void Mset::subNode_currentIndexChanged(int index)
-{//txtWarn->setText(QString::number(sn));
-	printf("subNode init\n");
+{
+    printf("subNode init   index==%d\n",index);
 	int i = 0;//默认漏电报警
 	if(index > 7) return;
-    if ((ML4T4 == sn) || (ML1T1 == sn) || (DL1T1 == sn))
+    if ((ML4T4 == sn))// || (ML1T1 == sn) || (DL1T1 == sn))
     {
 		if(index > 3)
         {
 			i =1;
-            txtWarn->setText( QString::number(nodeParm[index]/10));
+            txtWarn->setText( QString::number(nodeParm[index]));//10
 		}
 		else
 		{
@@ -138,12 +141,25 @@ void Mset::subNode_currentIndexChanged(int index)
             txtWarn->setText( QString::number(nodeParm[index]));
 		}
 	}
+    if((ML1T1 == sn) || (DL1T1 == sn))
+    {
+        if(index > 0 )
+        {
+            i =1;
+            txtWarn->setText( QString::number(nodeParm[4]));
+        }
+        else
+        {
+            i=0;
+            txtWarn->setText( QString::number(nodeParm[index]));
+        }
+    }
     if((MC == sn)||(ML8 == sn))
     {
 		i=0;
 		txtWarn->setText( QString::number(nodeParm[index]));
 	}
-    //lbl_wran->setText(QString::number(sn));
+
 	if(i == 0)
     {
         lbl_wran->setText(tr("漏电报警(mA)"));
@@ -152,8 +168,7 @@ void Mset::subNode_currentIndexChanged(int index)
     else if(i == 1){
         lbl_wran->setText(tr("温度报警(℃)"));
 		isLorT = 2;
-	}
-	//txtWarn->setText( QString::number(nodeParm[index]/10));
+	}	
 	printf("subNode end\n");
 }
 //=========== 写下报警数值 ====================
@@ -182,11 +197,11 @@ void Mset::warn_valueChanged ( const QString & text)
 //            return;
 //        }
 	}
-	else if( isLorT == 2)//当温度为55－80时版本
+    else if( isLorT == 2)//当温度为45－140时版本
 	{
-		if((text.toInt() > 80))
+        if((text.toInt() > 140))
 		{
-			txtWarn->setText("80");
+            txtWarn->setText("140");
 			return;
 		}
 
@@ -244,13 +259,13 @@ void Mset::setParm()
 	}
 	else if(isLorT==2)
 	{
-        if(txtWarn->text().toInt()>80)
+        if(txtWarn->text().toInt()>140)
 		{
-			txtWarn->setText("80");
+            txtWarn->setText("140");
 		}
-		else if(txtWarn->text().toInt()<55)
+        else if(txtWarn->text().toInt()<45)
         {
-			txtWarn->setText("55");
+            txtWarn->setText("45");
 		}
 		else
 		{
@@ -263,17 +278,18 @@ void Mset::setParm()
 	}
 
 	int currentSubNode = cmbSubNode->currentText().toInt();
-	if ((sn == ML4T4) || (sn == ML1T1) || (sn == DL1T1))
+    printf("currentSubNode==%d\n",currentSubNode);
+    if ((sn == ML4T4) || (sn == ML1T1) || (sn == DL1T1))
 	{
-		if(currentSubNode > 3)
+        if(currentSubNode > 3)
 		{
-	        nodeParm[currentSubNode] = txtWarn->text().toInt()*10;
+            nodeParm[currentSubNode] = txtWarn->text().toInt();//*10;
 		}
 		else
 		{
 	        nodeParm[currentSubNode] = txtWarn->text().toInt();
 		}
-	}
+    }
 	if((sn==MC)||(sn==ML8))
 	{
 	    nodeParm[currentSubNode] = txtWarn->text().toInt();
@@ -307,6 +323,22 @@ void Mset::insertSubItem(int count)
 	{
 		cmbSubNode->insertItem(i,QString::number(i));
 	}
+}
+void Mset::insertNewSubItem(int flag, int count)
+{
+    cmbSubNode->clear();
+    if(flag == DL1T1 || flag == ML1T1)
+    {
+        cmbSubNode->insertItem(0,QString::number(0));
+        cmbSubNode->insertItem(4,QString::number(4));
+    }
+    else
+    {
+        for(int i = 0; i < count ; i++)
+        {
+            cmbSubNode->insertItem(i,QString::number(i));
+        }
+    }
 }
 void Mset::cleanData()
 {
@@ -346,7 +378,7 @@ void Mset::delChange(const QString &str)
 	printf("del c\n");
 	if(str == "" || str == "") return;
 	printf("del c1\n");
-	if((str.toInt() > 60)||(str.toInt()==0))
+    if((str.toInt() > 30)||(str.toInt()==0))
 	{
 		printf("del c2\n");
 		txtDelay->setText(str.left(str.length()-1));

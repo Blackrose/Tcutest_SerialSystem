@@ -24,7 +24,7 @@ int Bell::init()
 	Bell::error_flag = 0;
 
 	Bell::flag = 0;
-	::ioctl(Bell::fd, 0, 199);
+    ::ioctl(Bell::fd, 0, 1);//199
 	printf("---bell init ok---\n");
 	return 1;
 }
@@ -45,7 +45,7 @@ void Bell::write(char arg )
 		return;
 	}
 	Bell::flag = cmd;
-	::ioctl(Bell::fd, cmd, 199);
+    ::ioctl(Bell::fd, cmd, 1);//199
 }
 void Bell::on()
 {

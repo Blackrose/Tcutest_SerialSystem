@@ -7,7 +7,7 @@
 #include "ui_printer.h"
 #include <QCloseEvent>
 #include <QWidget>
-
+#include <stdio.h>
 
 class Printer : public QWidget, public Ui_PrinterForm
 {

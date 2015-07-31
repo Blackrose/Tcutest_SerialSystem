@@ -126,7 +126,7 @@ void Check::b()
 			Led::modErrorLightOn();
 			Led::warnLightOn();
 			//timer.start(1000);
-            Led::CtlOn();
+            //Led::CtlOn();
             //Led::onRelay();
             usleep(1000000);//1.0s
 }
@@ -142,7 +142,7 @@ void Check::a()
 			Led::warnLightOff();
 			Led::LCDLightOn();
 			//timer.stop();
-            Led::CtlOff();
+            //Led::CtlOff();
             //Led::offRelay();
             usleep(500000);//0.5s
 

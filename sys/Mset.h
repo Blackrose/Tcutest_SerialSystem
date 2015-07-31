@@ -25,6 +25,7 @@ public :
 	virtual bool eventFilter( QObject * watched, QEvent *event);
         virtual ~Mset();
 	void insertSubItem(int count);
+    void insertNewSubItem(int flag, int count);
 	void cleanData();
 	QTimer timer;
 	static int nodeParm[16];

@@ -28,8 +28,13 @@ void IMFrame::getNumber(int number)
 }
 void IMFrame::my_show(QRect *location,QLineEdit *txt)
 {
-	QPoint p = getPoint(*location);
-	inWid.my_show(&QRect(p.x(), p.y(), 262, 130));
+    QPoint p = getPoint(*location);
+
+    QRect QRecttmp=QRect(p.x(), p.y(), 262, 130);
+    QRect *pQRect=&QRecttmp;
+    inWid.my_show(pQRect);
+
+    //inWid.my_show(&QRect(p.x(), p.y(), 262, 130));
 	etxt = txt;
 	content = etxt->text();
 }

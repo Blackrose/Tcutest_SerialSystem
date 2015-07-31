@@ -62,18 +62,24 @@ void NodeStatus::_show(int net,int id,int mod,int stat)
 			fillRow( lbl0, lblstat0, net, id, 0, WARN, true);
 		else
                 	fillRow( lbl0, lblstat0, net, id, 0, NORMAL, true);
-                fillRow( lbl1, lblstat1, net, id, 1, stat, true);
-                fillRow( lbl2, lblstat2, net, id, 2, stat, true);
-                fillRow( lbl3, lblstat3, net, id, 3, stat, true);
+//                fillRow( lbl1, lblstat1, net, id, 1, stat, true);
+//                fillRow( lbl2, lblstat2, net, id, 2, stat, true);
+//                fillRow( lbl3, lblstat3, net, id, 3, stat, true);
+                fillRow( lbl1, lblstat1, net, id, 1, UNABLE, true);
+                fillRow( lbl2, lblstat2, net, id, 2, UNABLE, true);
+                fillRow( lbl3, lblstat3, net, id, 3, UNABLE, true);
 		if (Module::getSubError(net, id, 4))
 			fillRow( lbl4, lblstat4, net, id, 4, ERROR, true);
 		else if (Module::getSubWarn(net, id, 4))
 			fillRow( lbl4, lblstat4, net, id, 4, WARN, true);
 		else
                 	fillRow( lbl4, lblstat4, net, id, 4, NORMAL, true);
-                fillRow( lbl5, lblstat5, net, id, 5, stat, true);
-                fillRow( lbl6, lblstat6, net, id, 6, stat, true);
-                fillRow( lbl7, lblstat7, net, id, 7, stat, true);
+//                fillRow( lbl5, lblstat5, net, id, 5, stat, true);
+//                fillRow( lbl6, lblstat6, net, id, 6, stat, true);
+//                fillRow( lbl7, lblstat7, net, id, 7, stat, true);
+                fillRow( lbl1, lblstat1, net, id, 1, UNABLE, true);
+                fillRow( lbl2, lblstat2, net, id, 2, UNABLE, true);
+                fillRow( lbl3, lblstat3, net, id, 3, UNABLE, true);
                 break;
 		case DL1T1:
                 lblThis->setText(tr("网络号:")+QString::number(net)+tr(" 节点号:")+QString::number(id)+tr(" 型号:")+Module::moTyp[mod].name+tr("(独立式,1路剩余电流,1路温度)"));

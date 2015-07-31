@@ -11,8 +11,8 @@
 
 #include "db.h"
 
-#define SQLMAX 10000
-#define SQLMAXDATA 10
+//#define SQLMAX 10000
+#define SQLMAXDATA 1000
 
 class WarnMsg
 {
@@ -47,5 +47,8 @@ public:
 
 	static void insertMainOk();//主电正常
 	static void insertPreMainOk();//备电正常
+
+    //static int flagerrdelete;
+    //static int flagwarndelete;
 };
 #endif

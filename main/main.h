@@ -50,6 +50,8 @@
 #include "printer.h"
 #include "help.h"
 #include "qpainter.h"
+#include "frminput/frminput.h"
+
 #define NORMAL 	1
 #define WARN	2
 #define ERROR	0
@@ -153,6 +155,8 @@ public :
 	void checkError();
 	/*============= 检查报警 ===============*/
 	void checkWarn();
+    /*============= 检查报警控制Relay ===============*/
+    void checkRelayWarn();
 	/*============ 检测密码 ===============*/
 	void check_pwd();
 	void setBellAndLedStatus();
@@ -177,7 +181,8 @@ public :
 	//RxThread 	*p_rx;		//接收数据
 	QTimer 		*p_timer;	//1s 定时器
 	QTimer          *pic_timer;       //
-//	QTimer      *led_timer; //通讯灯闪烁变化定时器－－－－－－－－－－－－－
+    QTimer      *s_timer;
+    QTimer      *led_timer; //通讯灯闪烁变化定时器－－－－－－－－－－－－－
 	Module 		*p_mod;		//模块链表
 	CheckPwd	*p_chePwd;	//密码验证
 	NodeStatus      *p_nodeStatus;	//节点的详细状态
@@ -192,6 +197,7 @@ public :
 	int 		prepower;	//备电源
 	int 		errorLed;	//节点故障灯
 	int 		warnLed;	//led报警灯
+    int         warnRelay;  //报警控制继电器
 
 	int		off;		//断路 
 	int 		on;		//短路
@@ -214,6 +220,7 @@ public :
 	int 		timer_countPower;
     int         colorcount;
     int         flagcolor;
+    int         flagnosound;
 
 public slots:
 	void slot_printer();
@@ -227,11 +234,15 @@ public slots:
 	void slot_logout();		//模块注销
 	void slot_btn_try();		//试验
 	void slot_no_sound(); 		//静音
+    void slot_start_sound();
+    void slot_stop_sound();
 	void slot_btn_node();		//node 按钮
 	void slot_btn_reset();		//主机复位
 	void slot_net();		//单击网络
 	void slot_timer();		//定时器
 	void pic_handle();
+    void sound_timer();
+    void led_slot_timer();
 	void clearScreenCount();
 public:
 	void slot_warn();		//报警

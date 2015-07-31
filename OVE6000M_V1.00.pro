@@ -85,7 +85,8 @@ HEADERS += data/pake.h \
            device/rtc/rtc.h \
            device/watchdog/watchdog.h \
            data/modbus/dri/can.h \
-           data/modbus/dri/rxdata.h
+           data/modbus/dri/rxdata.h \
+    frminput/frminput.h
 FORMS += print/main.ui \
          startUp/startUpFrm.ui \
          keyboard/ui/keyboard.ui \
@@ -103,7 +104,8 @@ FORMS += print/main.ui \
          sys/ui/sys_manage.ui \
          sys/ui/sys_set.ui \
          sys/ui/update_pwd.ui \
-         sys/ui/user.ui
+         sys/ui/user.ui \
+    frminput/frminput.ui
 SOURCES += data/pake.cpp \
            data/signals.cpp \
            keyboard/imframe.cpp \
@@ -144,7 +146,8 @@ SOURCES += data/pake.cpp \
            device/rtc/rtc.cpp \
            device/watchdog/watchdog.cpp \
            data/modbus/dri/can.cpp \
-           data/modbus/dri/rxdata.cpp
+           data/modbus/dri/rxdata.cpp \
+    frminput/frminput.cpp
 RESOURCES += img.qrc
 QT += sql
 

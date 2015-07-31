@@ -69,7 +69,7 @@ void Led::write(char number, char flag)
         else
         	cmd = 1;
 	if ((number < 5) && (number >= 0))
-		num = 4 - number;
+		num = 4 - number;    
 	::ioctl(Led::fd, cmd, num);
 	if (num < 5)
 		Led::status[num] = cmd;
@@ -164,23 +164,17 @@ bool Led::LCDStats()//是否亮
 
 void Led::CtlOn()//控制输出有效
 {
-	char on = 1;
-	
+    char on = 1;
     if (Led::fd1 > 0)
         ::write(Led::fd1, &on, 1);
-        int i = ::ioctl(Led::fd1, 1, 1);
-    //printf("CtlOn  i====%d\n",i);
-        //::write(fd1,1,1);
+    printf("CtlOn  \n");
 }
 void Led::CtlOff()//控制输出无效
 {
-	char off = 0;
-	
+    char off = 0;
     if (Led::fd1 > 0)
-        ::write(fd1, &off, 1);
-        int i = ::ioctl(Led::fd1, 0, 1);
-        //::write(fd1,0,1);
-    //printf("CtlOff   i=====%d\n",i);
+        ::write(fd1, &off, 0);
+    printf("CtlOff\n");
 }
 
 void Led::onRelay()

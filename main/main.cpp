@@ -4,6 +4,7 @@
 #include "main.h"
 #include "startUpFrm.h"
 #include "modbustx.h"
+#include "modbusrx.h"
 #include "Mset.h"
 #include "can.h"
 #include "pic/pic_communication.h"
@@ -43,13 +44,13 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	Led::commLightOff();
 	Led::modErrorLightOff(); 
 	Led::warnLightOff();
-    //Led::CtlOff();
-    Led::CtlOn();
+    Led::CtlOff();
 
 	proBar->setValue(24);
 	p_timer	= new QTimer(this);	//初始化定时器
-//	led_timer = new QTimer(this);
+    led_timer = new QTimer(this);
 	pic_timer = new QTimer(this); 
+    s_timer = new QTimer(this);
 	proBar->setValue(32);
 	Watchdog::kellLive();//喂狗
 	p_sys 	= new Sys(p_imf);//系统管理sig
@@ -84,6 +85,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	mainpower = 0;		//主电源
 	errorLed = 0;		//节点故障灯
 	warnLed = 0;		//led报警灯
+    warnRelay = 0;
 	error = 0;		//故障
 	warn = 0;		//报警
 	screenCount = 0;	//计算器
@@ -102,6 +104,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	timer_countPower = 3000;
     colorcount = 0;//add by 7.16
     flagcolor = 0;
+    flagnosound = 0;
 	Message::static_msg = new Message();
 	for(int i = 0 ; i < DATCOU ; i++)
 		dataA[i] = -1;	//当前电流值
@@ -132,6 +135,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	Db::newTimeNoSec(lblLocalTime,&time_min);//界面时钟
 	p_timer->start(3000);//启动定时器
 	pic_timer->start(50);
+    //led_timer->start(500);//0.5s
 	newErrorTest();
 	printf("init Main ok\n");
 
@@ -164,6 +168,7 @@ void Main::slot_reg(int net,int id)
 		}
 		checkError();
 		checkWarn();
+        checkRelayWarn();
 		setBellAndLedStatus();
 		Led::LCDLightOn();
 		if(p_nodeStatus -> curNet == net && p_nodeStatus-> curId == id )
@@ -251,7 +256,8 @@ void Main::slot_warn()
 			}
 
 			warn = 1;
-			warnLed = 1;			
+            warnLed = 1;
+            warnRelay = 1;
 			setBellAndLedStatus();
 			Led::LCDLightOn();
 			if(p_nodeStatus->curNet == net && p_nodeStatus->curId == id )
@@ -480,13 +486,21 @@ void Main::setBellAndLedStatus()
 	if(warnLed == 1)
 	{
 		Led::warnLightOn();
-		Led::CtlOn();
+        //Led::CtlOn();
 	}
 	else
 	{ 	
 		Led::warnLightOff();
-		Led::CtlOff();
+        //Led::CtlOff();
 	}
+    if(warnRelay == 1)
+    {
+        Led::CtlOn();
+    }
+    else
+    {
+        Led::CtlOff();
+    }
 	if(warn == 1)
 	{
 	//	Bell::on();
@@ -596,6 +610,31 @@ void Main::pic_handle()
 		PicProtocol::pic_heart_beat();
 	}
 	PicProtocol::pic_port_state_fsm(&PicProtocol::pic_port);
+}
+
+void Main::sound_timer()
+{
+     flagnosound = 1;
+     printf("enter sound_timer stop sound\n");
+}
+
+void Main::led_slot_timer()
+{
+    printf("now ModbusRx ====%d\n",ModbusRx::dataStatus);
+    if (ModbusRx::dataStatus == 4)
+    {
+        printf("now ModbusRx led on or off\n");
+        //si_i = ++ si_i % 10;//原来为60
+//        if ( si_i == 1)
+//            Led::commLightOn();
+//        else  if(si_i == 6)//原来为20
+//            Led::commLightOff();
+         Led::commLightOn();
+         usleep(500000);
+         Led::commLightOff();
+         //usleep(500000);
+    }
+
 }
 
 void Main::clearScreenCount()
@@ -899,6 +938,22 @@ void Main::slot_no_sound()
 	Bell::warn_flag = 0;
 	Bell::off();
 }
+
+void Main::slot_start_sound()
+{
+    s_timer->start(1000);//1s
+}
+
+void Main::slot_stop_sound()
+{
+    s_timer->stop();
+    if(flagnosound == 1)//time ok
+    {
+        printf("stop sound\n");
+        //add user operation
+        flagnosound = 0;
+    }
+}
 //======== 试验 =========
 void Main::slot_btn_try()
 {
@@ -1002,14 +1057,16 @@ void Main::slot_reboot()
 }
 void Main::slot_put_off()
 {//C型脱扣
-	whoChePwd = TUO;
-	p_chePwd->_show(); 
+    frmInput::Instance()->show();
+    //whoChePwd = TUO;
+    //p_chePwd->_show();
 }
 
 void Main::slot_printer()
 {
-        whoChePwd = PRINTER;
-        p_chePwd->_show();
+    frmInput::Instance()->hide();
+//    whoChePwd = PRINTER;
+//    p_chePwd->_show();
 }
 
 void Main::slot_help()
@@ -1030,8 +1087,8 @@ void Main::check_pwd()
 		case TUO:
 			p_putOff->_show();
 			break;
-		case PRINTER:
-			p_printer->_show();
+		case PRINTER:            
+            p_printer->_show();
 			break;
 		case LOGOUT:
             if(curNet >= 0 && curNode >= 0 && curNet < 2 && curNode < BtnNodeNUm)
@@ -1166,8 +1223,7 @@ void Main::check_pwd()
 			checkWarn();
 			if(warnLed==1)
 			{
-				Led::warnLightOn();
-				Led::CtlOn();
+				Led::warnLightOn();               
 			}
 			if(errorLed==1)
 			{
@@ -1204,6 +1260,18 @@ void Main::checkWarn()
 		warnLed = 0;
 		warn = 0;
 	}
+}
+/*============= 检查报警控制Relay ===============*/
+void Main::checkRelayWarn()
+{printf("checkRelayWarn\n");
+    if(p_mod->warnCount() > 0)
+    {
+        warnRelay = 1;
+    }
+    else
+    {
+        warnRelay = 0;
+    }
 }
 //============ 初始化当前信息子节点 ============
 void Main::initSubNode()
@@ -1244,13 +1312,16 @@ void Main::initConnect()
 	connect(btn_try,SIGNAL(clicked()),this,SLOT(slot_btn_try()));//试验
 	connect(btn_sysSet,SIGNAL(clicked()),this,SLOT(slot_sys()));//系统设置
 	connect(btn_noSound,SIGNAL(clicked()),this,SLOT(slot_no_sound()));//静音
+    connect(btn_noSound,SIGNAL(pressed()),this,SLOT(slot_start_sound()));//静音
+    connect(btn_noSound,SIGNAL(released()),this,SLOT(slot_stop_sound()));//静音
 	connect(btnNet0,SIGNAL(clicked()),this,SLOT(slot_net()));//单击网络
 	connect(btnNet1,SIGNAL(clicked()),this,SLOT(slot_net()));//单击网络
 	connect(btn_printer, SIGNAL(clicked()), this, SLOT(slot_printer()));
 	connect(btn_help, SIGNAL(clicked()), this, SLOT(slot_help()));
 	connect(p_timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//显示系统时间
-	connect(pic_timer, SIGNAL(timeout()), this, SLOT(pic_handle()));	
-	//自动上传
+    connect(pic_timer, SIGNAL(timeout()), this, SLOT(pic_handle()));//自动上传
+    connect(s_timer, SIGNAL(timeout()), this, SLOT(sound_timer()));
+    connect(led_timer, SIGNAL(timeout()), this, SLOT(led_slot_timer()));
 }
 void Main::showHowNet()
 {

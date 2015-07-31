@@ -21,6 +21,7 @@ PutOff::PutOff(Signals *p_rx,QWidget *parent): QWidget(parent),Ui_PutOffForm()
 void PutOff::_show()
 {
 	int net = Module::getNet();//-1 没有网络,0 只有 0 网络, 1 只有 1 网络,2 两个网络都有
+    cbNet->clear();
 	if(net == 0){
 		cbNet->insertItem(0,"0");
 	}

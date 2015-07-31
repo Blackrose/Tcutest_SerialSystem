@@ -7,7 +7,7 @@
 #include "ui_help.h"
 #include <QWidget>
 #include <QCloseEvent>
-
+#include <stdio.h>
 
 class Help : public QWidget, public Ui_HelpForm
 {

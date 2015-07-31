@@ -27,6 +27,7 @@ bool ModbusRx::sendDataToPake(int net,int id)
 				if(RxThread::netData[net].data[1] == 0x03 && ModbusTx::startSize[net]*2 == RxThread::netData[net].data[2] )
 				{
  					ModbusRx::dataStatus = 4;//right
+                    //printf("ModbusRx::dataStatus = 4\n");
 					if( ModbusTx::startAddr[net] == 25)
 					{//读取节点状态
 						Pake::readBuf.cmd = QUE_MOD_STA;
@@ -69,7 +70,7 @@ bool ModbusRx::sendDataToPake(int net,int id)
 					{//读取设置的报警数值
 						Pake::readBuf.cmd = QUE_WAR_VAL;
 						Pake::readBuf.data[0] = RxThread::netData[net].data[3]*256 +  RxThread::netData[net].data[4];
-                                                Pake::readBuf.data[1] = RxThread::netData[net].data[5]*256 +  RxThread::netData[net].data[6];
+                        Pake::readBuf.data[1] = RxThread::netData[net].data[5]*256 +  RxThread::netData[net].data[6];
 						Pake::readBuf.data[2] = RxThread::netData[net].data[7]*256 +  RxThread::netData[net].data[8];
 						Pake::readBuf.data[3] = RxThread::netData[net].data[9]*256 +  RxThread::netData[net].data[10];
 						Pake::readBuf.data[4] = RxThread::netData[net].data[11]*256 +  RxThread::netData[net].data[12];
@@ -96,7 +97,7 @@ bool ModbusRx::sendDataToPake(int net,int id)
 					{
 						Pake::readBuf.cmd = ASN_MOD_TRY;
 					}
-					ret = true;
+                    ret = true;//printf("0x10 ModbusRx::dataStatus = 4\n");
  					ModbusRx::dataStatus = 4;//right
 				}
 				else
