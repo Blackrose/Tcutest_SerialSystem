@@ -8,7 +8,8 @@
 class Signals
 {
 public:
-	static unsigned int errorFlag;
+    static unsigned int errorFlag;
+    static unsigned int Flagerror[2];
         static int netCount[2];//网络总节点数
 	int  netCurId[2] ;//网络当前节点
 	int netTimer[2];//网络从发次数

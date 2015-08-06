@@ -181,6 +181,7 @@ SysSet::_show ()
   if (Db::purview == DO)
     {
       btn_clear_warn->setEnabled (false);
+      btn_clear_err->setEnabled (false);
       btn_clear_opt->setEnabled (false);
       btnSys1OK->setEnabled (false);
       usart_btn_close->setEnabled (false);
@@ -204,6 +205,7 @@ SysSet::_show ()
   else
   {
       btn_clear_warn->setEnabled (true);
+      btn_clear_err->setEnabled (true);
       btn_clear_opt->setEnabled (true);
       btnSys1OK->setEnabled (true);
       usart_btn_close->setEnabled (true);
@@ -226,7 +228,7 @@ SysSet::_show ()
         local_slave_address_txt->setEnabled(false);
         local_slave_address_txt->removeEventFilter(this);
     } else {
-	usart1_badurate_comboBox->setEnabled(true);
+        usart1_badurate_comboBox->setEnabled(true);
         usart1_parity_comboBox->setEnabled(true);
         usart1_data_comboBox->setEnabled(true);
         usart1_stop_comboBox->setEnabled(true);
@@ -240,7 +242,7 @@ SysSet::_show ()
         usart3_parity_comboBox->setEnabled(true);
         usart3_data_comboBox->setEnabled(true);
         usart3_stop_comboBox->setEnabled(true);
-	local_slave_address_txt->setEnabled(true);
+        local_slave_address_txt->setEnabled(true);
         local_slave_address_txt->installEventFilter(this);
     }
 

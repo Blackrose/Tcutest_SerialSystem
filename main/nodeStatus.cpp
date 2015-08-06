@@ -17,10 +17,17 @@ NodeStatus::NodeStatus(QWidget *parent): QWidget(parent),Ui_NodeStatus()
 	par = parent;
         setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);//窗口没有没有边框  是 一个模太对话框
 
+    //QWSInputMethod* im = new SyszuxIM;
+    //QWSServer::setCurrentInputMethod(im);
+    //im->updateHandler(QWSInputMethod::FocusIn);
+
 	connect( btn_reset, SIGNAL(clicked()), this, SLOT(slot_reset()));
 	connect( btn_try, SIGNAL(clicked()), this, SLOT(slot_try()));
 	connect( btn_close, SIGNAL(clicked()), this, SLOT(slot_hide()));
 	connect( btn_no_wo, SIGNAL(clicked()), this, SLOT(slot_clear()));
+
+    connect(txt0,SIGNAL(textChanged(const QString)),this,SLOT(txtChange(QString)));
+    //txt0
 	curNet = -1;
 	curId = -1;
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -478,4 +485,9 @@ void NodeStatus::nodeNormal(QLabel *lbl)
 void NodeStatus::nodeUnable(QLabel *lbl)
 {
     lbl->setPixmap(QPixmap(QString::fromUtf8(":/img/images/unable.png")));
+}
+
+void NodeStatus::txtChange(const QString &str)
+{
+
 }

@@ -304,7 +304,7 @@
       <rect>
        <x>10</x>
        <y>40</y>
-       <width>601</width>
+       <width>301</width>
        <height>21</height>
       </rect>
      </property>
@@ -317,7 +317,7 @@
       <rect>
        <x>10</x>
        <y>130</y>
-       <width>601</width>
+       <width>301</width>
        <height>21</height>
       </rect>
      </property>
@@ -330,7 +330,7 @@
       <rect>
        <x>10</x>
        <y>220</y>
-       <width>601</width>
+       <width>301</width>
        <height>21</height>
       </rect>
      </property>
@@ -343,7 +343,7 @@
       <rect>
        <x>10</x>
        <y>100</y>
-       <width>601</width>
+       <width>301</width>
        <height>21</height>
       </rect>
      </property>
@@ -356,7 +356,7 @@
       <rect>
        <x>10</x>
        <y>250</y>
-       <width>601</width>
+       <width>301</width>
        <height>21</height>
       </rect>
      </property>
@@ -369,7 +369,7 @@
       <rect>
        <x>10</x>
        <y>70</y>
-       <width>601</width>
+       <width>301</width>
        <height>21</height>
       </rect>
      </property>
@@ -382,7 +382,7 @@
       <rect>
        <x>10</x>
        <y>160</y>
-       <width>601</width>
+       <width>301</width>
        <height>21</height>
       </rect>
      </property>
@@ -395,7 +395,7 @@
       <rect>
        <x>10</x>
        <y>190</y>
-       <width>601</width>
+       <width>301</width>
        <height>21</height>
       </rect>
      </property>
@@ -431,6 +431,110 @@
        <string>子节点 报警值   报警时间              备注</string>
       </property>
      </widget>
+    </widget>
+    <widget class="QLineEdit" name="txt0">
+     <property name="geometry">
+      <rect>
+       <x>311</x>
+       <y>40</y>
+       <width>300</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="echoMode">
+      <enum>QLineEdit::Normal</enum>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txt1">
+     <property name="geometry">
+      <rect>
+       <x>311</x>
+       <y>70</y>
+       <width>300</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="echoMode">
+      <enum>QLineEdit::Normal</enum>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txt3">
+     <property name="geometry">
+      <rect>
+       <x>311</x>
+       <y>130</y>
+       <width>300</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="echoMode">
+      <enum>QLineEdit::Normal</enum>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txt2">
+     <property name="geometry">
+      <rect>
+       <x>311</x>
+       <y>100</y>
+       <width>300</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="echoMode">
+      <enum>QLineEdit::Normal</enum>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txt5">
+     <property name="geometry">
+      <rect>
+       <x>311</x>
+       <y>190</y>
+       <width>300</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="echoMode">
+      <enum>QLineEdit::Normal</enum>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txt4">
+     <property name="geometry">
+      <rect>
+       <x>311</x>
+       <y>160</y>
+       <width>300</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="echoMode">
+      <enum>QLineEdit::Normal</enum>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txt6">
+     <property name="geometry">
+      <rect>
+       <x>311</x>
+       <y>220</y>
+       <width>300</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="echoMode">
+      <enum>QLineEdit::Normal</enum>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="txt7">
+     <property name="geometry">
+      <rect>
+       <x>311</x>
+       <y>250</y>
+       <width>300</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="echoMode">
+      <enum>QLineEdit::Normal</enum>
+     </property>
     </widget>
    </widget>
    <widget class="QFrame" name="frame_3">

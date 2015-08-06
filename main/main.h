@@ -51,6 +51,8 @@
 #include "help.h"
 #include "qpainter.h"
 #include "frminput/frminput.h"
+#include "SYSZUXpinyin/syszuxim.h"
+#include "SYSZUXpinyin/syszuxpinyin.h"
 
 #define NORMAL 	1
 #define WARN	2
@@ -220,7 +222,7 @@ public :
 	int 		timer_countPower;
     int         colorcount;
     int         flagcolor;
-    int         flagnosound;
+    static int  flagnosound;
 
 public slots:
 	void slot_printer();

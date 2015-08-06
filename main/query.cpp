@@ -20,15 +20,14 @@ Query::Query(QWidget *parent): QDialog(parent),Ui_QueryForm()
 	count = 0;		//数据条数	
 	currentCount = 0;
 	modelSql = new QSqlQueryModel;
-	qtw = NULL;
+	qtw = NULL;    
     for(int i = 0 ; i < 128 ; i++)
 	{
 		cmb_node->insertItem(i+1,QString::number(i));
 	}
         setWindowFlags(Qt::Dialog
 			| Qt::FramelessWindowHint);//窗口没有没有边框
-	tableWidget->setAlternatingRowColors(true);//设置背景交替使用
-
+	tableWidget->setAlternatingRowColors(true);//设置背景交替使用   
 	connect(btn_close, SIGNAL(clicked()), this, SLOT(_hide()));
 	connect(btn_query, SIGNAL(clicked()), this, SLOT(ok()));
 	connect(btnBefore, SIGNAL(clicked()), this, SLOT(beforePage()));
@@ -49,8 +48,8 @@ void Query::_show()
 	init_time( *dte_end, 0);
 	printf("2\n");
 	init_time( *dte_begin, 10);
-	printf("3\n");
-    //cmb_note_type -> setCurrentItem(0);
+	printf("3\n");    
+    cmb_note_type->setCurrentIndex(0);
 	init_parameter();
 	printf("4\n");
 	init_table();
@@ -60,12 +59,12 @@ void Query::_show()
 }
 void Query::_hide()
 {
-	tableWidget->clearSelection();
-	hide();
+	tableWidget->clearSelection();    
+    hide();
 }
 // 查询
 void Query::ok()
-{
+{    
 	tableWidget->clearSelection();
 	init_parameter();
 	init_table();
@@ -115,7 +114,7 @@ void Query::init_table()
 // 初始化一些参数
 void Query::init_parameter()
 {
-	typeQuery = cmb_note_type->currentIndex();
+    typeQuery = cmb_note_type->currentIndex();
 	timer_start = dte_begin->text();
 	timer_end = dte_end->text();
 	if( typeQuery == 0)

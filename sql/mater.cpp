@@ -1,5 +1,7 @@
 
 #include "mater.h"
+#include <QString>
+#include <string.h>
 
 int Mater::read()
 {
@@ -55,46 +57,53 @@ bool Mater::writeUsart1Baudrate(QString str)
 
 bool Mater::writeUsart1Parity(QString str)
 {
-	QString sql="update type set name='"+str+"' where id = 6";
+    QString sql="update type set name='"+str+"' where id = 6";
+    //QString sql = QString::fromUtf8("update type set name='") +str+ QString::fromUtf8("' where id = 6");
 	return  Db::IDUdb(sql);
 }
 
 bool Mater::writeUsart1Data(QString str)
 {
-	QString sql="update type set name='"+str+"' where id = 7";
+    QString sql="update type set name='"+str+"' where id = 7";
+    //QString sql = QString::fromUtf8("update type set name='") +str+ QString::fromUtf8("' where id = 7");
 	return  Db::IDUdb(sql);
 }
 
 bool Mater::writeUsart1Stop(QString str)
 {
-	QString sql="update type set name='"+str+"' where id = 8";
+    QString sql="update type set name='"+str+"' where id = 8";
+    //QString sql = QString::fromUtf8("update type set name='") +str+ QString::fromUtf8("' where id = 8");
 	return  Db::IDUdb(sql);
 }
 
 QString Mater::readUsart1Baudrate()
 {
-	QString sql = "select * from type where id = 5" ;
+    QString sql = "select * from type where id = 5" ;
+    //QString sql = QString::fromUtf8("select * from type where id = 5") ;
 	sql = Db::getValue( sql, 1);
 	return sql;
 }
 
 QString Mater::readUsart1Parity()
 {
-	QString sql = "select * from type where id = 6" ;
+    QString sql = "select * from type where id = 6" ;
+    //QString sql =  QString::fromUtf8("select * from type where id = 6");
 	sql = Db::getValue( sql, 1);
 	return sql;
 }
 
 QString Mater::readUsart1Data()
 {
-	QString sql = "select * from type where id = 7" ;
+    QString sql = "select * from type where id = 7" ;
+    //QString sql = QString::fromUtf8("select * from type where id = 7") ;
 	sql = Db::getValue( sql, 1);
 	return sql;
 }
 
 QString Mater::readUsart1Stop()
 {
-	QString sql = "select * from type where id = 8" ;
+    QString sql = "select * from type where id = 8" ;
+    //QString sql = QString::fromUtf8("select * from type where id = 8") ;
 	sql = Db::getValue( sql, 1);
 	return sql;
 }

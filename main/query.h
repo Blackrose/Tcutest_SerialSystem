@@ -41,7 +41,7 @@ private:
 	int 		currentCount;	//当前页几条数据
 	int 		par[4];
 	QString 	timer_start;
-	QString 	timer_end;
+    QString 	timer_end;
 public slots:
 	void changedIndex(int index);
 	void ok();

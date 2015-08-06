@@ -86,7 +86,9 @@ HEADERS += data/pake.h \
            device/watchdog/watchdog.h \
            data/modbus/dri/can.h \
            data/modbus/dri/rxdata.h \
-    frminput/frminput.h
+    frminput/frminput.h \    
+    SYSZUXpinyin/syszuxim.h \
+    SYSZUXpinyin/syszuxpinyin.h
 FORMS += print/main.ui \
          startUp/startUpFrm.ui \
          keyboard/ui/keyboard.ui \
@@ -105,7 +107,8 @@ FORMS += print/main.ui \
          sys/ui/sys_set.ui \
          sys/ui/update_pwd.ui \
          sys/ui/user.ui \
-    frminput/frminput.ui
+    frminput/frminput.ui \
+    SYSZUXpinyin/syszuxpinyin.ui
 SOURCES += data/pake.cpp \
            data/signals.cpp \
            keyboard/imframe.cpp \
@@ -147,7 +150,10 @@ SOURCES += data/pake.cpp \
            device/watchdog/watchdog.cpp \
            data/modbus/dri/can.cpp \
            data/modbus/dri/rxdata.cpp \
-    frminput/frminput.cpp
-RESOURCES += img.qrc
+    frminput/frminput.cpp \
+    SYSZUXpinyin/syszuxim.cpp \
+    SYSZUXpinyin/syszuxpinyin.cpp
+RESOURCES += img.qrc \
+    syszuxpinyin.qrc
 QT += sql
-
+#LIBS += -L ./ -lsyszuxpinyin

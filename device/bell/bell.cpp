@@ -1,4 +1,5 @@
 #include "bell.h"
+#include "main.h"
 
 int Bell::fd = 0;
 int Bell::flag = 0;
@@ -82,7 +83,7 @@ void Bell::hanlde()
 	
 	if (Bell::warn_flag) {
 		Bell::on();
-	} else if (Bell::error_flag) {
+    } else if (Bell::error_flag && (!Main::flagnosound)) {
 		if (count % 2)
 			Bell::off();
 		else

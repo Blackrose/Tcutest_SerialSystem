@@ -3,6 +3,7 @@
 #include "crc.h"
 #include "rxdata.h"
 #include "pake.h"
+#include "signals.h"
 
 int ModbusRx::dataStatus = 0;
 
@@ -33,8 +34,16 @@ bool ModbusRx::sendDataToPake(int net,int id)
 						Pake::readBuf.cmd = QUE_MOD_STA;
 						Pake::readBuf.data[0] = RxThread::netData[net].data[3]*256 + RxThread::netData[net].data[4];
 						Pake::readBuf.data[1] = RxThread::netData[net].data[5]*256 + RxThread::netData[net].data[6];
-                        //printf("testdata= %x ",Pake::readBuf.data[0]);
-                        //printf("\n");
+                        printf("testdata= %x ",Pake::readBuf.data[1]);
+                        Signals::errorFlag = Pake::readBuf.data[1];
+                        printf("\n");
+                        printf("net ==%d\n",net);
+                        if(net == 0){
+                            Signals::Flagerror[0] = Pake::readBuf.data[1];
+                        }else{
+                            Signals::Flagerror[1] = Pake::readBuf.data[1];
+                        }
+
 					}
 					else if(ModbusTx::startAddr[net] == 1)
 					{//读取报警信息

@@ -246,7 +246,7 @@ int WarnMsg::insertNodeDo(int netId, int nodeId, int wDo)
             //return;
         }
         sql = "select count(*) from ErrMsg";
-        printf("insertNodeDo 222222222222222Db::selectCount(sql)===%d\n",Db::selectCount(sql));
+        //printf("insertNodeDo 222222222222222Db::selectCount(sql)===%d\n",Db::selectCount(sql));
         sql = "insert into ErrMsg values(NULL,'"+QString::number(netId)+"','"+
                 QString::number(nodeId)+"',' ','"+QString::number(wDo)+"',' ','"+time_str+"');";
     }
@@ -260,7 +260,7 @@ int WarnMsg::insertNodeDo(int netId, int nodeId, int wDo)
             //return;
         }
         sql = "select count(*) from WarnMsg";
-        printf("insertNodeDo 222222222222222Db::selectCount(sql)===%d\n",Db::selectCount(sql));
+        //printf("insertNodeDo 222222222222222Db::selectCount(sql)===%d\n",Db::selectCount(sql));
         sql = "insert into WarnMsg values(NULL,'"+QString::number(netId)+"','"+
                 QString::number(nodeId)+"',' ','"+QString::number(wDo)+"',' ','"+time_str+"');";
     }

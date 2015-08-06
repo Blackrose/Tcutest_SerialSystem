@@ -55,6 +55,7 @@ public slots:
 	void slot_try();
 	void slot_hide();
 	void slot_clear();
+    void txtChange(const QString &str);
 };
 
 #endif

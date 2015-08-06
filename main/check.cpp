@@ -56,6 +56,7 @@ void Check::start()
 	Led::commLightOff();
 	Led::modErrorLightOff();
 	Led::warnLightOff(); 
+    //Bell::warn_flag = 1;
     usleep(500000);//0.5s
     //Led::LCDLightOff();
 
@@ -119,7 +120,7 @@ void Check::start()
 void Check::b()
 {
 			//timer.stop();
-			Bell::on();
+            Bell::on();
 			Led::mainLightOn();
 			Led::preMainLightOn();
 			Led::commLightOn();
@@ -133,8 +134,8 @@ void Check::b()
 void Check::a()
 {
 	//timer.stop();
-	Main::com_led=1;
-			Bell::off();
+	Main::com_led=1; 
+
 			Led::mainLightOff();
 			Led::preMainLightOff();
 			Led::commLightOff();
@@ -145,6 +146,8 @@ void Check::a()
             //Led::CtlOff();
             //Led::offRelay();
             usleep(500000);//0.5s
+            Bell::off();
+            //Bell::error_flag = 1;
 
 }
 
@@ -153,8 +156,12 @@ void Check::slot_timer()
     switch(count)
     {
     case 1:
-        timer.start(500);//0.5s
+        timer.start(1000);//0.5s
         hide();
+        Bell::warn_flag = 0;
+        Bell::error_flag = 1;
+        if(Main::flagnosound == 1)
+            Main::flagnosound = 0;
         ((Main*)par)->LCDmain();
         count = 2;
         break;
@@ -162,7 +169,7 @@ void Check::slot_timer()
         ((Main*)par)->LCDmain();
         count = 3;
         break;
-    case 3:
+    case 3:        
         ((Main*)par)->LCDmain();
         count = 4;
         break;
@@ -178,6 +185,7 @@ void Check::slot_timer()
         ((Main*)par)->LCDmain();
         //count = 2;
         show();
+        Bell::error_flag = 0;
         timer.stop();
         break;
     }

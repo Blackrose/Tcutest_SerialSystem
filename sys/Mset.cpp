@@ -128,12 +128,12 @@ void Mset::subNode_currentIndexChanged(int index)
     printf("subNode init   index==%d\n",index);
 	int i = 0;//默认漏电报警
 	if(index > 7) return;
-    if ((ML4T4 == sn))// || (ML1T1 == sn) || (DL1T1 == sn))
+    if ((ML4T4 == sn) || (ML1T1 == sn))
     {
 		if(index > 3)
         {
 			i =1;
-            txtWarn->setText( QString::number(nodeParm[index]));//10
+            txtWarn->setText( QString::number(nodeParm[index]/10));//10
 		}
 		else
 		{
@@ -141,7 +141,7 @@ void Mset::subNode_currentIndexChanged(int index)
             txtWarn->setText( QString::number(nodeParm[index]));
 		}
 	}
-    if((ML1T1 == sn) || (DL1T1 == sn))
+    if(DL1T1 == sn)
     {
         if(index > 0 )
         {
@@ -279,17 +279,29 @@ void Mset::setParm()
 
 	int currentSubNode = cmbSubNode->currentText().toInt();
     printf("currentSubNode==%d\n",currentSubNode);
-    if ((sn == ML4T4) || (sn == ML1T1) || (sn == DL1T1))
+    if ((sn == ML4T4) || (sn == ML1T1))
 	{
         if(currentSubNode > 3)
 		{
-            nodeParm[currentSubNode] = txtWarn->text().toInt();//*10;
+            nodeParm[currentSubNode] = txtWarn->text().toInt()*10;//*10;
 		}
 		else
 		{
 	        nodeParm[currentSubNode] = txtWarn->text().toInt();
 		}
     }
+    if(sn == DL1T1)
+    {
+        if(currentSubNode > 3)
+        {
+            nodeParm[currentSubNode] = txtWarn->text().toInt();//*10;
+        }
+        else
+        {
+            nodeParm[currentSubNode] = txtWarn->text().toInt();
+        }
+    }
+
 	if((sn==MC)||(sn==ML8))
 	{
 	    nodeParm[currentSubNode] = txtWarn->text().toInt();
