@@ -105,7 +105,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	timer_count = 0 ;
 	timer_countPower = 3000;
     colorcount = 0;//add by 7.16
-    flagcolor = 0;
+    flagcolor = 0;   
 
 	Message::static_msg = new Message();
 	for(int i = 0 ; i < DATCOU ; i++)
@@ -156,17 +156,17 @@ void Main::slot_reg(int net,int id)
 //        //printf("注册信息 mo->sn==%d\n",mo->sn);
 //        ModbusTx::readMem( net, id, 201, 1);
 //    }//add by zhq
-    //Main::slot_mod();//型号
-	if(mo -> flag == ERROR)
-	{
-		mo -> flag = NORMAL;
+    //Main::slot_mod();//型号    
+    if(mo->flag == UNABLE)//ERROR
+    {
+        mo->flag = NORMAL;
 		if(curNet != net)
 		{
 			showCurrentNet(net);//显示当前网络
 		}
 		else
 		{
-			setBtnFalg( id, NORMAL);
+            printf("enter normal 169\n");setBtnFalg( id, NORMAL);
 		}
 		checkError();
 		checkWarn();
@@ -184,9 +184,9 @@ void Main::slot_error(int net,int id)
 {
 	struct  mod* mo = p_mod -> getNode( net, id);
 
-	if (mo->flag != ERROR)
+    if (mo->flag != UNABLE)//ERROR
 	{
-		mo -> flag = ERROR;
+        mo->flag = UNABLE;//ERROR
 		p_mod -> cleSubWarn( net , id);
 		if(curNet != net)
 		{
@@ -194,7 +194,8 @@ void Main::slot_error(int net,int id)
 		}
 		else
 		{
-			setBtnFalg( id, ERROR);
+            //setBtnFalg( id, ERROR);
+            setBtnFalg( id, UNABLE);//掉线
 		}
 		WarnMsg::insertEAlarm( net, id);
 		setLblWarnSum();
@@ -208,8 +209,9 @@ void Main::slot_error(int net,int id)
 		clearSubNodeDat();//20121130-16:55--modified
 		if(p_nodeStatus -> curNet == net && p_nodeStatus-> curId == id )
 		{
-			p_nodeStatus->_show( net, id, mo->sn, ERROR);
+            p_nodeStatus->_show( net, id, mo->sn, UNABLE);
 		}
+        mo->sn = NO_SN;//掉线
 	}
 }
 //================ 报警 ==================
@@ -224,140 +226,101 @@ void Main::slot_warn()
 	mo = p_mod -> getNode( net, id);
 	for( sudId = 0 ; sudId < 8 ; sudId++)
 	{
-		if(p_mod -> getSubWarn( net, id, sudId) == false && dat->data[sudId] > 0)
-		{
+        if(p_mod -> getSubWarn( net, id, sudId) == false && dat->data[sudId] > 0)
+        {
+            //printf("getSubWarn net==%d id==%d sudId==%d\n",net,id,sudId);
+            mo->flag = WARN;
+            if(curNet !=  net)
+            {
+                showCurrentNet(net);//显示当前网络
+            }
+            else
+            {
+                setBtnFalg(id, WARN);
+            }
+            is = p_mod->getWhatWarn( net, id, sudId);
+            if( is == 2)
+            {//漏电
+                WarnMsg::insertMAlarm( net, id, sudId, dat->data[sudId]);
+            }
+            else if( is == 0)
+            {//温度
+                WarnMsg::insertTAlarm( net, id, sudId, dat->data[sudId]/10);
+            }
+            //显示模块节点号
+            curNode = id;
+            clearSubNodeDat();
+            if(is == 2)
+            {
+                p_mod->setSubWarn( net, id, sudId, WARN, dat->data[sudId]);//写下子节点报警
+            }
+            if(is == 0)
+            {
 
-			if(curNet !=  net)
-			{
-				showCurrentNet(net);//显示当前网络
-			}
-			else
-			{
-				setBtnFalg(id, WARN);
-			}
-			is = p_mod->getWhatWarn( net, id, sudId);
-			if( is == 2)
-			{//漏电
-				WarnMsg::insertMAlarm( net, id, sudId, dat->data[sudId]);
-			}
-			else if( is == 0)
-			{//温度
-					WarnMsg::insertTAlarm( net, id, sudId, dat->data[sudId]/10);
-			}
-			//显示模块节点号
-			curNode = id;
-			clearSubNodeDat();
-			if(is == 2)
-			{
-				p_mod->setSubWarn( net, id, sudId, WARN, dat->data[sudId]);//写下子节点报警
-			}
-			if(is == 0)
-			{
+                p_mod->setSubWarn( net, id, sudId, WARN, dat->data[sudId]/10);//写下子节点报警
+            }
 
-				p_mod->setSubWarn( net, id, sudId, WARN, dat->data[sudId]/10);//写下子节点报警
-			}
-
-			warn = 1;
+            warn = 1;
             warnLed = 1;
             warnRelay = 1;
-			setBellAndLedStatus();
-			Led::LCDLightOn();
-			if(p_nodeStatus->curNet == net && p_nodeStatus->curId == id )
-			{
-				p_nodeStatus->_show(curNet,curNode,mo->sn,WARN);
-			}
-			setLblWarnSum();
-			//显示模块型号
-			lblXing->setText(tr(Module::moTyp[mo->sn].name));
-			//显示模块节点号
-			curNode = id;
-			lblNode->setText(QString::number(id));
-		}
-        else if(p_mod->getSubError(net, id, sudId) == false)
-        {
-            printf("net ==%d id ===%d sudId===%d\n",net,id,sudId);
-            if((Signals::Flagerror[net] >> sudId & 0x01))
-            //if((Signals::errorFlag >> sudId & 0x01))
+            setBellAndLedStatus();
+            Led::LCDLightOn();
+            if(p_nodeStatus->curNet == net && p_nodeStatus->curId == id )
             {
-                printf("11111Signals::errorFlag= %x ",Signals::errorFlag);
-                printf("\n");
-                printf("11111Signals::Flagerror= %x ",Signals::Flagerror[net]);
-                printf("\n");
-                printf("11111111net ==%d id ===%d sudId===%d\n",net,id,sudId);
-                if (curNet !=  net) {
-                    showCurrentNet(net);//显示当前网络
-                } else {
-                    setBtnFalg(id, ERROR);//err  ???不起作用
-                }
-                //=============================================================
-                is = p_mod->getWhatErr( net, id, sudId);
-                if( is == 2)
-                {//漏电故障
-                    WarnMsg::insertCError( net, id, sudId);
-                }
-                else if( is == 0)
-                {//温度故障
-                    WarnMsg::insertTError( net, id, sudId);
-                }
-                //==============================================================
-                //WarnMsg::insertSubError(net, id, sudId);
-                //显示模块节点号
-                curNode = id;
-                clearSubNodeDat();
-                p_mod->setSubError(net, id, sudId, ERROR);//写下子节点故障
-                printf("net ==%d id ==%d sudid==%d\n",net,id,sudId);
-                error = 1;
-                errorLed = 1;
-                setBellAndLedStatus();
-                if (p_nodeStatus->curNet == net && p_nodeStatus->curId == id)
-                {
-                    p_nodeStatus->_show(curNet, curNode, mo->sn, ERROR);
-                }
-                //显示模块型号
-                lblXing->setText(tr(Module::moTyp[mo->sn].name));
-                //显示模块节点号
-                curNode = id;
-                lblNode->setText(QString::number(id));
+                p_nodeStatus->_show(curNet,curNode,mo->sn,WARN);
             }
+            setLblWarnSum();
+            //显示模块型号
+            lblXing->setText(tr(Module::moTyp[mo->sn].name));
+            //显示模块节点号
+            curNode = id;
+            lblNode->setText(QString::number(id));
         }
-//        else if (p_mod->getSubError(net, id, sudId) == false && (Signals::errorFlag >> sudId & 0x01)) {
-//			if (curNet !=  net) {
-//				showCurrentNet(net);//显示当前网络
-//			} else {
-//                setBtnFalg(id, ERROR);//err  ???不起作用
-//			}
-//            //=============================================================
-//            is = p_mod->getWhatErr( net, id, sudId);
-//            if( is == 2)
-//            {//漏电故障
-//                WarnMsg::insertCError( net, id, sudId);
-//            }
-//            else if( is == 0)
-//            {//温度故障
-//                WarnMsg::insertTError( net, id, sudId);
-//            }
-//            //==============================================================
-//            //WarnMsg::insertSubError(net, id, sudId);
-//			//显示模块节点号
-//			curNode = id;
-//			clearSubNodeDat();
-//            p_mod->setSubError(net, id, sudId, ERROR);//写下子节点故障
-//            printf("net ==%d id ==%d sudid==%d\n",net,id,sudId);
-//			error = 1;
-//			errorLed = 1;
-//			setBellAndLedStatus();
-//			if (p_nodeStatus->curNet == net && p_nodeStatus->curId == id)
-//			{
-//				p_nodeStatus->_show(curNet, curNode, mo->sn, ERROR);
-//			}
-//			//显示模块型号
-//			lblXing->setText(tr(Module::moTyp[mo->sn].name));
-//			//显示模块节点号
-//			curNode = id;
-//			lblNode->setText(QString::number(id));
-//        }
-        else if(p_mod->getSubErrorRecovery(net, id, sudId) == true && ((Signals::errorFlag >> sudId) == 0)){//没有故障
+        else if (p_mod->getSubError(net, id, sudId) == false && (Signals::Flagerror[net] >> sudId & 0x01)) {
+
+            mo->flag = ERROR;
+            //printf("11111Signals::Flagerror[%d]= %x ",net,Signals::Flagerror[net]);
+            //printf("\n");
+            //printf("getSubError net ==%d id ===%d sudId===%d\n",net,id,sudId);
+
+            if (curNet !=  net) {
+                showCurrentNet(net);//显示当前网络
+            } else {
+                setBtnFalg(id, ERROR);//err  ???不起作用
+            }
+            //=============================================================
+            is = p_mod->getWhatErr( net, id, sudId);
+            if( is == 2)
+            {//漏电故障
+                WarnMsg::insertCError( net, id, sudId);
+            }
+            else if( is == 0)
+            {//温度故障
+                WarnMsg::insertTError( net, id, sudId);
+            }
+            //==============================================================
+            //WarnMsg::insertSubError(net, id, sudId);
+            //显示模块节点号
+            curNode = id;
+            clearSubNodeDat();
+            p_mod->setSubError(net, id, sudId, ERROR);//写下子节点故障
+            error = 1;
+            errorLed = 1;
+            setBellAndLedStatus();
+            if (p_nodeStatus->curNet == net && p_nodeStatus->curId == id)
+            {
+                p_nodeStatus->_show(curNet, curNode, mo->sn, ERROR);
+            }
+            //显示模块型号
+            lblXing->setText(tr(Module::moTyp[mo->sn].name));
+            //显示模块节点号
+            curNode = id;
+            lblNode->setText(QString::number(id));
+        }
+        else if(p_mod->getSubErrorRecovery(net, id, sudId) == true && ((Signals::Flagerror[net] >> sudId) == 0)){//没有故障
                 //Message::_show(tr("没有故障！"));
+            mo->flag = NORMAL;
+            printf("enter getSubErrorRecovery id ===%d\n",id);
             if (curNet !=  net) {
                 showCurrentNet(net);//显示当前网络
             } else {
@@ -392,6 +355,18 @@ void Main::slot_warn()
             curNode = id;
             lblNode->setText(QString::number(id));
         }
+    }
+    for( sudId = 0 ; sudId < 8 ; sudId++)
+    {
+            if(p_mod -> getSubWarn( net, id, sudId) == true)
+            {
+                mo->flag = WARN;
+                if (curNet !=  net) {
+                    showCurrentNet(net);//显示当前网络
+                } else {
+                    setBtnFalg(id, WARN);//
+                }
+            }
     }
 }
 //========== 模块当前数据 (电流漏电 温度) ================
@@ -952,15 +927,15 @@ void  Main::initCurrentNode()
 		mo = p_mod -> getNode( curNet, id);
 		if(mo == NULL) continue;
 		if( mo->isHave == true)
-		{
+        {printf("enter 917 mo->flag==%d\n",mo->flag);
 			setBtnFalg( id, mo->flag);
-			if(btn_node[id - 1].btn.isVisible() == false)
-				btn_node[id -1].btn.setVisible(true);
+            if(btn_node[id - 1].btn.isVisible() == false)
+                btn_node[id -1].btn.setVisible(true);
 		}
 		else
 		{
-			if(btn_node[id - 1].btn.isVisible() == true)
-				btn_node[id -1].btn.setVisible(false);
+            if(btn_node[id - 1].btn.isVisible() == true)
+                btn_node[id -1].btn.setVisible(false);
 		}
 	}
 }
@@ -1069,6 +1044,7 @@ void Main::initBtnNode()
 ============================================================*/
 void Main::setBtnFalg(int id,int flag)
 {
+    printf("flag ==%d btn_node[%d].flag==%d\n",flag,id-1,btn_node[id-1].flag);
 	if(btn_node[id-1].flag == flag) return;
 	if(flag == NORMAL)
 	{//正常
@@ -1082,6 +1058,10 @@ void Main::setBtnFalg(int id,int flag)
 	{//故障
 		errorColor(btn_node[id-1].btn);
 	}
+    else if(flag == UNABLE)
+    {//掉线
+        unableColor(btn_node[id-1].btn);
+    }
 	btn_node[id-1].flag = flag;
 }
 void Main::slot_query()
@@ -1184,7 +1164,8 @@ void Main::check_pwd()
 	        on=0;//
 	        preJ4=0;//
 	        relayStats=0;//
-	        Led::CtlOff();//
+            warnRelay = 0;
+            //Led::CtlOff();//
 			setBellAndLedStatus();
 			for( int i = 0 ; i < 2; i ++)
 			{
@@ -1488,6 +1469,11 @@ void Main::warnColor(QWidget& qw)
 void Main::errorColor(QWidget& qw)
 {
 	qw.setStyleSheet(QString::fromUtf8("background-image:url(:/img/images/btnerror.png);"));
+}
+//掉线颜色
+void Main::unableColor(QWidget& qw)
+{
+    qw.setStyleSheet(QString::fromUtf8("background-image:url(:/img/images/btnunable.png);"));
 }
 void Main::printfCPU()
 {

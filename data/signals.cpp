@@ -27,7 +27,7 @@ Signals::Signals()
 void Signals::send()
 {
 	RxThread::read();
-#if 1
+
 	if(isRun == true)
 	{//处理轮询信息
         //printf("enter doNet\n");
@@ -52,8 +52,6 @@ void Signals::send()
 		isRun = false;
 		sendInsert();
 	}
-#else
-#endif
 
     if(Main::com_led==1)
     {
@@ -113,7 +111,7 @@ void Signals::doNet(int net)
 		{//节点掉线处理
 			Can::reSetNet(net);
             mo = ((Main*)p_main)->p_mod -> getNode( net, netCurId[net]);
-			if(mo -> flag == ERROR)
+            if(mo->flag == UNABLE)//ERROR
 			{
 				netCurId[net] = ++netCurId[net] % netCount[net];
 				if(netCurId[net] == 0 ) netCurId[net] = netCount[net];
@@ -127,7 +125,7 @@ void Signals::doNet(int net)
 				netTimer[net] = 0; //网络0从发次数
                 //((Main*)p_main)->p_mod->unreg( net, netCurId[net]);
                 //mod_list[net * BtnNodeNUm + netCurId[net]-1].sn = NO_SN;
-                mo->sn = NO_SN;
+                //mo->sn = NO_SN;
 			}
 		}
 		else
@@ -157,7 +155,7 @@ void Signals::sendNet(int net)
 		}
 		else 
 		{//节点轮询
-			ModbusTx::readMem( net, netCurId[net], 25, 2);
+			ModbusTx::readMem( net, netCurId[net], 25, 2);            
 		}
 	}
 }
@@ -167,7 +165,7 @@ void Signals::doInsert()
 	{//节点掉线处理
 		Can::reSetNet(pak->net);
 		mo = ((Main*)p_main)->p_mod -> getNode( pak->net, pak->id);
-		if(mo -> flag == ERROR)
+        if(mo->flag == UNABLE)//ERROR
 		{
 			Pake::next();
 			insertTimer = 0;
@@ -178,15 +176,15 @@ void Signals::doInsert()
 			insertTimer = 0;
 			((Main*)p_main)->slot_error( pak->net, pak->id);
             //((Main*)p_main)->p_mod->unreg( pak->net, pak->id);
-            mo->sn = NO_SN;
+            //mo->sn = NO_SN;
 		}
 	}
 	else
-	{
+    {
 		toDo();
 		Pake::next();
 		insertTimer = 0;        
-		((Main*)p_main)->slot_reg(pak->net, pak->id);
+        ((Main*)p_main)->slot_reg(pak->net, pak->id);
 	}
 } 
 void Signals::sendInsert()
@@ -242,32 +240,30 @@ void Signals::toDo()
 			break;
 		case QUE_MOD_STA://节点状态
             //Signals::errorFlag = Pake::readBuf.data[1];
-            //printf("Signals::errorFlag= %x ",Pake::readBuf.data[1]);
             for (int i = 0; i < 8; i++) {                
-				if (Module::getSubWarn(Pake::readBuf.net, Pake::readBuf.id , i) == false
-					&& (Pake::readBuf.data[0] >> i & 0x01)) {
+                if (Module::getSubWarn(Pake::readBuf.net, Pake::readBuf.id , i) == false
+                    && (Pake::readBuf.data[0] >> i & 0x01)) {
                     //Message::_show("warn!!!");
                     //Message::_show(QString::number(i));
-					Pake::send(Pake::readBuf.net,Pake::readBuf.id, QUE_DEV_WAR, NULL, 0);
-					break;
-				} else if (Module::getSubError(Pake::readBuf.net, Pake::readBuf.id , i) == false
+                    //printf("Pake::readBuf.data[0] = %x   ",Pake::readBuf.data[0]);
+                    //printf("warn!!!i==%d\n",i);
+                    Pake::send(Pake::readBuf.net,Pake::readBuf.id, QUE_DEV_WAR, NULL, 0);
+                    break;
+                } else if (Module::getSubError(Pake::readBuf.net, Pake::readBuf.id , i) == false
                     && (Signals::Flagerror[Pake::readBuf.net] >> i & 0x01)) {
-                    //Message::_show("故障！4444");
-                    //Message::_show(QString::number(i));
-					//((Main*)p_main)->slot_warn_error();
-                    printf("Signals::errorFlag= %x   ",Signals::errorFlag);
-                    printf("Signals::Flagerror= %x   ",Signals::Flagerror[Pake::readBuf.net]);
-                    printf("errorFlag Pake::readBuf.net==%d Pake::readBuf.id==%d i===%d \n",Pake::readBuf.net,Pake::readBuf.id,i);
+                    //Message::_show("故障！4444");                    
+					//((Main*)p_main)->slot_warn_error();                    
+                    //printf("Signals::Flagerror[%d]= %x   ",Pake::readBuf.net,Signals::Flagerror[Pake::readBuf.net]);
+                    //printf("errorFlag Pake::readBuf.net==%d Pake::readBuf.id==%d i===%d \n",Pake::readBuf.net,Pake::readBuf.id,i);
 					Pake::send(Pake::readBuf.net,Pake::readBuf.id, QUE_DEV_WAR, NULL, 0);
 					break;
                 }else if(Module::getSubErrorRecovery(Pake::readBuf.net, Pake::readBuf.id , i) == true
-                    &&((Signals::errorFlag >> i) == 0)){
-                    //Message::_show("故障恢复！");
-                    //Message::_show(QString::number((Signals::errorFlag >> i)));
+                    &&((Signals::Flagerror[Pake::readBuf.net] >> i) == 0)){
+                    //Message::_show("故障恢复！");                    
                     Pake::send(Pake::readBuf.net,Pake::readBuf.id, QUE_DEV_WAR, NULL, 0);
                     break;
                  }
-			}
+            }
 		   	if (Pake::readBuf.data[0] >> 8 & 0x01) {
 				((Main*)p_main)->slot_ans_try();
 			}

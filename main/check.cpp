@@ -49,6 +49,7 @@ void Check::start()
     timer.stop();
     timer.start(500);
     count = 1;
+    sound = 0;
 	Main::com_led=0;
 	Bell::off();
 	Led::mainLightOff();
@@ -152,7 +153,7 @@ void Check::a()
 }
 
 void Check::slot_timer()
-{
+{   
     switch(count)
     {
     case 1:
@@ -161,7 +162,10 @@ void Check::slot_timer()
         Bell::warn_flag = 0;
         Bell::error_flag = 1;
         if(Main::flagnosound == 1)
+        {
             Main::flagnosound = 0;
+            sound =1;
+        }
         ((Main*)par)->LCDmain();
         count = 2;
         break;
@@ -186,6 +190,10 @@ void Check::slot_timer()
         //count = 2;
         show();
         Bell::error_flag = 0;
+        if(sound == 1){
+        printf("Main::flagnosound = 1\n");
+            Main::flagnosound = 1;
+        }
         timer.stop();
         break;
     }

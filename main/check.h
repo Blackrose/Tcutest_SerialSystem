@@ -28,6 +28,7 @@ public :
 	void b();    
     QTimer timer;	//定时器
 	int count;
+    int sound;
 //	Module *p_mod;
 //	Main *main;
 //	extern int whoChePwd;

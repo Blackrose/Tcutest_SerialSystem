@@ -116,7 +116,7 @@ void NodeStatus::_show(int net,int id,int mod,int stat)
                         fillRow( lbl7, lblstat7, net, id, 7, UNABLE, true);
                 break;
 		case ML4T4:
-		lblThis->setText(tr("网络号:")+QString::number(net)+tr(" 节点号:")+QString::number(id)+tr(" 型号:")+Module::moTyp[mod].name+tr("(4路剩余电流,4路温度)"));
+                lblThis->setText(tr("网络号:")+QString::number(net)+tr(" 节点号:")+QString::number(id)+tr(" 型号:")+Module::moTyp[mod].name+tr("(4路剩余电流,4路温度)"));
                 if (Module::getSubError(net, id, 0))
                         fillRow( lbl0, lblstat0, net, id, 0, ERROR, true);
                 else if (Module::getSubWarn(net, id, 0))
@@ -167,7 +167,7 @@ void NodeStatus::_show(int net,int id,int mod,int stat)
                         fillRow( lbl7, lblstat7, net, id, 7, NORMAL, true);
                 break;
 		case ML8:
-		lblThis->setText(tr("网络号:")+QString::number(net)+tr(" 节点号:")+QString::number(id)+tr(" 型号:")+Module::moTyp[mod].name+tr("(8路剩余电流)"));
+                lblThis->setText(tr("网络号:")+QString::number(net)+tr(" 节点号:")+QString::number(id)+tr(" 型号:")+Module::moTyp[mod].name+tr("(8路剩余电流)"));
                 if (Module::getSubError(net, id, 0))
                         fillRow( lbl0, lblstat0, net, id, 0, ERROR, true);
                 else if (Module::getSubWarn(net, id, 0))

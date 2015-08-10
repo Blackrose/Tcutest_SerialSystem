@@ -136,16 +136,16 @@ void WarnMsg::insertCAlarm(int netId,int nodeId,int subNodeId,int value)//电流
 	WarnMsg::insert( netId, nodeId, subNodeId, C_ALARM, value);
 }
 void WarnMsg::insertTAlarm(int netId,int nodeId,int subNodeId,int value)//温度报警
-{
+{//printf("enter insertTAlarm\n");
 	WarnMsg::insert( netId, nodeId, subNodeId, T_ALARM, value);
 }
 void WarnMsg::insertMAlarm(int netId,int nodeId,int subNodeId,int value)//漏电报警
-{
+{//printf("enter insertMAlarm\n");
 	WarnMsg::insert( netId, nodeId, subNodeId, M_ALARM, value);
 }
 
 void WarnMsg::insertTError(int netId, int nodeId, int subNodeId)//温度故障
-{printf("enter insertTError\n");
+{//printf("enter insertTError\n");
     //int sn = Module::getNodeSN( netId, nodeId);
     QString strSubId = QString::number(subNodeId);
     int warn = SUB_ERROR;
@@ -169,7 +169,7 @@ void WarnMsg::insertTError(int netId, int nodeId, int subNodeId)//温度故障
     Db::IDUdb(sql);
 }
 void WarnMsg::insertCError(int netId, int nodeId, int subNodeId)//漏电故障
-{printf("enter insertCError\n");
+{//printf("enter insertCError\n");
     //int sn = Module::getNodeSN( netId, nodeId);
     QString strSubId = QString::number(subNodeId);
     int warn = SUB_ERROR;

@@ -189,9 +189,9 @@ void Module::setSubError(int net, int id, int subId, int flag)
 	if( i >= MODCOUNT || subId >= SUBNODECOUNT) return;
 	mod_list[i].subNodIsWar[subId] = flag;
 	mod_list[i].flag = NORMAL;
-	mod_list[i].subNodValue[subId] = 0;
+    mod_list[i].subNodValue[subId] = ERROR;
 	Db::copyTime(mod_list[i].subNodTimer[subId].time);
-	mod_list[i].flag = WARN;
+    mod_list[i].flag = flag;//WARN change by zhq 8.6
     mod_list[i].recovery[subId] = flag;
 }
 

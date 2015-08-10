@@ -147,6 +147,7 @@ public :
 	void normalColor(QWidget& qw);
 	void warnColor(QWidget& qw);
 	void errorColor(QWidget& qw);
+    void unableColor(QWidget& qw);
 	void printfCPU();
 	void get_cpu_status(struct cpustatus *cpu_stat);
 	//================== 电源检测 ================

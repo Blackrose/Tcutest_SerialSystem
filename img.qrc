@@ -25,5 +25,6 @@
         <file>images/cut.png</file>
         <file>images/monSet.png</file>
         <file>images/unable.png</file>
+        <file>images/btnunable.png</file>
     </qresource>
 </RCC>
