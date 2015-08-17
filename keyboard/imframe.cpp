@@ -9,6 +9,12 @@ IMFrame::IMFrame()
 {
 	connect( &inWid, SIGNAL(sendNumber(int)), this, SLOT(getNumber(int)));
 }
+
+IMFrame::~IMFrame()
+{
+    inWid.deleteLater();
+}
+
 void IMFrame::getNumber(int number)
 {
 	if('o' == number){

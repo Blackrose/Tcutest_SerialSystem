@@ -16,7 +16,7 @@
 #define CIRC_SPACE(head, tail, size)  CIRC_CNT((tail),((head)+1),(size))
 
 #define CIRC_LEN        1024
-#define RETRY_TIME_MS   30 
+#define RETRY_TIME_MS   60//30
 #define RETRY_COUNT     3
 #define PIC_BUF_LEN     16
 

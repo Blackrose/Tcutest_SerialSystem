@@ -53,6 +53,7 @@
 #include "frminput/frminput.h"
 #include "SYSZUXpinyin/syszuxim.h"
 #include "SYSZUXpinyin/syszuxpinyin.h"
+#include "nodeStatus.h"
 
 #define NORMAL 	1
 #define WARN	2
@@ -172,6 +173,7 @@ public :
 
 public :
 	IMFrame *p_imf;			//键盘
+    //SyszuxIM* im_my;		//键盘
 	static int 	screenWaitTime; //屏幕保护时间s
 	static int  com_led;
 	Printer         *p_printer;

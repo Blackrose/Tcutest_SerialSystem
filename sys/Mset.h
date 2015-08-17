@@ -30,7 +30,7 @@ public :
 	QTimer timer;
 	static int nodeParm[16];
 private:
-	IMFrame *imf;
+    IMFrame *imf;
 	int sn;//型号
 	//static int nodeParm[16];//参数数据
 	int isLorT; // 1＝漏电，2 = 温度 

@@ -12,7 +12,7 @@ StartUp::StartUp(QWidget *parent): QWidget(parent),Ui_startUpFrm()
         setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
 	connect(&timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//显示系统时间
 	setAttribute(Qt::WA_DeleteOnClose);
-    Print::init();
+    //Print::init();
 	timer.start(200);
 	show();
 	myFlag = 0;

@@ -16,6 +16,10 @@
 #include "modList.h"
 #include "rxdata.h"
 #include "signals.h"
+#include "SYSZUXpinyin/syszuxim.h"
+#include "SYSZUXpinyin/syszuxpinyin.h"
+#include "keyboard/imframe.h"
+#include "mylineedit.h"
 
 #include <stdio.h>
 #include <QString>
@@ -24,6 +28,7 @@
 #include <QRect>
 #include <QTimer>
 #include <QWidget>
+#include <QWSServer>
 
 #define NORMAL 	1
 #define WARN	2
@@ -33,7 +38,9 @@ class NodeStatus:public QWidget,public Ui_NodeStatus
 {
         Q_OBJECT
 public :
-        NodeStatus(QWidget* parent = NULL);
+        NodeStatus(IMFrame *im,QWidget* parent = NULL);
+        IMFrame *p_imf;
+        static SyszuxIM* imf_my;
         virtual ~NodeStatus();
 	void _show(int net,int id,int mod,int stat);
 	void fillRow(QLabel *lbl,QLabel *lblStats,int net, int id,int subId,int stat,bool isHave);
@@ -55,7 +62,14 @@ public slots:
 	void slot_try();
 	void slot_hide();
 	void slot_clear();
-    void txtChange(const QString &str);
+    void txt0Change();
+    void txt1Change();
+    void txt2Change();
+    void txt3Change();
+    void txt4Change();
+    void txt5Change();
+    void txt6Change();
+    void txt7Change();
 };
 
 #endif

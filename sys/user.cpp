@@ -31,7 +31,7 @@ User::User(IMFrame *im,QWidget *parent): QWidget(parent),Ui_UserForm()
 
 	txt_user->installEventFilter(this);
 	txt_password->installEventFilter(this);
-	imf = im;
+    imf = im;//QWSServer::setCurrentInputMethod(imf);
 	printf("init user ok\n");
 }
 User::~User()

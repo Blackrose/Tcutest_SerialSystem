@@ -24,6 +24,8 @@
 #ifndef SYSZUXIM_H
 #define SYSZUXIM_H
 #include <QWSInputMethod>
+#include <QLineEdit>
+#include <QTextCodec>
 
 class SyszuxPinyin;
 class SyszuxIM:public QWSInputMethod
@@ -37,6 +39,6 @@ public slots:
         void confirmString(QString gemfield);
 private:
         SyszuxPinyin* syszuxpinyin;
-
+        QLineEdit *le;
 };
 #endif

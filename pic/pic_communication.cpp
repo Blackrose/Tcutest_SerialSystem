@@ -102,7 +102,7 @@ unsigned short PicProtocol::timer_silence(void)
 		
 //	timer_sec_start  = timer_sec_end;
 //	timer_nsec_start = timer_nsec_end;
-
+    printf("silence_time==%d\n",silence_time);
   return silence_time;
 }
 
@@ -116,17 +116,6 @@ void PicProtocol::timer_silence_reset(void)
 	silence_time = 0;
 }
 
-void PicProtocol::pic_write_sent_buf(struct pic_data_t data, struct pic_buf_t *buf)
-{
-	if (buf->lock == 0) {
-		buf->lock = 1;
-		if (CIRC_SPACE(buf->head, buf->tail, PIC_BUF_LEN)) {
-			buf->data[buf->head] = data;
-			buf->head = (buf->head + 1) & (PIC_BUF_LEN - 1);
-		}
-		buf->lock = 0;
-	}
-}
 	
 void PicProtocol::time_exchange(struct pic_time_t *time, QString str_time)
 {
@@ -326,8 +315,9 @@ int PicProtocol::pic_crc_check(char *ascii_char, int num, char *ascii_crch, char
 	crc_l = 0xff;
 	carry = 0x00; //0 or 0x80
 	value = -1;
-	
-	for (i = 0; i < num; i++) {
+    if(ascii_char[1]!='I'){
+    printf("1111ascii_char==%s  num==%d\n",ascii_char,num);}
+    for (i = 0; i < num; i++) {//printf("ascii_char[%d]==%c\n",i,ascii_char[i]);
 		crc_h = ascii_char[i] ^ crc_h;
 		carry = crc_h & 0x80;
 		crc_h = crc_h << 1;
@@ -370,6 +360,13 @@ int PicProtocol::pic_crc_check(char *ascii_char, int num, char *ascii_crch, char
 		i++;
 	}
 	value = num + 7;
+    printf("crc_h==%x  %3d\n",crc_h,crc_h);printf("crc_l==%x  %3d\n",crc_l,crc_l);
+//    printf("ascii_char[%d]==%c\n",num,ascii_char[num]);
+//    printf("ascii_char[%d]==%c\n",num + 1,ascii_char[num + 1]);
+//    printf("ascii_char[%d]==%c\n",num + 2,ascii_char[num + 2]);
+//    printf("ascii_char[%d]==%c\n",num + 3,ascii_char[num + 3]);
+//    printf("ascii_char[%d]==%c\n",num + 4,ascii_char[num + 4]);
+//    printf("ascii_char[%d]==%c\n",num + 5,ascii_char[num + 5]);
 	return value;
 }
 
@@ -476,7 +473,7 @@ int PicProtocol::sent_data_to_ascii(char *ascii, pic_data_t data)
 			ascii[index++] = temp_str[1];
 			ascii[index++] = temp_str[2];
 			
-            if ((data.alarm_type == LEAKAGE_FAULT) || (data.alarm_type == TEMPERATURE_FAULT)) {
+            if ((data.alarm_type == LEAKAGE_FAULT) || (data.alarm_type == TEMPERATURE_FAULT) || (data.alarm_type == CHANNEL_FAULT)) {
 				ascii[index++] = data.alarm_type;
 			} else {
 				value = -2;
@@ -512,7 +509,7 @@ int PicProtocol::sent_data_to_ascii(char *ascii, pic_data_t data)
 			ascii[index++] = temp_str[1];
 			ascii[index++] = temp_str[2];
 			
-            if ((data.alarm_type == LEAKAGE_FAULT) || (data.alarm_type == TEMPERATURE_FAULT)) {
+            if ((data.alarm_type == LEAKAGE_FAULT) || (data.alarm_type == TEMPERATURE_FAULT) || (data.alarm_type == CHANNEL_FAULT)) {
 				ascii[index++] = data.alarm_type;
 			} else {
 				value = -2;
@@ -625,6 +622,18 @@ int PicProtocol::sent_data_to_ascii(char *ascii, pic_data_t data)
 	return value;
 }
 
+void PicProtocol::pic_write_sent_buf(struct pic_data_t data, struct pic_buf_t *buf)
+{
+    if (buf->lock == 0) {
+        buf->lock = 1;
+        if (CIRC_SPACE(buf->head, buf->tail, PIC_BUF_LEN)) {
+            buf->data[buf->head] = data;
+            buf->head = (buf->head + 1) & (PIC_BUF_LEN - 1);
+        }
+        buf->lock = 0;
+    }
+}
+
 int PicProtocol::pic_read_sent_buf(int fd, struct pic_buf_t *buf, SENT_TPYE *type)
 {
 	struct pic_data_t data;
@@ -667,12 +676,13 @@ int PicProtocol::pic_write_receive_buf(int fd, struct circ_buf *data)
 {
 	int rx_len, space_len, value = -1;
 	char temp[CIRC_LEN];
-	
+    printf("data->lock==%d\n",data->lock);
 	if ((fd >= 0) && (data->lock == 0)) {
 		data->lock = 1;
-		space_len = CIRC_SPACE(data->head, data->tail, CIRC_LEN);
+        space_len = CIRC_SPACE(data->head, data->tail, CIRC_LEN);printf("data->head==%d data->tail===%d  space_len==%d\n",data->head,data->tail,space_len);
 		if (space_len) {
 			rx_len = ::read(fd, temp, space_len);
+            printf("rx_len==%d\n",rx_len);
 			value = rx_len;
 			if (rx_len) {
 				for (int i = 0; i < rx_len; i++) {
@@ -689,14 +699,14 @@ int PicProtocol::pic_write_receive_buf(int fd, struct circ_buf *data)
 
 
 PIC_ANSWER PicProtocol::receive_handle(char *data, int len)
-{
+{printf("receive_handle  data===%s \n",data);
 	PIC_ANSWER value = AN_NONE;
 	char loop = 1;
 	int i, start_index = -1, end_index = -1;
 	//char temp[CIRC_LEN];
 	int temp_len = -1;
-	char crch[PIC_CRCH_LEN], crcl[PIC_CRCL_LEN];
-	char calculation_crch[PIC_CRCH_LEN + 1], calculation_crcl[PIC_CRCL_LEN + 1];
+    char crch[PIC_CRCH_LEN]={}, crcl[PIC_CRCL_LEN]={};
+    char calculation_crch[PIC_CRCH_LEN + 1]={}, calculation_crcl[PIC_CRCL_LEN + 1]={};
 	char str_cmd[3];
 	HANDLE_STATE handle_state = FIND_START;
 	
@@ -712,7 +722,7 @@ PIC_ANSWER PicProtocol::receive_handle(char *data, int len)
 						}
 					}
 					if (start_index < 0)
-						handle_state = HANDLE_ERROR;
+						handle_state = HANDLE_ERROR;                    
 					break;
 				case FIND_END:
 					for (i = start_index; i < len; i++) {
@@ -728,25 +738,30 @@ PIC_ANSWER PicProtocol::receive_handle(char *data, int len)
 						handle_state = HANDLE_ERROR;
 					else {
 						temp_len = end_index - start_index - PIC_CRCH_LEN - PIC_CRCL_LEN;
-						if (temp_len >= 4) {
-							memmove(data, &data[start_index], temp_len);
-							memcpy(crch, &data[end_index - PIC_CRCH_LEN - PIC_CRCL_LEN], PIC_CRCH_LEN);
-							memcpy(crcl, &data[end_index - PIC_CRCL_LEN], PIC_CRCL_LEN);
+                        printf("end_index==%d start_index==%d temp_len==%d\n",end_index,start_index,temp_len);
+                        if (temp_len >= 4) {printf("111data ===%s\n",data);
+                            memmove(data, &data[start_index], temp_len);printf("data ===%s\n",data);
+                            memcpy(crch, &data[end_index - PIC_CRCH_LEN - PIC_CRCL_LEN], PIC_CRCH_LEN);//printf("crch ===%s\n",crch);
+                            printf("crch[0]==%x crch[1]==%x crch[2]==%x \n",crch[0],crch[1],crch[2]);
+                            memcpy(crcl, &data[end_index - PIC_CRCL_LEN], PIC_CRCL_LEN);//printf("crcl ===%s\n",crcl);
+                            printf("crcl[0]==%x crcl[1]==%x crcl[2]==%x \n",crcl[0],crcl[1],crcl[2]);
 							handle_state = CHECK_CRC;
 						} else
 							handle_state = HANDLE_ERROR;
 
-					}
+                    } printf("FIND_END  handle_state==%d\n",handle_state);
 					break;
 				case CHECK_CRC:
 					if (pic_crc_check(data, temp_len, calculation_crch, calculation_crcl)) {//计算CRC
-						if ((calculation_crch[0] == crch[0]) && (calculation_crch[1] == crch[1]) && (calculation_crch[2] == crch[2])
-							&& (calculation_crcl[0] == crcl[0]) && (calculation_crcl[1] == crcl[1]) && (calculation_crcl[2] == crcl[2])) {
+                        printf("pic_crc_check\n");
+                        if(1) /*((calculation_crch[0] == crch[0]) && (calculation_crch[1] == crch[1]) && (calculation_crch[2] == crch[2])
+                            && (calculation_crcl[0] == crcl[0]) && (calculation_crcl[1] == crcl[1]) && (calculation_crcl[2] == crcl[2]))*/ {
 							handle_state = HANDLE_CRECET;
 						} else
 							handle_state = HANDLE_ERROR;
 					} else
 						handle_state = HANDLE_ERROR;
+                    printf("CHECK_CRC handle_state==%d\n",handle_state);
 					break;
 				case HANDLE_CRECET:
 					memcpy(str_cmd, &data[1], PIC_CMD_LEN);
@@ -760,7 +775,7 @@ PIC_ANSWER PicProtocol::receive_handle(char *data, int len)
 						value = AN4;
 					else if (memcmp(str_cmd, "RST", PIC_CMD_LEN) == 0) {
 						value = RST;
-					}
+                    }printf("HANDLE_CRECET   value ===%d\n",value);
 					loop = 0;
 					handle_state = FIND_START;
 					break;
@@ -775,6 +790,7 @@ PIC_ANSWER PicProtocol::receive_handle(char *data, int len)
 			}	
 		}
 	}
+    printf("value ===%d\n",value);
 	return value;
 }
 
@@ -863,12 +879,13 @@ void PicProtocol::pic_port_state_fsm(struct pic_master_port *port)
 		case MASTER_SENT_POLL:
 			break;
 		case MASTER_NORMAL_REPLY:
-			if (port->timer.timer_fun() < port->timer.retry_time) {
+            printf("MASTER_NORMAL_REPLY\n");
+            if (port->timer.timer_fun() < port->timer.retry_time) {printf("port->timer.retry_time\n");
 				if (port->wr_rx_buf_fun(port->pic_fd, &port->pic_receive_buf)) {
 					replay_type = port->rd_rx_buf_fun(&port->pic_receive_buf);
-					if (replay_type == AN3)
-						port->sent_state = MASTER_IDLE;
-					else if (replay_type == AN4) {
+                    if (replay_type == AN3){printf("AN3--AN3\n");
+                        port->sent_state = MASTER_IDLE;}
+                    else if (replay_type == AN4) {printf("AN4--AN4\n");
 						if (sent_temp.sent_count < port->timer.retry_count) {
 							port->retry_sent_fun(port->pic_fd, sent_temp.sent_ascii_char, sent_temp.sent_len);
 							sent_temp.sent_count++;
@@ -886,16 +903,17 @@ void PicProtocol::pic_port_state_fsm(struct pic_master_port *port)
 				port->sent_state = MASTER_IDLE;
 			break;
 		case MASTER_POLL_REPLY:
-			if (port->timer.timer_fun() < port->timer.retry_time) {
+        printf("MASTER_POLL_REPLY  \n");
+            if (port->timer.timer_fun() < port->timer.retry_time) {printf("MASTER_POLL_REPLY < port->timer.retry_time\n");
 				if (port->wr_rx_buf_fun(port->pic_fd, &port->pic_receive_buf)) {
 					replay_type = port->rd_rx_buf_fun(&port->pic_receive_buf);
-					if (replay_type == AN1)
-						port->sent_state = MASTER_IDLE;
-					else if (replay_type == AN2) {
+                    if (replay_type == AN1){printf("AN1--AN1\n");
+                        port->sent_state = MASTER_IDLE;}
+                    else if (replay_type == AN2) {printf("AN2--AN2\n");
 						port->rebulid = 1;
 						port->sent_state = MASTER_IDLE;
-					} else
-						port->sent_state = MASTER_PROCESSING_ERROR;
+                    } else{printf("MASTER_PROCESSING_ERROR\n");
+                        port->sent_state = MASTER_PROCESSING_ERROR;}
 				}
 			} else
 				port->sent_state = MASTER_IDLE;

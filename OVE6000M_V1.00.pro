@@ -88,7 +88,8 @@ HEADERS += data/pake.h \
            data/modbus/dri/rxdata.h \
     frminput/frminput.h \    
     SYSZUXpinyin/syszuxim.h \
-    SYSZUXpinyin/syszuxpinyin.h
+    SYSZUXpinyin/syszuxpinyin.h \
+    mylineedit.h
 FORMS += print/main.ui \
          startUp/startUpFrm.ui \
          keyboard/ui/keyboard.ui \
@@ -152,7 +153,8 @@ SOURCES += data/pake.cpp \
            data/modbus/dri/rxdata.cpp \
     frminput/frminput.cpp \
     SYSZUXpinyin/syszuxim.cpp \
-    SYSZUXpinyin/syszuxpinyin.cpp
+    SYSZUXpinyin/syszuxpinyin.cpp \
+    mylineedit.cpp
 RESOURCES += img.qrc \
     syszuxpinyin.qrc
 QT += sql

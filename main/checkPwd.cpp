@@ -20,7 +20,7 @@ CheckPwd::CheckPwd(IMFrame *im,QWidget *parent): QDialog(parent),Ui_CheckPwd()
         setWindowFlags(Qt::Dialog | Qt::WindowTitleHint);
 	setAttribute(Qt::WA_DeleteOnClose);	
 	setGeometry(200,180,211,121);
-
+    //QWSServer::setCurrentInputMethod(p_imf);
 	txt_password->installEventFilter(this);
 	connect(btn_close,SIGNAL(clicked()),this,SLOT(_hide()));
 	connect(btn_ok,SIGNAL(clicked()),this,SLOT(CheckPwd_ok()));

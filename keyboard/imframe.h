@@ -10,6 +10,7 @@ class IMFrame:public QWSInputMethod
 Q_OBJECT
 public:
 	IMFrame();
+    ~IMFrame();
 	void my_show(QRect *location,QLineEdit *txt);
 	void my_hide();
 	QPoint getPoint(QRect qr,int w=262,int h=130);

@@ -26,7 +26,7 @@ Print *Print::point;
 
 bool Print::init()
 {
-#if 1
+#if 0
     //fd = open("/dev/null", O_RDWR);
     fd1 = open("/dev/ttySAC0",O_RDWR | O_NOCTTY);
     if (fd1 < 0) {
@@ -38,25 +38,26 @@ bool Print::init()
     dup2(fd1, 2);
 #else
 	struct termios newtio;
-	char start[2] = {0x1c, 0x26};
+    char start[2] = {0x1c, 0x26};//汉字字模
 	char on_off = 1;
 
-    fd1 = open("/dev/ttySAC0",O_RDWR | O_NOCTTY);
-    if (fd1 < 0) {
+    fd = open("/dev/ttySAC0",O_RDWR | O_NOCTTY);
+    if (fd < 0) {
         printf("open ttySAC0 failure\n");
         return false;
     }
-    dup2(fd1, 0);
-    dup2(fd1, 1);
-    dup2(fd1, 2);
+//    dup2(fd, 0);
+//    dup2(fd, 1);
+//    dup2(fd, 2);
 
-    fd = open("/dev/e17printer",O_RDWR);
-    if (fd < 0) {
+    fd1 = open("/dev/e17printer",O_RDWR);
+    if (fd1 < 0) {
 		printf("open e17printer failure\n");
 		return false;
 	}
 	::bzero(&newtio, sizeof(newtio));
-	newtio.c_cflag = B115200 | CS8 | CLOCAL | CREAD;
+    newtio.c_cflag = B115200 | CS8 | CLOCAL | CREAD;
+    //newtio.c_cflag = B9600 | CS8 | CLOCAL | CREAD;
 	/* Raw input */
 	newtio.c_iflag = 0;
 	/* Raw output */
@@ -90,7 +91,7 @@ bool Print::init()
 //	Print::GB2313(end_str);
 //	Print::clear();
 //	Print::goPaper();
-    ::write(fd, &on_off, 1);
+    ::write(fd1, &on_off, 1);
     ::write(fd, start, 2);
 	Print::check();
 	::usleep(50000);
@@ -160,7 +161,7 @@ int Print::status()
 		else if (read_status[0] == 0x55)
 			ret = 1;
 	}
-    printf("ret ===%d\n");
+    printf("ret ===%d\n",ret);
 //char temp_str[40];
 //char value_str[10];
 //sprintf(value_str, "%03d", read_status[len - 1]);

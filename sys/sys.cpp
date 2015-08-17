@@ -14,7 +14,7 @@ Sys::Sys(IMFrame *im,QWidget *parent): QWidget(parent),Ui_SysForm()
 	setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存
  	setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边框 是一个模太对话框
 	setGeometry(0,0,800,600);
-
+    //QWSServer::setCurrentInputMethod(im);
         stackedWidget = new QStackedWidget(this);
         stackedWidget->setGeometry(QRect(150, 10, 681, 581));
         stackedWidget->setFrameShape(QFrame::NoFrame);

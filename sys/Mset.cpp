@@ -16,7 +16,7 @@ Mset::Mset( IMFrame *im, QWidget *parent): QWidget(parent),Ui_MSetForm()
 	setupUi(this);
         setWindowFlags(Qt::Dialog);
 	setGeometry(45,25,550,430);
-	imf = im;
+    imf = im;
 	setAttribute(Qt::WA_DeleteOnClose);
 	txtWarn->installEventFilter(this);
 	txtDelay->installEventFilter(this);
@@ -34,7 +34,7 @@ Mset::Mset( IMFrame *im, QWidget *parent): QWidget(parent),Ui_MSetForm()
     connect( txtDelay, SIGNAL(textChanged( const QString &)), this, SLOT(delChange( const QString &)));
 
 	connect( &timer, SIGNAL(timeout()), this, SLOT(slot_timer()));//显示系统时间
-
+    //QWSServer::setCurrentInputMethod(imf);
 	printf("init MSet ok\n");
 }
 void Mset::_show()
@@ -376,10 +376,10 @@ bool Mset::eventFilter(QObject *obj, QEvent *event)
 			wid = wid->parentWidget();
 		}
 		qr.setRect( qr.x(), qr.y(), w, h);
-		imf->my_show(&qr,txt);
+        imf->my_show(&qr,txt);
 	}
 	if(event->type() == QEvent::FocusOut){
-		imf->my_hide();
+        imf->my_hide();
 	}
 	return QWidget::eventFilter(obj, event);
 }

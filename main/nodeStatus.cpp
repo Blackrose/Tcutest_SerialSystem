@@ -8,26 +8,35 @@
 #include "sql/node.h"
 #include <QWidget>
 #include "main.h"
+
+SyszuxIM* NodeStatus::imf_my;
 /*====================================
 	功能：初始化资源
 ====================================*/
-NodeStatus::NodeStatus(QWidget *parent): QWidget(parent),Ui_NodeStatus()
+NodeStatus::NodeStatus(IMFrame *im, QWidget *parent): QWidget(parent),Ui_NodeStatus()
 {
 	setupUi(this);
 	par = parent;
         setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);//窗口没有没有边框  是 一个模太对话框
-
-    //QWSInputMethod* im = new SyszuxIM;
-    //QWSServer::setCurrentInputMethod(im);
-    //im->updateHandler(QWSInputMethod::FocusIn);
+    p_imf= im;
+    //imf_my= im_my;
+    imf_my = new SyszuxIM();
 
 	connect( btn_reset, SIGNAL(clicked()), this, SLOT(slot_reset()));
 	connect( btn_try, SIGNAL(clicked()), this, SLOT(slot_try()));
 	connect( btn_close, SIGNAL(clicked()), this, SLOT(slot_hide()));
 	connect( btn_no_wo, SIGNAL(clicked()), this, SLOT(slot_clear()));
 
-    connect(txt0,SIGNAL(textChanged(const QString)),this,SLOT(txtChange(QString)));
-    //txt0
+    //connect(txt0,SIGNAL(textEdited(const QString &)),this,SLOT(txtChange(QString)));
+    connect(txt0,SIGNAL(clicked()),this,SLOT(txt0Change()));
+    connect(txt1,SIGNAL(clicked()),this,SLOT(txt1Change()));
+    connect(txt2,SIGNAL(clicked()),this,SLOT(txt2Change()));
+    connect(txt3,SIGNAL(clicked()),this,SLOT(txt3Change()));
+    connect(txt4,SIGNAL(clicked()),this,SLOT(txt4Change()));
+    connect(txt5,SIGNAL(clicked()),this,SLOT(txt5Change()));
+    connect(txt6,SIGNAL(clicked()),this,SLOT(txt6Change()));
+    connect(txt7,SIGNAL(clicked()),this,SLOT(txt7Change()));
+
 	curNet = -1;
 	curId = -1;
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -455,6 +464,9 @@ void NodeStatus::slot_hide()
 	Pake::send( curNet, curId, QUE_CUR_VAL, NULL, 0);
 	curNet = -1;
 	curId = -1;
+    imf_my->updateHandler(QWSInputMethod::FocusOut);
+    QWSServer::setCurrentInputMethod(p_imf);
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 }	
 /*====================================
 	功能：写下lbl报警
@@ -487,7 +499,54 @@ void NodeStatus::nodeUnable(QLabel *lbl)
     lbl->setPixmap(QPixmap(QString::fromUtf8(":/img/images/unable.png")));
 }
 
-void NodeStatus::txtChange(const QString &str)
+void NodeStatus::txt0Change()
 {
+    //QWSServer::setCurrentInputMethod(imf_my);
+    //imf_my->updateHandler(QWSInputMethod::FocusIn);
+    //imf_my = new SyszuxIM();
+    //QWSServer::setCurrentInputMethod(imf_my);
+    txt0->clearFocus();
+    txt0->setFocus();
+}
 
+void NodeStatus::txt1Change()
+{
+    txt1->clearFocus();
+    txt1->setFocus();
+}
+
+void NodeStatus::txt2Change()
+{
+    txt2->clearFocus();
+    txt2->setFocus();
+}
+
+void NodeStatus::txt3Change()
+{
+    txt3->clearFocus();
+    txt3->setFocus();
+}
+
+void NodeStatus::txt4Change()
+{
+    txt4->clearFocus();
+    txt4->setFocus();
+}
+
+void NodeStatus::txt5Change()
+{
+    txt5->clearFocus();
+    txt5->setFocus();
+}
+
+void NodeStatus::txt6Change()
+{
+    txt6->clearFocus();
+    txt6->setFocus();
+}
+
+void NodeStatus::txt7Change()
+{
+    txt7->clearFocus();
+    txt7->setFocus();
 }

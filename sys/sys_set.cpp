@@ -18,7 +18,7 @@ SysSet::SysSet (IMFrame * im, QWidget * parent):QWidget (parent),
 Ui_SysSetForm ()
 {
   setupUi (this);
-  imf = im;
+  imf = im;//QWSServer::setCurrentInputMethod(imf);
   setWindowFlags (Qt::Dialog);
   setGeometry (67, 80, 500, 340);
   setAttribute (Qt::WA_DeleteOnClose);	//关闭时自动的释放内存

@@ -233,9 +233,9 @@ int WarnMsg::insertNodeDo(int netId, int nodeId, int wDo)
     QString sql = "select count(*) from ErrMsg";
         QString time_str = Db::newTime();
 	
-    //if (wDo == E_ALARM)
+    if (wDo == E_ALARM)
             //PicProtocol::pic_communication_error(netId, nodeId, 99, time_str);//故障
-            //PicProtocol::pic_channel_error(netId, nodeId, subNodeId, time_str);//通道故障    
+            PicProtocol::pic_channel_error(netId, nodeId, 99, time_str);//通道故障
     if(wDo == E_ALARM){
         if( Db::selectCount(sql) >= SQLMAXDATA)//SQLMAX
         {

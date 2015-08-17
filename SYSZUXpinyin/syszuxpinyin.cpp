@@ -34,8 +34,11 @@ SyszuxPinyin::SyszuxPinyin(QWSInputMethod* im) :QDialog(0,Qt::Tool | Qt::WindowS
 {
     int ret=0;
     setupUi(this);
-    QTextCodec::setCodecForCStrings(0);
+    //QTextCodec::setCodecForCStrings(0);
     //resize(800,480);
+    QPalette pal = palette();
+    pal.setColor(QPalette::Background, QColor(215, 245, 255));
+    setPalette(pal);
     initGb();
     pinyin_file.setFileName(":SYSZUXpinyin/syszux/syszuxpinyin");
 
@@ -52,6 +55,7 @@ SyszuxPinyin::SyszuxPinyin(QWSInputMethod* im) :QDialog(0,Qt::Tool | Qt::WindowS
         pinyin_map.insert(regExp.cap(1),data.left(ret));
     }
     connect(this,SIGNAL(sendPinyin(QString)),im,SLOT(confirmString(QString)));
+
 }
 SyszuxPinyin::~SyszuxPinyin()
 {

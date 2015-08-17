@@ -26,7 +26,7 @@ UpdatePwd::UpdatePwd(IMFrame *im,QWidget *parent): QWidget(parent),Ui_UpdatePwdF
 	connect(txt_newPwd,SIGNAL(textChanged(const QString)),this,SLOT(txtChange(QString)));
 	connect(txt_newPwdChe,SIGNAL(textChanged(const QString)),this,SLOT(txtChange(QString)));
 
-	imf = im;
+    imf = im;//QWSServer::setCurrentInputMethod(imf);
 	txt_name->installEventFilter(this);
 	txt_oldPwd->installEventFilter(this);
 	txt_newPwd->installEventFilter(this);

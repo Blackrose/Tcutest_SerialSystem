@@ -18,8 +18,8 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 {
 	setupUi(this);
         setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
-	setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存    
-	p_imf = new IMFrame();	//键盘
+	setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存        
+    p_imf = new IMFrame();	//键盘
 	proBar->setValue(8);
 	Message::static_msg = new Message();
 
@@ -28,7 +28,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	Db::init();		//加载数据库
 	p_mod = new Module();	//初始化模块:
 	proBar->setValue(16);
-	QWSServer::setCurrentInputMethod(p_imf);
+    QWSServer::setCurrentInputMethod(p_imf);
 //	Watchdog::init();//初始化看门狗
 
 	Can::init();		//初始化can设备
@@ -72,8 +72,9 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	p_query = new Query();//报警、操作记录查询
         proBar->setValue(80);
 	Watchdog::kellLive();//喂狗
-	p_nodeStatus = new NodeStatus(this);//详细记录的状态
+    p_nodeStatus = new NodeStatus(p_imf,this);//详细记录的状态
 	proBar->setValue(88);
+    //QWSServer::setCurrentInputMethod(p_imf);
 	proBar->setValue(96);
 
 
@@ -166,7 +167,7 @@ void Main::slot_reg(int net,int id)
 		}
 		else
 		{
-            printf("enter normal 169\n");setBtnFalg( id, NORMAL);
+            setBtnFalg( id, NORMAL);
 		}
 		checkError();
 		checkWarn();
@@ -613,9 +614,9 @@ void Main::slot_timer()
 		::system("hwclock -s");
 		timer_count = ModbusTx::timer;
 		Watchdog::kellLive();//喂狗
-		printf("timer_time\n");
+        //printf("timer_time\n");
 		Db::newTimeNoSec(lblLocalTime,&time_min);//界面时钟
-		::system("free");
+        //::system("free");
         //printfCPU();
 		p_timer->start(500);
 		return ;
@@ -712,15 +713,15 @@ void Main::powerCheck()
 	//j4电平控制 判断是否短路断路
 	if (relayStats == 0) {	
         if (Power::isPrePowerJ() == 0) {//断路
-			printf("off off off off off\n");
+            //printf("off off off off off\n");
 			off = 1;
 			on = 0;
         } else if (Power::isPrePowerJ() == 1) {//短路
-			printf("on on on on on on \n");
+            //printf("on on on on on on \n");
 			on = 1;
 			off = 0;
         } else if (Power::isPrePowerJ() == 2) {//ok
-			printf("ok ok ok ok ok ok\n");
+            //printf("ok ok ok ok ok ok\n");
 			on = 0;
 			off = 0;
 		}
@@ -822,7 +823,7 @@ void Main::powerCheck()
                 preStat = 1;
                 Message::_show(tr("电池充电!"));
             }
-            printf("on relay\n");
+            //printf("on relay\n");
         }else{
             if(mainStat == 1){
                 mainStat = 0;
@@ -927,7 +928,7 @@ void  Main::initCurrentNode()
 		mo = p_mod -> getNode( curNet, id);
 		if(mo == NULL) continue;
 		if( mo->isHave == true)
-        {printf("enter 917 mo->flag==%d\n",mo->flag);
+        {//printf("enter 917 mo->flag==%d\n",mo->flag);
 			setBtnFalg( id, mo->flag);
             if(btn_node[id - 1].btn.isVisible() == false)
                 btn_node[id -1].btn.setVisible(true);
@@ -946,7 +947,8 @@ void Main::slot_btn_node()
 	btn_id = qobject_cast<QPushButton*>(sender())->text().toInt();
 	struct mod *mo  = p_mod -> getNode( curNet, btn_id);
 	if( p_mod->getSN(curNet, btn_id) != 0)
-	{
+    {   //QWSServer::setCurrentInputMethod(NodeStatus::imf_my);
+        //delete  p_imf;
 		curNode = btn_id;
 		//显示模块型号
 		lblXing->setText(tr(Module::moTyp[mo->sn].name));
@@ -956,6 +958,10 @@ void Main::slot_btn_node()
 		lblNode->setText(QString::number(curNode));
 		clearSubNodeDat();
 		p_nodeStatus->_show( curNet, curNode, mo->sn,p_mod->getNodeStats(curNet,curNode));
+        //NodeStatus::imf_my = new SyszuxIM();
+        QTextCodec::setCodecForCStrings(0);
+        QWSServer::setCurrentInputMethod(NodeStatus::imf_my);
+        NodeStatus::imf_my->updateHandler(QWSInputMethod::FocusOut);
 	}
 	else
 	{
@@ -974,7 +980,7 @@ void Main::slot_no_sound()
 
 void Main::slot_start_sound()
 {
-    s_timer->start(3000);//3s
+    s_timer->start(5000);//5s
 }
 
 void Main::slot_stop_sound()
@@ -1044,7 +1050,7 @@ void Main::initBtnNode()
 ============================================================*/
 void Main::setBtnFalg(int id,int flag)
 {
-    printf("flag ==%d btn_node[%d].flag==%d\n",flag,id-1,btn_node[id-1].flag);
+    //printf("flag ==%d btn_node[%d].flag==%d\n",flag,id-1,btn_node[id-1].flag);
 	if(btn_node[id-1].flag == flag) return;
 	if(flag == NORMAL)
 	{//正常
@@ -1145,6 +1151,7 @@ void Main::check_pwd()
 				Message::_show(tr("节点不存在!"));
 			}
 			setLblNodSum();
+            memset(Db::username,0,sizeof(Db::username));
 			break;
 		case REBOOT:
 			::system("reboot");

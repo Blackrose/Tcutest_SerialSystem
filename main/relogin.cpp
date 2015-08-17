@@ -27,7 +27,7 @@ Relogin::Relogin(IMFrame *im,QWidget *main,QWidget *parent): QDialog(parent),Ui_
 	connect(btn_ok,SIGNAL(clicked()),this,SLOT(Relogin_ok()));
 	connect(txt_user,SIGNAL(textChanged(const QString)),this,SLOT(txtChange(QString)));
 	connect(txt_password,SIGNAL(textChanged(const QString)),this,SLOT(txtChange(QString)));
-
+    //QWSServer::setCurrentInputMethod(p_imf);
 	printf("init Relogin ok\n");
 }
 Relogin::~Relogin()
@@ -72,7 +72,7 @@ void Relogin::txtChange(const QString &str)
 {//控制字符串的长度
 	QLineEdit* txt=qobject_cast<QLineEdit*>(sender());
 	if(str.length() > 6)
-		txt->setText(str.left(6));
+		txt->setText(str.left(6));   
 }
 void Relogin::closeEvent ( QCloseEvent * event )
 {

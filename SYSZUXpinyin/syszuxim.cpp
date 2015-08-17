@@ -26,8 +26,13 @@
 
 SyszuxIM::SyszuxIM()
 {
+        QTextCodec::setCodecForCStrings(0);
         syszuxpinyin = new SyszuxPinyin(this);
-        syszuxpinyin->resize(800,420);
+        QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+        //syszuxpinyin->resize(800,420);        
+        //syszuxpinyin->setGeometry(0,0,400,210);
+        syszuxpinyin->resize(560,275);
+        le = new QLineEdit;
 }
 SyszuxIM::~SyszuxIM()
 {
@@ -36,7 +41,8 @@ SyszuxIM::~SyszuxIM()
 
 void SyszuxIM::confirmString(QString gemfield)
 {
-        sendCommitString(gemfield);
+        //sendCommitString(gemfield);
+        le->setText(gemfield);
 }
 
 void SyszuxIM::updateHandler(int type)
@@ -44,8 +50,14 @@ void SyszuxIM::updateHandler(int type)
         switch(type)
         {
         case QWSInputMethod::FocusIn:
-            syszuxpinyin->show();
-            break;
+            {
+                QWidget *current_focus_widget=new QWidget;    //added by me
+                current_focus_widget = QApplication::focusWidget();     //added  by me
+                le= qobject_cast<QLineEdit*>(current_focus_widget);      //added by me
+                syszuxpinyin->show();
+                syszuxpinyin->lineEdit_window->setText(le->text());     //added by me
+                break;
+             }
         case QWSInputMethod::FocusOut:
             syszuxpinyin->hide();
             break;
