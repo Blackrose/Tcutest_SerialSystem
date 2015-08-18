@@ -75,9 +75,10 @@ bool Db::IDUdb(QString &sql)//数据库操作
 	QSqlQuery query;
 	if(query.exec(sql)){
 		query.finish();
+        printf("IDUdb  true\n");
 		return true;
 	}
-	query.finish();
+    query.finish();printf("IDUdb  false\n");
 	return false;
 }
 bool Db::isHave(QString &sql)//数据库操作

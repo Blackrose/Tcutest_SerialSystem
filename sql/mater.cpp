@@ -227,3 +227,110 @@ int Mater::readLocalAddress()
 	sql = Db::getValue( sql, 1);
 	return sql.toInt();
 }
+
+
+QString Mater::read0address(int addr)
+{
+    QString sql = "select * from address where id = '"+ QString::number(addr) +"'" ;
+    sql = Db::getValue( sql, 1);
+    return sql;
+}
+
+QString Mater::read1address(int addr)
+{
+    QString sql = "select * from address where id = '"+ QString::number(addr) +"'" ;
+    sql = Db::getValue( sql, 2);
+    return sql;
+}
+
+QString Mater::read2address(int addr)
+{
+    QString sql = "select * from address where id = '"+ QString::number(addr) +"'" ;
+    sql = Db::getValue( sql, 3);
+    return sql;
+}
+
+QString Mater::read3address(int addr)
+{
+    QString sql = "select * from address where id = '"+ QString::number(addr) +"'" ;
+    sql = Db::getValue( sql, 4);
+    return sql;
+}
+
+QString Mater::read4address(int addr)
+{
+    //QString sql = "select * from type where id = 22" ;
+    QString sql = "select * from address where id = '"+ QString::number(addr) +"'" ;
+    sql = Db::getValue( sql, 5);
+    return sql;
+}
+
+QString Mater::read5address(int addr)
+{
+    QString sql = "select * from address where id = '"+ QString::number(addr) +"'" ;
+    sql = Db::getValue( sql, 6);
+    return sql;
+}
+
+QString Mater::read6address(int addr)
+{
+    QString sql = "select * from address where id = '"+ QString::number(addr) +"'" ;
+    sql = Db::getValue( sql, 7);
+    return sql;
+}
+
+QString Mater::read7address(int addr)
+{
+    QString sql = "select * from address where id = '"+ QString::number(addr) +"'" ;
+    sql = Db::getValue( sql, 8);
+    return sql;
+}
+
+
+bool Mater::write0address(QString str,int addr)
+{
+    QString sql="update address set addr0='"+str+"' where id = '"+QString::number(addr)+"'";
+    return  Db::IDUdb(sql);
+}
+
+bool Mater::write1address(QString str,int addr)
+{
+    QString sql="update address set addr1='"+str+"' where id = '"+QString::number(addr)+"'";
+    return  Db::IDUdb(sql);
+}
+
+bool Mater::write2address(QString str,int addr)
+{
+    QString sql="update address set addr2='"+str+"' where id = '"+QString::number(addr)+"'";
+    return  Db::IDUdb(sql);
+}
+
+bool Mater::write3address(QString str,int addr)
+{
+    QString sql="update address set addr3='"+str+"' where id = '"+QString::number(addr)+"'";
+    return  Db::IDUdb(sql);
+}
+
+bool Mater::write4address(QString str, int addr)
+{
+    QString sql="update address set addr4='"+str+"' where id = '"+QString::number(addr)+"'";
+    return  Db::IDUdb(sql);
+}
+
+bool Mater::write5address(QString str,int addr)
+{
+    QString sql="update address set addr5='"+str+"' where id = '"+QString::number(addr)+"'";
+    return  Db::IDUdb(sql);
+}
+
+bool Mater::write6address(QString str,int addr)
+{
+    QString sql="update address set addr6='"+str+"' where id = '"+QString::number(addr)+"'";
+    return  Db::IDUdb(sql);
+}
+
+bool Mater::write7address(QString str,int addr)
+{
+    QString sql="update address set addr7='"+str+"' where id = '"+QString::number(addr)+"'";
+    return  Db::IDUdb(sql);
+}

@@ -59,6 +59,23 @@ public:
 	static bool writeLocalAddress(QString str);
 	static int readLocalAddress();
 
+    static QString read0address(int addr);
+    static QString read1address(int addr);
+    static QString read2address(int addr);
+    static QString read3address(int addr);
+    static QString read4address(int addr);
+    static QString read5address(int addr);
+    static QString read6address(int addr);
+    static QString read7address(int addr);
+    static bool write0address(QString str, int addr);
+    static bool write1address(QString str,int addr);
+    static bool write2address(QString str, int addr);
+    static bool write3address(QString str,int addr);
+    static bool write4address(QString str,int addr);
+    static bool write5address(QString str,int addr);
+    static bool write6address(QString str, int addr);
+    static bool write7address(QString str,int addr);
+
 };
 
 

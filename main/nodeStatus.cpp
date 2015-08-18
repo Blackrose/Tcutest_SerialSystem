@@ -26,6 +26,8 @@ NodeStatus::NodeStatus(IMFrame *im, QWidget *parent): QWidget(parent),Ui_NodeSta
 	connect( btn_try, SIGNAL(clicked()), this, SLOT(slot_try()));
 	connect( btn_close, SIGNAL(clicked()), this, SLOT(slot_hide()));
 	connect( btn_no_wo, SIGNAL(clicked()), this, SLOT(slot_clear()));
+    connect( btn_ok, SIGNAL(clicked()), this, SLOT(slot_ok()));
+    connect( btn_change, SIGNAL(clicked()), this, SLOT(slot_change()));
 
     //connect(txt0,SIGNAL(textEdited(const QString &)),this,SLOT(txtChange(QString)));
     connect(txt0,SIGNAL(clicked()),this,SLOT(txt0Change()));
@@ -230,6 +232,55 @@ void NodeStatus::_show(int net,int id,int mod,int stat)
 
 	Pake::send( curNet, curId, QUE_CUR_VAL, NULL, 0);
 	show();
+
+
+    switch(curMod)
+    {
+        case ML1T1:
+        case DL1T1:
+            txt0->setText(Mater::read0address((curNet*BtnNodeNUm + curId)));
+            txt1->setText("");
+            txt2->setText("");
+            txt3->setText("");
+            txt4->setText(Mater::read4address((curNet*BtnNodeNUm + curId)));
+            txt5->setText("");
+            txt6->setText("");
+            txt7->setText("");
+            txt0->setEnabled(false);
+            txt4->setEnabled(false);
+            txt1->setVisible(false);
+            txt2->setVisible(false);
+            txt3->setVisible(false);
+            txt5->setVisible(false);
+            txt6->setVisible(false);
+            txt7->setVisible(false);
+            break;
+        case ML4T4:
+        case ML8:
+            txt0->setText(Mater::read0address((curNet*BtnNodeNUm + curId)));
+            txt1->setText(Mater::read1address((curNet*BtnNodeNUm + curId)));
+            txt2->setText(Mater::read2address((curNet*BtnNodeNUm + curId)));
+            txt3->setText(Mater::read3address((curNet*BtnNodeNUm + curId)));
+            txt4->setText(Mater::read4address((curNet*BtnNodeNUm + curId)));
+            txt5->setText(Mater::read5address((curNet*BtnNodeNUm + curId)));
+            txt6->setText(Mater::read6address((curNet*BtnNodeNUm + curId)));
+            txt7->setText(Mater::read7address((curNet*BtnNodeNUm + curId)));
+            txt0->setEnabled(false);
+            txt1->setEnabled(false);
+            txt2->setEnabled(false);
+            txt3->setEnabled(false);
+            txt4->setEnabled(false);
+            txt5->setEnabled(false);
+            txt6->setEnabled(false);
+            txt7->setEnabled(false);
+            txt1->setVisible(true);
+            txt2->setVisible(true);
+            txt3->setVisible(true);
+            txt5->setVisible(true);
+            txt6->setVisible(true);
+            txt7->setVisible(true);
+            break;
+    }
 }
 /*====================================
 	功能：些下当前数值
@@ -441,8 +492,8 @@ void NodeStatus::fillRow(QLabel *lbl,QLabel *lblStats,int net, int id,int subId,
 	功能：复位
 ====================================*/
 void NodeStatus::slot_reset()
-{
-	((Main*)par)->slot_btn_reset();
+{    
+	((Main*)par)->slot_btn_reset();    
 }
 /*====================================
 	功能：试验
@@ -549,4 +600,57 @@ void NodeStatus::txt7Change()
 {
     txt7->clearFocus();
     txt7->setFocus();
+}
+
+
+void NodeStatus::slot_ok()
+{
+    if((curMod == ML4T4) || (curMod == ML8))
+    {
+        Mater::write0address(txt0->text(),(curNet*BtnNodeNUm + curId));
+        Mater::write1address(txt1->text(),(curNet*BtnNodeNUm + curId));
+        Mater::write2address(txt2->text(),(curNet*BtnNodeNUm + curId));
+        Mater::write3address(txt3->text(),(curNet*BtnNodeNUm + curId));
+        Mater::write4address(txt4->text(),(curNet*BtnNodeNUm + curId));
+        Mater::write5address(txt5->text(),(curNet*BtnNodeNUm + curId));
+        Mater::write6address(txt6->text(),(curNet*BtnNodeNUm + curId));
+        Mater::write7address(txt7->text(),(curNet*BtnNodeNUm + curId));
+        txt0->setEnabled(false);
+        txt1->setEnabled(false);
+        txt2->setEnabled(false);
+        txt3->setEnabled(false);
+        txt4->setEnabled(false);
+        txt5->setEnabled(false);
+        txt6->setEnabled(false);
+        txt7->setEnabled(false);
+    }
+    else
+    {
+        Mater::write0address(txt0->text(),(curNet*BtnNodeNUm + curId));
+        Mater::write4address(txt4->text(),(curNet*BtnNodeNUm + curId));
+        txt0->setEnabled(false);
+        txt4->setEnabled(false);
+    }
+    QMessageBox::question (this, tr("提示信息"), tr("设置成功！"),
+               tr("确定"), tr("取消"));
+}
+
+void NodeStatus::slot_change()
+{
+    if((curMod == ML4T4) || (curMod == ML8))
+    {
+        txt0->setEnabled(true);
+        txt1->setEnabled(true);
+        txt2->setEnabled(true);
+        txt3->setEnabled(true);
+        txt4->setEnabled(true);
+        txt5->setEnabled(true);
+        txt6->setEnabled(true);
+        txt7->setEnabled(true);
+    }
+    else
+    {
+        txt0->setEnabled(true);
+        txt4->setEnabled(true);
+    }
 }

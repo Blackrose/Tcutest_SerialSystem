@@ -20,6 +20,7 @@
 #include "SYSZUXpinyin/syszuxpinyin.h"
 #include "keyboard/imframe.h"
 #include "mylineedit.h"
+#include "sql/mater.h"
 
 #include <stdio.h>
 #include <QString>
@@ -62,6 +63,8 @@ public slots:
 	void slot_try();
 	void slot_hide();
 	void slot_clear();
+    void slot_ok();
+    void slot_change();
     void txt0Change();
     void txt1Change();
     void txt2Change();
