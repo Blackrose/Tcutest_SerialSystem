@@ -50,6 +50,10 @@ void Query::_show()
 	init_time( *dte_begin, 10);
 	printf("3\n");    
     cmb_note_type->setCurrentIndex(0);
+    //cmb_net->setCurrentIndex(0);
+    //cmb_node->setCurrentIndex(0);
+    //cmb_sub_node->setCurrentIndex(0);
+
 	init_parameter();
 	printf("4\n");
 	init_table();

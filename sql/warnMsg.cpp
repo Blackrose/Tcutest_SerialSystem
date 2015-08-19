@@ -5,6 +5,7 @@
 #include "modList.h"
 #include "print.h"
 #include "pic/pic_communication.h"
+#include "main/main.h"
 
 static int flagerrdelete = 0;
 static int flagwarndelete = 0;
@@ -27,6 +28,11 @@ int WarnMsg::insert(int netId,int nodeId,int subNodeId,int warn,int value)
 		dan = "mA";
 		Print::Calarm(netId, nodeId, subNodeId, value, time_str);
 	}
+    if(Main::flagreset == 1)
+    {
+        QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+        Main::flagreset = 0;
+    }
 	QString sql = "select count(*) from WarnMsg";
     if( Db::selectCount(sql) >= SQLMAXDATA)
 	{

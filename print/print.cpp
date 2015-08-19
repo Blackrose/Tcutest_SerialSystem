@@ -26,7 +26,7 @@ Print *Print::point;
 
 bool Print::init()
 {
-#if 0
+#if 1
     //fd = open("/dev/null", O_RDWR);
     fd1 = open("/dev/ttySAC0",O_RDWR | O_NOCTTY);
     if (fd1 < 0) {
@@ -161,7 +161,7 @@ int Print::status()
 		else if (read_status[0] == 0x55)
 			ret = 1;
 	}
-    printf("ret ===%d\n",ret);
+    //printf("ret ===%d\n",ret);
 //char temp_str[40];
 //char value_str[10];
 //sprintf(value_str, "%03d", read_status[len - 1]);

@@ -6,8 +6,9 @@
 =======================================*/
 #include "nodeStatus.h"
 #include "sql/node.h"
-#include <QWidget>
 #include "main.h"
+#include <QWidget>
+
 
 SyszuxIM* NodeStatus::imf_my;
 /*====================================
@@ -18,8 +19,7 @@ NodeStatus::NodeStatus(IMFrame *im, QWidget *parent): QWidget(parent),Ui_NodeSta
 	setupUi(this);
 	par = parent;
         setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);//窗口没有没有边框  是 一个模太对话框
-    p_imf= im;
-    //imf_my= im_my;
+    p_imf= im;   
     imf_my = new SyszuxIM();
 
 	connect( btn_reset, SIGNAL(clicked()), this, SLOT(slot_reset()));
@@ -493,6 +493,26 @@ void NodeStatus::fillRow(QLabel *lbl,QLabel *lblStats,int net, int id,int subId,
 ====================================*/
 void NodeStatus::slot_reset()
 {    
+    Main::flagreset = 1;
+    imf_my->updateHandler(QWSInputMethod::FocusOut);
+    QWSServer::setCurrentInputMethod(p_imf);
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    if((curMod == ML4T4) || (curMod == ML8))
+    {
+        txt0->setEnabled(false);
+        txt1->setEnabled(false);
+        txt2->setEnabled(false);
+        txt3->setEnabled(false);
+        txt4->setEnabled(false);
+        txt5->setEnabled(false);
+        txt6->setEnabled(false);
+        txt7->setEnabled(false);
+    }
+    else
+    {
+        txt0->setEnabled(false);
+        txt4->setEnabled(false);
+    }
 	((Main*)par)->slot_btn_reset();    
 }
 /*====================================
@@ -551,11 +571,7 @@ void NodeStatus::nodeUnable(QLabel *lbl)
 }
 
 void NodeStatus::txt0Change()
-{
-    //QWSServer::setCurrentInputMethod(imf_my);
-    //imf_my->updateHandler(QWSInputMethod::FocusIn);
-    //imf_my = new SyszuxIM();
-    //QWSServer::setCurrentInputMethod(imf_my);
+{    
     txt0->clearFocus();
     txt0->setFocus();
 }
@@ -637,6 +653,10 @@ void NodeStatus::slot_ok()
 
 void NodeStatus::slot_change()
 {
+    QTextCodec::setCodecForCStrings(0);
+    QWSServer::setCurrentInputMethod(imf_my);
+    imf_my->updateHandler(QWSInputMethod::FocusOut);
+
     if((curMod == ML4T4) || (curMod == ML8))
     {
         txt0->setEnabled(true);

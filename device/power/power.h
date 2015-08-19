@@ -17,7 +17,7 @@
 #define POWER_SCHMIDT           0.3
 #define PREPOWER_LOW_VOLTAGE    9.0  //need test
 #define PREPOWER_SCHMIDT        0.5
-#define PREPOWER_FULL_VOLTAGE   12.8//11.8   change by zhq 8.4
+#define PREPOWER_FULL_VOLTAGE   12.2//11.8
 #define PREPOWER_BREAK_VOLTAGE  3.75 //need test
 #define PREPOWER_SHORT_VOLTAGE  0.3 //need test
 typedef enum {

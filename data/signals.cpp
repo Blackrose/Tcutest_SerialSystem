@@ -122,10 +122,7 @@ void Signals::doNet(int net)
                 ((Main*)p_main)->slot_error( net, netCurId[net]);//故障
 				netCurId[net] = ++netCurId[net] % netCount[net];
 				if(netCurId[net] == 0 ) netCurId[net] = netCount[net];
-				netTimer[net] = 0; //网络0从发次数
-                //((Main*)p_main)->p_mod->unreg( net, netCurId[net]);
-                //mod_list[net * BtnNodeNUm + netCurId[net]-1].sn = NO_SN;
-                //mo->sn = NO_SN;
+				netTimer[net] = 0; //网络0从发次数                
 			}
 		}
 		else
@@ -174,9 +171,7 @@ void Signals::doInsert()
 		{
 			Pake::next();
 			insertTimer = 0;
-			((Main*)p_main)->slot_error( pak->net, pak->id);
-            //((Main*)p_main)->p_mod->unreg( pak->net, pak->id);
-            //mo->sn = NO_SN;
+			((Main*)p_main)->slot_error( pak->net, pak->id);            
 		}
 	}
 	else

@@ -226,6 +226,7 @@ public :
     int         colorcount;
     int         flagcolor;
     static int  flagnosound;
+    static int  flagreset;
 
 public slots:
 	void slot_printer();

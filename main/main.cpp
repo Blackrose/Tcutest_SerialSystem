@@ -13,6 +13,7 @@ int Main::screenWaitTime = 600; //屏幕保护时间s
 int Main::whoChePwd = NONE;
 int Main::com_led = 1;
 int Main::flagnosound = 0;
+int Main::flagreset = 0;
 
 Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 {
@@ -151,6 +152,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 void Main::slot_reg(int net,int id)
 {
 	struct  mod* mo = p_mod -> getNode( net, id);
+    QString time_str = Db::newTime();
     //printf("注册信息 \n");
 //    if(mo->sn == 0)
 //    {//读取SN
@@ -178,6 +180,7 @@ void Main::slot_reg(int net,int id)
 		{
 			p_nodeStatus->_show( net, id, mo->sn, NORMAL);
 		}
+        PicProtocol::pic_channel_restore(net, id, 99, time_str);//通道故障恢复
 	}
 }
 //===== 故障  ==================
@@ -1192,7 +1195,7 @@ void Main::check_pwd()
 				if(mo==NULL) continue;
 				if(mo->isHave==true && mo->flag==ERROR)
 				{
-                    printf("now enter mo->flag==ERROR\n");
+                    printf("now enter mo->flag==ERROR\n");                    
 					WarnMsg::insertEAlarm(curNet,id);
 					Bell::error();
 					Led::modErrorLightOn();

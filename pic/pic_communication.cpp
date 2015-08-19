@@ -102,7 +102,7 @@ unsigned short PicProtocol::timer_silence(void)
 		
 //	timer_sec_start  = timer_sec_end;
 //	timer_nsec_start = timer_nsec_end;
-    printf("silence_time==%d\n",silence_time);
+    //printf("silence_time==%d\n",silence_time);
   return silence_time;
 }
 
@@ -315,8 +315,8 @@ int PicProtocol::pic_crc_check(char *ascii_char, int num, char *ascii_crch, char
 	crc_l = 0xff;
 	carry = 0x00; //0 or 0x80
 	value = -1;
-    if(ascii_char[1]!='I'){
-    printf("1111ascii_char==%s  num==%d\n",ascii_char,num);}
+    //if(ascii_char[1]!='I'){
+    //printf("1111ascii_char==%s  num==%d\n",ascii_char,num);}
     for (i = 0; i < num; i++) {//printf("ascii_char[%d]==%c\n",i,ascii_char[i]);
 		crc_h = ascii_char[i] ^ crc_h;
 		carry = crc_h & 0x80;
@@ -360,7 +360,7 @@ int PicProtocol::pic_crc_check(char *ascii_char, int num, char *ascii_crch, char
 		i++;
 	}
 	value = num + 7;
-    printf("crc_h==%x  %3d\n",crc_h,crc_h);printf("crc_l==%x  %3d\n",crc_l,crc_l);
+    //printf("crc_h==%x  %3d\n",crc_h,crc_h);printf("crc_l==%x  %3d\n",crc_l,crc_l);
 //    printf("ascii_char[%d]==%c\n",num,ascii_char[num]);
 //    printf("ascii_char[%d]==%c\n",num + 1,ascii_char[num + 1]);
 //    printf("ascii_char[%d]==%c\n",num + 2,ascii_char[num + 2]);
@@ -676,13 +676,13 @@ int PicProtocol::pic_write_receive_buf(int fd, struct circ_buf *data)
 {
 	int rx_len, space_len, value = -1;
 	char temp[CIRC_LEN];
-    printf("data->lock==%d\n",data->lock);
+    //printf("data->lock==%d\n",data->lock);
 	if ((fd >= 0) && (data->lock == 0)) {
 		data->lock = 1;
-        space_len = CIRC_SPACE(data->head, data->tail, CIRC_LEN);printf("data->head==%d data->tail===%d  space_len==%d\n",data->head,data->tail,space_len);
+        space_len = CIRC_SPACE(data->head, data->tail, CIRC_LEN);//printf("data->head==%d data->tail===%d  space_len==%d\n",data->head,data->tail,space_len);
 		if (space_len) {
 			rx_len = ::read(fd, temp, space_len);
-            printf("rx_len==%d\n",rx_len);
+            //printf("rx_len==%d\n",rx_len);
 			value = rx_len;
 			if (rx_len) {
 				for (int i = 0; i < rx_len; i++) {
@@ -699,7 +699,7 @@ int PicProtocol::pic_write_receive_buf(int fd, struct circ_buf *data)
 
 
 PIC_ANSWER PicProtocol::receive_handle(char *data, int len)
-{printf("receive_handle  data===%s \n",data);
+{//printf("receive_handle  data===%s \n",data);
 	PIC_ANSWER value = AN_NONE;
 	char loop = 1;
 	int i, start_index = -1, end_index = -1;
@@ -738,22 +738,22 @@ PIC_ANSWER PicProtocol::receive_handle(char *data, int len)
 						handle_state = HANDLE_ERROR;
 					else {
 						temp_len = end_index - start_index - PIC_CRCH_LEN - PIC_CRCL_LEN;
-                        printf("end_index==%d start_index==%d temp_len==%d\n",end_index,start_index,temp_len);
-                        if (temp_len >= 4) {printf("111data ===%s\n",data);
+                        //printf("end_index==%d start_index==%d temp_len==%d\n",end_index,start_index,temp_len);
+                        if (temp_len >= 4) {//printf("111data ===%s\n",data);
                             memmove(data, &data[start_index], temp_len);printf("data ===%s\n",data);
                             memcpy(crch, &data[end_index - PIC_CRCH_LEN - PIC_CRCL_LEN], PIC_CRCH_LEN);//printf("crch ===%s\n",crch);
-                            printf("crch[0]==%x crch[1]==%x crch[2]==%x \n",crch[0],crch[1],crch[2]);
+                            //printf("crch[0]==%x crch[1]==%x crch[2]==%x \n",crch[0],crch[1],crch[2]);
                             memcpy(crcl, &data[end_index - PIC_CRCL_LEN], PIC_CRCL_LEN);//printf("crcl ===%s\n",crcl);
-                            printf("crcl[0]==%x crcl[1]==%x crcl[2]==%x \n",crcl[0],crcl[1],crcl[2]);
+                            //printf("crcl[0]==%x crcl[1]==%x crcl[2]==%x \n",crcl[0],crcl[1],crcl[2]);
 							handle_state = CHECK_CRC;
 						} else
 							handle_state = HANDLE_ERROR;
 
-                    } printf("FIND_END  handle_state==%d\n",handle_state);
+                    } //printf("FIND_END  handle_state==%d\n",handle_state);
 					break;
 				case CHECK_CRC:
 					if (pic_crc_check(data, temp_len, calculation_crch, calculation_crcl)) {//计算CRC
-                        printf("pic_crc_check\n");
+                        //printf("pic_crc_check\n");
                         if(1) /*((calculation_crch[0] == crch[0]) && (calculation_crch[1] == crch[1]) && (calculation_crch[2] == crch[2])
                             && (calculation_crcl[0] == crcl[0]) && (calculation_crcl[1] == crcl[1]) && (calculation_crcl[2] == crcl[2]))*/ {
 							handle_state = HANDLE_CRECET;
@@ -761,7 +761,7 @@ PIC_ANSWER PicProtocol::receive_handle(char *data, int len)
 							handle_state = HANDLE_ERROR;
 					} else
 						handle_state = HANDLE_ERROR;
-                    printf("CHECK_CRC handle_state==%d\n",handle_state);
+                    //printf("CHECK_CRC handle_state==%d\n",handle_state);
 					break;
 				case HANDLE_CRECET:
 					memcpy(str_cmd, &data[1], PIC_CMD_LEN);
@@ -775,7 +775,7 @@ PIC_ANSWER PicProtocol::receive_handle(char *data, int len)
 						value = AN4;
 					else if (memcmp(str_cmd, "RST", PIC_CMD_LEN) == 0) {
 						value = RST;
-                    }printf("HANDLE_CRECET   value ===%d\n",value);
+                    }//printf("HANDLE_CRECET   value ===%d\n",value);
 					loop = 0;
 					handle_state = FIND_START;
 					break;
@@ -790,7 +790,7 @@ PIC_ANSWER PicProtocol::receive_handle(char *data, int len)
 			}	
 		}
 	}
-    printf("value ===%d\n",value);
+    //printf("value ===%d\n",value);
 	return value;
 }
 
@@ -904,15 +904,15 @@ void PicProtocol::pic_port_state_fsm(struct pic_master_port *port)
 			break;
 		case MASTER_POLL_REPLY:
         printf("MASTER_POLL_REPLY  \n");
-            if (port->timer.timer_fun() < port->timer.retry_time) {printf("MASTER_POLL_REPLY < port->timer.retry_time\n");
+            if (port->timer.timer_fun() < port->timer.retry_time) {//printf("MASTER_POLL_REPLY < port->timer.retry_time\n");
 				if (port->wr_rx_buf_fun(port->pic_fd, &port->pic_receive_buf)) {
 					replay_type = port->rd_rx_buf_fun(&port->pic_receive_buf);
-                    if (replay_type == AN1){printf("AN1--AN1\n");
+                    if (replay_type == AN1){//printf("AN1--AN1\n");
                         port->sent_state = MASTER_IDLE;}
                     else if (replay_type == AN2) {printf("AN2--AN2\n");
 						port->rebulid = 1;
 						port->sent_state = MASTER_IDLE;
-                    } else{printf("MASTER_PROCESSING_ERROR\n");
+                    } else{//printf("MASTER_PROCESSING_ERROR\n");
                         port->sent_state = MASTER_PROCESSING_ERROR;}
 				}
 			} else
