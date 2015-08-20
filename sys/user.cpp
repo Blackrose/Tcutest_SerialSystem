@@ -81,26 +81,30 @@ void User::insert()
 // 删除用户
 void User::_delete()
 {
-	if(txt_user->text()== tr("")){
-		QMessageBox::question(this, tr("提示信息"), tr("用户名不能为空！"), tr("确定"), tr("取消"));
-		return;
-	}
-	if( user.checkName(txt_user->text()) ){
-		if(QMessageBox::question(this, tr("提示信息"), tr("真的要删除用户：")+txt_user->text()+tr("吗？"), tr("确定"), tr("取消"))==0){
-			if(user.del(txt_user->text())){
-				QMessageBox::question(this, tr("提示信息"), tr("删除用户：")+txt_user->text()+ tr("成功！"), tr("确定"), tr("取消"));
-				OptMsg::insertUserDel(); //添加用户删除操作记录
-				del_qtw();
-				init_table();
-			}
-			else 
-				QMessageBox::question(this, tr("提示信息"), tr("删除用户：")+txt_user->text()+ tr("失败！"), tr("确定"), tr("取消"));
-			clear();
-		}
-	}
-	else{
-		QMessageBox::question(this, tr("提示信息"), tr("此用户不存在！"), tr("确定"), tr("取消"));
-	}
+    //QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),pos().x(),pos().y(),frameGeometry().width(),frameGeometry().height());
+//    QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),0,0,800,600);
+//    pixmap.save("6.png","png");
+
+    if(txt_user->text()== tr("")){
+        QMessageBox::question(this, tr("提示信息"), tr("用户名不能为空！"), tr("确定"), tr("取消"));
+        return;
+    }
+    if( user.checkName(txt_user->text()) ){
+        if(QMessageBox::question(this, tr("提示信息"), tr("真的要删除用户：")+txt_user->text()+tr("吗？"), tr("确定"), tr("取消"))==0){
+            if(user.del(txt_user->text())){
+                QMessageBox::question(this, tr("提示信息"), tr("删除用户：")+txt_user->text()+ tr("成功！"), tr("确定"), tr("取消"));
+                OptMsg::insertUserDel(); //添加用户删除操作记录
+                del_qtw();
+                init_table();
+            }
+            else
+                QMessageBox::question(this, tr("提示信息"), tr("删除用户：")+txt_user->text()+ tr("失败！"), tr("确定"), tr("取消"));
+            clear();
+        }
+    }
+    else{
+        QMessageBox::question(this, tr("提示信息"), tr("此用户不存在！"), tr("确定"), tr("取消"));
+    }
 }
 /*============================*/
 // 修改用户

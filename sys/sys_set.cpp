@@ -324,6 +324,10 @@ SysSet::clear_opt ()
 void
 SysSet::touch_calibration()
 {
+    //QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),pos().x(),pos().y(),frameGeometry().width(),frameGeometry().height());
+//    QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),0,0,800,600);
+//    pixmap.save("4.png","png");
+
   if (QMessageBox::
       question (this, "警告", "是否真的要重启设备,并重新校准屏幕?",
                 "确定", "取消") != 0)

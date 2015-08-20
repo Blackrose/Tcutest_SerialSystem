@@ -8,6 +8,9 @@
 #include <QWidget>
 #include <QPoint>
 #include <QRect>
+#include<QPixmap>
+#include <QDesktopWidget>
+
 #include "../keyboard/imframe.h"
 
 class  UpdatePwd:public QWidget,public Ui_UpdatePwdForm

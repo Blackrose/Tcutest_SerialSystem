@@ -11,6 +11,9 @@
 #include <QTableWidgetItem>
 #include <QPoint>
 #include <QRect>
+#include<QPixmap>
+#include <QDesktopWidget>
+
 #include "keyboard/imframe.h"
 #include "sql/dbuser.h"
 

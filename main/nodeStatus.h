@@ -30,6 +30,8 @@
 #include <QTimer>
 #include <QWidget>
 #include <QWSServer>
+#include<QPixmap>
+#include <QDesktopWidget>
 
 #define NORMAL 	1
 #define WARN	2

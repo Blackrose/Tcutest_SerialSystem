@@ -19,6 +19,8 @@
 #include <sys/types.h>
 #include <string.h>
 #include <QProgressBar>
+#include<QPixmap>
+#include <QDesktopWidget>
 
 #include "ui_main.h"
 #include "query.h"

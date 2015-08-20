@@ -533,6 +533,8 @@
     </widget>
    </widget>
   </widget>
+  <zorder>groupBox_3</zorder>
+  <zorder>btn_close_2</zorder>
  </widget>
  <resources/>
  <connections/>

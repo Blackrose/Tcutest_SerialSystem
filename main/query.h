@@ -13,6 +13,9 @@
 #include <QKeyEvent>
 #include <QObject>
 #include <QDateTime>
+#include<QPixmap>
+#include <QDesktopWidget>
+
 #include "keyboard/imframe.h"
 #include "sql/warnMsg.h"
 #include "sql/optMsg.h"

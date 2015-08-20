@@ -524,7 +524,9 @@ void NodeStatus::slot_try()
 }
 void NodeStatus::slot_clear()
 {
-	((Main*)par)->slot_no_sound();
+//    QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),0,0,800,600);
+//    pixmap.save("7.png","png");
+    ((Main*)par)->slot_no_sound();
 }
 /*====================================
 	功能：hide窗口

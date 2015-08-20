@@ -26,7 +26,7 @@ Print *Print::point;
 
 bool Print::init()
 {
-#if 1
+#if 0
     //fd = open("/dev/null", O_RDWR);
     fd1 = open("/dev/ttySAC0",O_RDWR | O_NOCTTY);
     if (fd1 < 0) {

@@ -86,12 +86,16 @@ void Query::beforePage()
 // 下一条
 void Query::nextPage()
 {
-	tableWidget->clearSelection();
+    //QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),pos().x(),pos().y(),frameGeometry().width(),frameGeometry().height());
+//    QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),0,0,800,600);
+//    pixmap.save("2.png","png");
+
+    tableWidget->clearSelection();
     //currentNumber = (  ++currentNumber ) % countNumber;
     currentNumber = (  ++currentNumber ) % count;
     if(currentNumber == 0)
         currentNumber = count;
-	init_table();
+    init_table();
 }
 // 加载数据
 void Query::init_table()

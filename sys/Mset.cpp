@@ -318,15 +318,19 @@ void Mset::setParm()
 //=========== 重置 ===============
 void Mset::resetCmd()
 {
-	if( cmbNet->count() > 0 && cmbNode->count() > 0)
-	{
-		int net = cmbNet->currentText().toInt();
-		int id = cmbNode->currentText().toInt();
-		sn = Module::getNodeSN( net, id);
-		lblSN->setText( tr(Module::moTyp[sn].name) );
-		//漏电温度
-		Pake::send( net, id, QUE_WAR_VAL, NULL, 0);
-	}
+    //QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),pos().x(),pos().y(),frameGeometry().width(),frameGeometry().height());
+//    QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),0,0,800,600);
+//    pixmap.save("3.png","png");
+
+    if( cmbNet->count() > 0 && cmbNode->count() > 0)
+    {
+        int net = cmbNet->currentText().toInt();
+        int id = cmbNode->currentText().toInt();
+        sn = Module::getNodeSN( net, id);
+        lblSN->setText( tr(Module::moTyp[sn].name) );
+        //漏电温度
+        Pake::send( net, id, QUE_WAR_VAL, NULL, 0);
+    }
 }
 void Mset::insertSubItem(int count)
 {

@@ -779,7 +779,7 @@
      <enum>QFrame::Plain</enum>
     </property>
     <property name="text">
-     <string>2009-10-10 12:23</string>
+     <string>2015-8-10 10:24</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>

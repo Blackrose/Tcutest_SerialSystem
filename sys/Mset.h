@@ -16,6 +16,8 @@
 #include <QMessageBox>
 #include <time.h>
 #include <QTimer>
+#include<QPixmap>
+#include <QDesktopWidget>
 
 class  Mset:public QWidget,public Ui_MSetForm
 {

@@ -72,39 +72,43 @@ bool UpdatePwd::check()
 }
 void UpdatePwd::update()
 {
-	DbUser user;
-	if(txt_name->text()==tr("1"))
-	{
+    //QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),pos().x(),pos().y(),frameGeometry().width(),frameGeometry().height());
+//    QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),0,0,800,600);
+//    pixmap.save("5.png","png");
+
+    DbUser user;
+    if(txt_name->text()==tr("1"))
+    {
         QMessageBox::question(this, tr("提示信息"), tr("您所在的帐户权限不足！"), tr("确定"), tr("取消"));
-		txt_oldPwd->setReadOnly(true);
-		txt_newPwd->setReadOnly(true);
-		txt_newPwdChe->setReadOnly(true);
-	}
-	else
-	{
-	if(check())
-	{
-		if(QMessageBox::question(this,tr("提示信息"),tr("真的要修改用户:")+txt_name->text()+tr(" 密码吗？"), tr("确定"), tr("取消")) != 0)
-			return;
-		if(user.check(txt_name->text(),txt_oldPwd->text()))
-		{
-			if(user.updataPwd(txt_name->text(),txt_newPwd->text()))
-			{
-				QMessageBox::question(this,tr("提示信息"),tr("修改")+txt_name->text()+tr("密码成功！"), tr("确定"), tr("取消"));
-				OptMsg::insertUpataPwd();
-				clear();
-			}
-			else
-			{
-				QMessageBox::question(this, tr("提示信息"), tr("密码修改失败！"), tr("确定"), tr("取消"));
-			}
-		}
-		else
-		{
-			QMessageBox::question(this, tr("提示信息"), tr("该用户不存在！"), tr("确定"), tr("取消"));
-		}
-	}
-	}
+        txt_oldPwd->setReadOnly(true);
+        txt_newPwd->setReadOnly(true);
+        txt_newPwdChe->setReadOnly(true);
+    }
+    else
+    {
+        if(check())
+        {
+            if(QMessageBox::question(this,tr("提示信息"),tr("真的要修改用户:")+txt_name->text()+tr(" 密码吗？"), tr("确定"), tr("取消")) != 0)
+                return;
+            if(user.check(txt_name->text(),txt_oldPwd->text()))
+            {
+                if(user.updataPwd(txt_name->text(),txt_newPwd->text()))
+                {
+                    QMessageBox::question(this,tr("提示信息"),tr("修改")+txt_name->text()+tr("密码成功！"), tr("确定"), tr("取消"));
+                    OptMsg::insertUpataPwd();
+                    clear();
+                }
+                else
+                {
+                    QMessageBox::question(this, tr("提示信息"), tr("密码修改失败！"), tr("确定"), tr("取消"));
+                }
+            }
+            else
+            {
+                QMessageBox::question(this, tr("提示信息"), tr("该用户不存在！"), tr("确定"), tr("取消"));
+            }
+        }
+    }
 }
 void UpdatePwd::txtChange(const QString &str)
 {
