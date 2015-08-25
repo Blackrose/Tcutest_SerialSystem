@@ -187,6 +187,7 @@ public :
 	Relogin 	*p_relog;	//重启
 	//RxThread 	*p_rx;		//接收数据
 	QTimer 		*p_timer;	//1s 定时器
+    QTimer 		*pic_rebuild_timer;
 	QTimer          *pic_timer;       //
     QTimer      *s_timer;
     QTimer      *led_timer; //通讯灯闪烁变化定时器－－－－－－－－－－－－－
@@ -248,6 +249,7 @@ public slots:
 	void slot_btn_reset();		//主机复位
 	void slot_net();		//单击网络
 	void slot_timer();		//定时器
+    void pic_rebuild();
 	void pic_handle();
     void sound_timer();
     void led_slot_timer();

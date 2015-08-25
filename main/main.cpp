@@ -51,7 +51,8 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 
 	proBar->setValue(24);
 	p_timer	= new QTimer(this);	//初始化定时器
-    led_timer = new QTimer(this);
+    //led_timer = new QTimer(this);
+    //pic_rebuild_timer = new QTimer(this);
 	pic_timer = new QTimer(this); 
     s_timer = new QTimer(this);
 	proBar->setValue(32);
@@ -139,6 +140,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	Db::newTimeNoSec(lblLocalTime,&time_min);//界面时钟
 	p_timer->start(3000);//启动定时器
 	pic_timer->start(50);
+    //pic_rebuild_timer->start(1000);
     //led_timer->start(500);//0.5s
 	newErrorTest();
 	printf("init Main ok\n");
@@ -567,7 +569,7 @@ void Main::slot_timer()
 	{
 		screenCount = 0;
 	}
-    if( timer_countPower >= 3500)//愿为3500
+    if( timer_countPower >= 3500)//3500//愿为3500
     {//printf("timer_countPower==%d\n",timer_countPower);
 		timer_countPower = ModbusTx::timer;
 		powerCheck();
@@ -630,14 +632,27 @@ void Main::slot_timer()
 
 void Main::pic_handle()
 {
-	static int inq_loop = 0;
-	
+    static int inq_loop = 0,tmp_loop;
+    tmp_loop++;
 	inq_loop++;
-	if (inq_loop == 60) {
+    if (inq_loop == 60) {
 		inq_loop = 0;
 		PicProtocol::pic_heart_beat();
+        //PicProtocol::pic_port_state_fsm(&PicProtocol::pic_port);
+        //PicProtocol::pic_rebuild(&PicProtocol::pic_port);
 	}
-	PicProtocol::pic_port_state_fsm(&PicProtocol::pic_port);
+    if(tmp_loop == 20){
+        tmp_loop = 0;
+        PicProtocol::pic_port_state_fsm(&PicProtocol::pic_port);
+        PicProtocol::pic_rebuild(&PicProtocol::pic_port);
+    }
+    //PicProtocol::pic_port_state_fsm(&PicProtocol::pic_port);
+    //PicProtocol::pic_rebuild(&PicProtocol::pic_port);
+}
+
+void Main::pic_rebuild()
+{
+    PicProtocol::pic_rebuild(&PicProtocol::pic_port);
 }
 
 void Main::sound_timer()
@@ -729,6 +744,12 @@ void Main::powerCheck()
 			off = 0;
 		}
     } else {//电池充电中
+        /*if (Power::isPrePowerJ() == 0) {//断路
+            //printf("off off off off off\n");
+            off = 1;
+            on = 0;
+        }
+        else*/
         if (Power::isPrePowerJ() == 1) {//短路
 			on = 1;
 			off = 0;
@@ -1374,8 +1395,9 @@ void Main::initConnect()
 	connect(btn_help, SIGNAL(clicked()), this, SLOT(slot_help()));
 	connect(p_timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//显示系统时间
     connect(pic_timer, SIGNAL(timeout()), this, SLOT(pic_handle()));//自动上传
+    //connect(pic_rebuild_timer, SIGNAL(timeout()), this, SLOT(pic_rebuild()));//自动上传
     connect(s_timer, SIGNAL(timeout()), this, SLOT(sound_timer()));
-    connect(led_timer, SIGNAL(timeout()), this, SLOT(led_slot_timer()));
+    //connect(led_timer, SIGNAL(timeout()), this, SLOT(led_slot_timer()));
 }
 void Main::showHowNet()
 {

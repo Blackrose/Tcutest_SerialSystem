@@ -130,7 +130,7 @@ public:
 		subId：子节点号；
 		返回值：0 ＝ 温度；1＝电流；2＝漏电
 	=====================================*/
-	int  getWhatWarn(int net,int id,int subId);
+    static int  getWhatWarn(int net,int id,int subId);
 
     /*====================================
         功能：返回故障的类型；
@@ -139,7 +139,7 @@ public:
         subId：子节点号；
         返回值：0 ＝ 温度；1＝电流；2＝漏电
     =====================================*/
-    int  getWhatErr(int net,int id,int subId);
+    static int  getWhatErr(int net,int id,int subId);
 
 	/*====================================
 		功能：打印节点的信息；
@@ -163,7 +163,7 @@ public:
 public:
 	static int getNet();//-1 没有网络,0 只有 0 网络, 1 只有 1 网络,2 两个网络都有
 	static int getNodeSN(int net,int id);//返回sn地址
-	struct mod* getNode(int net,int id);//返回指定的节点
+    static struct mod* getNode(int net,int id);//返回指定的节点
 	static bool nodeIsHave(int net, int id);//是否有节点
 	static struct nodeModName *moTyp;
 private:

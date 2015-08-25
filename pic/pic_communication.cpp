@@ -11,6 +11,10 @@
 #include <string.h>
 #include <stdio.h>
 #include "pic_communication.h"
+#include "module/modList.h"
+#include "sql/mater.h"
+#include "device/power/power.h"
+#include "main.h"
 
 const unsigned char PicProtocol::crc_table[] = {
 	0x00,0x00,0x10,0x21,0x20,0x42,0x30,0x63,0x40,0x84,0x50,0xA5,0x60,0xC6,0x70,0xE7,
@@ -83,8 +87,9 @@ unsigned short PicProtocol::timer_silence(void)
 	
 	::clock_gettime(CLOCK_MONOTONIC, &ts);
 	timer_sec_end  = ts.tv_sec;
-	timer_nsec_end = ts.tv_nsec;
-	if (timer_nsec_end >= timer_nsec_start) {
+    timer_nsec_end = ts.tv_nsec;
+
+    if (timer_nsec_end >= timer_nsec_start) {
 		timer_msec = (timer_sec_end - timer_sec_start) * MSEC_PER_SEC + 
 			(timer_nsec_end - timer_nsec_start + timer_remain_nsec) / NSEC_PER_MSEC;
 		timer_remain_nsec = (timer_nsec_end - timer_nsec_start + timer_remain_nsec) % NSEC_PER_MSEC;
@@ -94,15 +99,15 @@ unsigned short PicProtocol::timer_silence(void)
 		timer_remain_nsec = (timer_nsec_end + NSEC_PER_SEC - timer_nsec_start + timer_remain_nsec)
 			% NSEC_PER_MSEC;
 	}
-	temp = silence_time + timer_msec;
+    temp = silence_time + timer_msec;
 	if (temp >= 0xFFFF)
 		silence_time = 0xFFFF;
 	else
 		silence_time = (uint16_t)temp;
 		
 //	timer_sec_start  = timer_sec_end;
-//	timer_nsec_start = timer_nsec_end;
-    //printf("silence_time==%d\n",silence_time);
+//	timer_nsec_start = timer_nsec_end;    
+    //printf("silence_time==%d \n",silence_time);
   return silence_time;
 }
 
@@ -269,6 +274,111 @@ void PicProtocol::pic_heart_beat(void)
 	if (num == 255)
 		num = 0;
 }
+
+void PicProtocol::pic_rebuild(struct pic_master_port *port)
+{
+    if(port->rebulid == 1)
+    {
+        //struct pake* dat = &Pake::readBuf;
+        int is, net, id, sudId;
+        QString time_str = Db::newTime();
+        //QString str;
+        //printf("Module::net0All===%d Module::net1All===%d\n",Module::net0All;Module::net1All;);
+        //for(net = 0 ; net < 2 ; net++)
+        printf("port->rebulid == 1\n");
+        net = 0;
+        for(id = 1 ; id <= Mater::readNet0Count() ; id++)
+        {
+            for( sudId = 0 ; sudId < 8 ; sudId++)
+            {
+                if(Module::getSubWarn( 0, id, sudId) == true)
+                {
+                    //printf("getSubWarn net==%d id==%d sudId==%d\n",net,id,sudId);
+                    is = Module::getWhatWarn( 0, id, sudId);
+                    if( is == 2)
+                    {//漏电
+                        pic_c_alarm(0, id, sudId, time_str);
+                    }
+                    else if( is == 0)
+                    {//温度
+                        pic_t_alarm(0, id, sudId, time_str);
+                    }
+                }
+
+                if(Module::getSubError( 0, id, sudId) == true)
+                {
+                    //printf("getSubWarn net==%d id==%d sudId==%d\n",net,id,sudId);
+                    is = Module::getWhatErr( 0, id, sudId);
+                    if( is == 2)
+                    {//漏电故障
+                        pic_c_error(0, id, sudId, time_str);//漏电故障
+                    }
+                    else if( is == 0)
+                    {//温度故障
+                        pic_t_error(0, id, sudId, time_str);//温度故障
+                    }
+                }
+            }
+            if(Module::getNode( 0, id)->flag == UNABLE)
+            {
+                 PicProtocol::pic_channel_error(0, id, 99, time_str);//通道故障
+            }
+
+
+        }
+
+        net = 1;
+        for(id = 1 ; id <= Mater::readNet1Count() ; id++)
+        {
+            for( sudId = 0 ; sudId < 8 ; sudId++)
+            {
+                if(Module::getSubWarn( 1, id, sudId) == true)
+                {
+                    //printf("getSubWarn net==%d id==%d sudId==%d\n",net,id,sudId);
+                    is = Module::getWhatWarn( 1, id, sudId);
+                    if( is == 2)
+                    {//漏电
+                        pic_c_alarm(1, id, sudId, time_str);
+                    }
+                    else if( is == 0)
+                    {//温度
+                        pic_t_alarm(1, id, sudId, time_str);
+                    }
+                }
+
+                if(Module::getSubError( 1, id, sudId) == true)
+                {
+                    //printf("getSubWarn net==%d id==%d sudId==%d\n",net,id,sudId);
+                    is = Module::getWhatErr( 1, id, sudId);
+                    if( is == 2)
+                    {//漏电故障
+                        pic_c_error(1, id, sudId, time_str);//漏电故障
+                    }
+                    else if( is == 0)
+                    {//温度故障
+                        pic_t_error(1, id, sudId, time_str);//温度故障
+                    }
+                }
+            }
+            if(Module::getNode( 1, id)->flag == UNABLE)
+            {
+                 PicProtocol::pic_channel_error(1, id, 99, time_str);//通道故障
+            }
+        }
+
+        if(Power::isMainPower() == false)
+        {
+            pic_main_error(time_str);//主电故障
+        }
+        if((Power::isPrePower() == false) || (Power::isPrePowerJ() == 0) || (Power::isPrePowerJ() == 1))
+        {
+            pic_premain_error(time_str);//备电故障
+        }
+
+    }
+    port->rebulid = 0;
+}
+
 //主电故障
 void PicProtocol::pic_main_error(QString time)
 {
@@ -879,13 +989,13 @@ void PicProtocol::pic_port_state_fsm(struct pic_master_port *port)
 		case MASTER_SENT_POLL:
 			break;
 		case MASTER_NORMAL_REPLY:
-            printf("MASTER_NORMAL_REPLY\n");
-            if (port->timer.timer_fun() < port->timer.retry_time) {printf("port->timer.retry_time\n");
+            //printf("MASTER_NORMAL_REPLY\n");
+            if (port->timer.timer_fun() < port->timer.retry_time) {//printf("port->timer.retry_time\n");
 				if (port->wr_rx_buf_fun(port->pic_fd, &port->pic_receive_buf)) {
 					replay_type = port->rd_rx_buf_fun(&port->pic_receive_buf);
-                    if (replay_type == AN3){printf("AN3--AN3\n");
+                    if (replay_type == AN3){//printf("AN3--AN3\n");
                         port->sent_state = MASTER_IDLE;}
-                    else if (replay_type == AN4) {printf("AN4--AN4\n");
+                    else if (replay_type == AN4) {//printf("AN4--AN4\n");
 						if (sent_temp.sent_count < port->timer.retry_count) {
 							port->retry_sent_fun(port->pic_fd, sent_temp.sent_ascii_char, sent_temp.sent_len);
 							sent_temp.sent_count++;
@@ -903,7 +1013,7 @@ void PicProtocol::pic_port_state_fsm(struct pic_master_port *port)
 				port->sent_state = MASTER_IDLE;
 			break;
 		case MASTER_POLL_REPLY:
-        printf("MASTER_POLL_REPLY  \n");
+        //printf("MASTER_POLL_REPLY  \n");
             if (port->timer.timer_fun() < port->timer.retry_time) {//printf("MASTER_POLL_REPLY < port->timer.retry_time\n");
 				if (port->wr_rx_buf_fun(port->pic_fd, &port->pic_receive_buf)) {
 					replay_type = port->rd_rx_buf_fun(&port->pic_receive_buf);
@@ -924,7 +1034,7 @@ void PicProtocol::pic_port_state_fsm(struct pic_master_port *port)
 		default:
 			port->sent_state = MASTER_IDLE;
 			break;
-	}
+	}    
 }
 
 PicProtocol::PicProtocol()

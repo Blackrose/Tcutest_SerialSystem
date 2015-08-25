@@ -16,8 +16,8 @@
 #define CIRC_SPACE(head, tail, size)  CIRC_CNT((tail),((head)+1),(size))
 
 #define CIRC_LEN        1024
-#define RETRY_TIME_MS   60//30
-#define RETRY_COUNT     3
+#define RETRY_TIME_MS   1010//60//30
+#define RETRY_COUNT     2//3
 #define PIC_BUF_LEN     16
 
 #define PIC_FREAM_MIN_LEN  10
@@ -165,7 +165,7 @@ public:
 	static long timer_remain_nsec;
 	static struct retry_data sent_temp;
 	static struct pic_master_port pic_port;
-	
+
 	PicProtocol();
 	virtual ~PicProtocol();
 	static void timer_init(void);
@@ -185,6 +185,7 @@ public:
 	static void pic_channel_restore(unsigned char net, unsigned char device, unsigned char channel, QString time);
 	static void pic_communication_restore(unsigned char net, unsigned char device, unsigned char channel, QString time);
 	static void pic_heart_beat(void);
+    static void pic_rebuild(struct pic_master_port *port);
 	static void pic_main_error(QString time);
 	static void pic_main_restore(QString time);
 	static void pic_premain_error(QString time);

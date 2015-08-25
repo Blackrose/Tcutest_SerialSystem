@@ -33,7 +33,7 @@
     </rect>
    </property>
    <property name="title">
-    <string>SL-EFAS-MLT型节点参数设置</string>
+    <string>节点参数设置</string>
    </property>
    <widget class="QPushButton" name="btnFu">
     <property name="geometry">

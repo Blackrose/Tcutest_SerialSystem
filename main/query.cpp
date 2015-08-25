@@ -171,7 +171,7 @@ void Query::init_warn()
     }
 
 	currentCount = modelSql->rowCount();
-    printf("currentCount===%d\n",currentCount);
+    //printf("currentCount===%d\n",currentCount);
  	qtw = new QTableWidgetItem[ 7 * (currentCount + 1) ];
     tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);//表格对用户只读
 	tableWidget->setColumnCount(7);
@@ -276,15 +276,31 @@ void Query::init_opt()
 		re = modelSql->record(i);
 		ind = (i + 1) * 4;
 
+        if(i == 0)
+        {
+            qtw[ind].setBackgroundColor(Qt::yellow);
+        }
 		qtw[ind].setText(re.value(0).toString());
 		tableWidget->setItem( i, 0, &qtw[ind ++]);
 
+        if(i == 0)
+        {
+            qtw[ind].setBackgroundColor(Qt::yellow);
+        }
 		qtw[ind].setText(re.value(1).toString());
 		tableWidget->setItem( i, 1, &qtw[ind ++]);
 
+        if(i == 0)
+        {
+            qtw[ind].setBackgroundColor(Qt::yellow);
+        }
 		qtw[ind].setText( tr(Db::doData[re.value(2).toInt()].str) );
 		tableWidget->setItem( i, 2, &qtw[ind ++]);
 
+        if(i == 0)
+        {
+            qtw[ind].setBackgroundColor(Qt::yellow);
+        }
 		qtw[ind].setText(re.value(3).toString() );
 		tableWidget->setItem( i, 3, &qtw[ind ++]);
 	}

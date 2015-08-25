@@ -83,7 +83,7 @@ void Power::hanlde()
 		total[0] = total[0] / SAMPLE_NUM;
 		value = (float)total[0] / 100; //cell
 
-        printf("cell voltage is %f\n", value);
+        //printf("cell voltage is %f\n", value);
 		/* check back-up power break or short */
 		if ((value <= PREPOWER_BREAK_VOLTAGE) && (value >= PREPOWER_SHORT_VOLTAGE))
 			Power::cmd[PRE_POWERJ_3] = 0;
@@ -118,7 +118,7 @@ void Power::hanlde()
 
 		total[1] = total[1] / SAMPLE_NUM;
 		value = (float)total[1] / 100; //power
-        printf("power voltage is %f\n", value);
+        //printf("power voltage is %f\n", value);
 		/* check main power undervoltage */
 		if (value >= POWER_LOW_VOLTAGE)
 			Power::cmd[MAIN_POWER_0] = 1;
