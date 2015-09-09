@@ -655,6 +655,10 @@ void NodeStatus::slot_ok()
 
 void NodeStatus::slot_change()
 {
+    if(Main::flagreset == 1)
+    {
+        return ;
+    }
     QTextCodec::setCodecForCStrings(0);
     QWSServer::setCurrentInputMethod(imf_my);
     imf_my->updateHandler(QWSInputMethod::FocusOut);

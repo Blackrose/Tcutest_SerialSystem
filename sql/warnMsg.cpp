@@ -16,6 +16,8 @@ int WarnMsg::insert(int netId,int nodeId,int subNodeId,int warn,int value)
 	QString strSubId = QString::number(subNodeId);
 	QString dan;
 	QString time_str = Db::newTime();
+    Main::flagreset = 1;
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 	if(warn == T_ALARM)
 	{
 		PicProtocol::pic_t_alarm(netId, nodeId, subNodeId, time_str);
@@ -28,11 +30,8 @@ int WarnMsg::insert(int netId,int nodeId,int subNodeId,int warn,int value)
 		dan = "mA";
 		Print::Calarm(netId, nodeId, subNodeId, value, time_str);
 	}
-    if(Main::flagreset == 1)
-    {
-        QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
-        Main::flagreset = 0;
-    }
+    Main::flagreset = 0;
+
 	QString sql = "select count(*) from WarnMsg";
     if( Db::selectCount(sql) >= SQLMAXDATA)
 	{
@@ -42,7 +41,7 @@ int WarnMsg::insert(int netId,int nodeId,int subNodeId,int warn,int value)
 	}
 	sql = "insert into WarnMsg values(NULL,'"+QString::number(netId)+"','"+
 			QString::number(nodeId)+"','"+strSubId+"','"+QString::number(warn)+"','"+
-			QString::number(value)+dan+"','"+time_str+"');";
+			QString::number(value)+dan+"','"+time_str+"');";    
 	return Db::IDUdb(sql);
 }
 void WarnMsg::insertMainNo()//主电欠压
@@ -312,7 +311,7 @@ void WarnMsg::getTable(QString time_bg,QString timer_end, int net,int id, int su
 	{
 		sql += " and SubNodeId = '"+QString::number(subId)+"'";
 	}
-	sql += " ORDER BY id DESC limit 9 offset "+ QString::number(big);
+    sql += " ORDER BY id DESC limit 9 offset "+ QString::number(big);//按照数据库id降序排列取出9条记录
 	Db::fillModel(sql,model);
 }
 

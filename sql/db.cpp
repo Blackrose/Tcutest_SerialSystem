@@ -74,7 +74,7 @@ bool Db::IDUdb(QString &sql)//数据库操作
 	Db::isOpen();
 	QSqlQuery query;
 	if(query.exec(sql)){
-		query.finish();
+        query.finish();
         //printf("IDUdb  true\n");
 		return true;
 	}

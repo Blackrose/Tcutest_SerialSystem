@@ -186,6 +186,7 @@ public:
 	static void pic_communication_restore(unsigned char net, unsigned char device, unsigned char channel, QString time);
 	static void pic_heart_beat(void);
     static void pic_rebuild(struct pic_master_port *port);
+    static void pic_reset(QString time);
 	static void pic_main_error(QString time);
 	static void pic_main_restore(QString time);
 	static void pic_premain_error(QString time);

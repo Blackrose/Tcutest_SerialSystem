@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "mater.h"
+#include "main/main.h"
 
 struct mod* Module::mod_list = NULL;
 struct nodeModName* Module::moTyp = NULL;
@@ -251,10 +252,13 @@ int Module::warnCount()
 	int sum = 0;
 	for(int i = 0; i < MODCOUNT; i++)
 	{
-		if(mod_list[i].flag == WARN && mod_list[i].isHave == true)
-		{
-			sum++;
-		}
+        for(int j=0;j<SUBNODECOUNT;j++)
+        {
+            if(mod_list[i].subNodIsWar[j] == WARN && mod_list[i].isHave == true)
+            {
+                sum++;
+            }
+        }
 	}
 	return sum;
 }
@@ -264,13 +268,88 @@ int Module::errorCount()
 	int sum = 0;
 	for(int i=0; i < MODCOUNT; i++)
 	{
-		if(mod_list[i].flag == ERROR  && mod_list[i].isHave == true)
-		{
-			sum++;
-		}
+        for(int j=0;j<SUBNODECOUNT;j++)
+        {
+            if(mod_list[i].subNodIsWar[j] == ERROR  && mod_list[i].isHave == true)
+            {
+                sum++;
+            }
+        }
+        if(mod_list[i].flag == UNABLE && mod_list[i].isHave == true)
+        {
+            sum++;
+        }
 	}
+    if( Main::mainpower || Main::prepower || Main::onStat || Main::offStat )
+    {
+        sum++;
+    }
 	return sum;
 }
+
+//============ 报警故障总数 ===============
+int Module::warnerrorCount(int net)
+{
+    int sum = 0;
+    int i = net * BtnNodeNUm;
+    if(i > MODCOUNT ) return 0;
+    int count = (net + 1)*BtnNodeNUm;
+    if(count > MODCOUNT ) return 0;
+    for(; i < count; i++)
+    {
+        for(int j=0;j<SUBNODECOUNT;j++)
+        {
+            if(mod_list[i].subNodIsWar[j] == WARN  && mod_list[i].isHave == true)
+            {
+                sum++;
+            }
+            if(mod_list[i].subNodIsWar[j] == ERROR  && mod_list[i].isHave == true)
+            {
+                sum++;
+            }
+        }
+        if(mod_list[i].flag == UNABLE && mod_list[i].isHave == true)
+        {
+            sum++;
+        }
+    }
+    if( Main::mainpower || Main::prepower || Main::onStat || Main::offStat )
+    {
+        sum++;
+    }
+    return sum;
+}
+
+
+//============ 报警故障总数 ===============
+int Module::warnerrorCount()
+{
+    int sum = 0;
+    for(int i=0; i < MODCOUNT; i++)
+    {
+        for(int j=0;j<SUBNODECOUNT;j++)
+        {
+            if(mod_list[i].subNodIsWar[j] == WARN  && mod_list[i].isHave == true)
+            {
+                sum++;
+            }
+            if(mod_list[i].subNodIsWar[j] == ERROR  && mod_list[i].isHave == true)
+            {
+                sum++;
+            }
+        }
+        if(mod_list[i].flag == UNABLE && mod_list[i].isHave == true)
+        {
+            sum++;
+        }
+    }
+    if( Main::mainpower || Main::prepower || Main::onStat || Main::offStat )
+    {
+        sum++;
+    }
+    return sum;
+}
+
 //================返回 sn=============
 int Module::getNodeSN(int net,int id)
 {
@@ -450,4 +529,31 @@ void Module::getWarnTimeAndVal(int net,int id,int subId,char** time,int* value)
 	if( i >= MODCOUNT || subId >= SUBNODECOUNT) return;
 	*time = mod_list[i].subNodTimer[subId].time;
 	*value = mod_list[i].subNodValue[subId];
+}
+
+//=============== 试验  ==============
+int Module::TryAllNode(int net)
+{
+    if(net == 0)
+    {
+        for(int i = 0; i < BtnNodeNUm; i++)
+        {
+            if(mod_list[i].flag != UNABLE && mod_list[i].isHave == true)
+            {
+                Pake::send( net, i+1, SET_MOD_TRY, NULL, 0);
+            }
+        }
+    }
+    else
+    {
+        for(int i = BtnNodeNUm; i < MODCOUNT; i++)
+        {
+            if(mod_list[i].flag != UNABLE && mod_list[i].isHave == true)
+            {
+                Pake::send( net, (i+1)%BtnNodeNUm, SET_MOD_TRY, NULL, 0);
+            }
+        }
+    }
+
+    return 1;
 }

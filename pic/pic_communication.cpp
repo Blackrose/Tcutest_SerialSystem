@@ -379,6 +379,16 @@ void PicProtocol::pic_rebuild(struct pic_master_port *port)
     port->rebulid = 0;
 }
 
+//reset
+void PicProtocol::pic_reset(QString time)
+{
+    pic_data_t data;
+
+    data.cmd_type = RST_CMD;
+    time_exchange(&data.pic_time, time);
+    pic_port.wr_tx_buf_fun(data, &pic_port.pic_sent_buf);
+}
+
 //主电故障
 void PicProtocol::pic_main_error(QString time)
 {
@@ -636,7 +646,7 @@ int PicProtocol::sent_data_to_ascii(char *ascii, pic_data_t data)
 			}
 			value = index;
 			break;
-		case RST_CMD:
+        case RST_CMD:
 			ascii[index++] = 'R';
 			ascii[index++] = 'S';
 			ascii[index++] = 'T';

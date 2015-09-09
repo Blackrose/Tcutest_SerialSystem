@@ -14,6 +14,11 @@ int Main::whoChePwd = NONE;
 int Main::com_led = 1;
 int Main::flagnosound = 0;
 int Main::flagreset = 0;
+int Main::mainpower = 0;
+int Main::prepower = 0;
+int Main::onStat = 0;
+int Main::offStat = 0;
+int Main::WarnSumOne = 0;
 
 Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 {
@@ -70,12 +75,12 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	p_check	= new Check(this); //自检
 	proBar->setValue(72);
 	p_printer = new Printer();
+    proBar->setValue(80);
 	p_help = new Help();
 	p_query = new Query();//报警、操作记录查询
-        proBar->setValue(80);
+    proBar->setValue(88);
 	Watchdog::kellLive();//喂狗
     p_nodeStatus = new NodeStatus(p_imf,this);//详细记录的状态
-	proBar->setValue(88);
     //QWSServer::setCurrentInputMethod(p_imf);
 	proBar->setValue(96);
 
@@ -87,7 +92,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
     curNet = 0;		//当前显示的网络 默认0
 	curNode = -1;		//当前选择的节点 默认0
 	whoReset = 0;		//谁复位 :0 启动复位 1 按钮复位
-	mainpower = 0;		//主电源
+    //mainpower = 0;		//主电源
 	errorLed = 0;		//节点故障灯
 	warnLed = 0;		//led报警灯
     warnRelay = 0;
@@ -96,15 +101,15 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	screenCount = 0;	//计算器
 	whoChePwd = NONE;	//检测密码
 	time_min = -1;		//分
-	offStat = 0;	
-	onStat = 0;
+    //offStat = 0;
+    //onStat = 0;
     preStat = 0;
     mainStat = 0;
 	off = 0;		//短路断路
 	on = 0;
 	preJ4 = 0;		//j4电平
 	relayStats = 0;		//继电器状态
-	prepower = 0;		//备电源
+    //prepower = 0;		//备电源
 	timer_count = 0 ;
 	timer_countPower = 3000;
     colorcount = 0;//add by 7.16
@@ -317,6 +322,7 @@ void Main::slot_warn()
             {
                 p_nodeStatus->_show(curNet, curNode, mo->sn, ERROR);
             }
+            setLblWarnSum();
             //显示模块型号
             lblXing->setText(tr(Module::moTyp[mo->sn].name));
             //显示模块节点号
@@ -355,6 +361,7 @@ void Main::slot_warn()
             {
                 p_nodeStatus->_show(curNet, curNode, mo->sn, NORMAL);
             }
+            setLblWarnSum();
             //显示模块型号
             lblXing->setText(tr(Module::moTyp[mo->sn].name));
             //显示模块节点号
@@ -546,6 +553,7 @@ void Main::setBellAndLedStatus()
 		Bell::warn_flag = 0;
 		Bell::error_flag = 0;
 	}
+    setLblWarnSum();
 }
 // ================ 定时器  ================== 
 void Main::slot_timer()
@@ -862,7 +870,7 @@ void Main::powerCheck()
             preStat = 0;
             Message::_show(tr("电池电量充足!"));
         }
-        printf("off relay when full\n");
+        //printf("off relay when full\n");
     }else {
 		Power::offRelay();
 		printf("off relay\n");
@@ -872,6 +880,7 @@ void Main::powerCheck()
 //============== 复位回复 ===============
 void Main::slot_ans_reset()
 {
+    QString time_str = Db::newTime();
 	struct pake* dat = &Pake::readBuf;
 	if(dat == NULL) return;
 	int net = 0 , id = 0;
@@ -893,6 +902,7 @@ void Main::slot_ans_reset()
 //	checkWarn();
 //	setBellAndLedStatus();
 	setLblWarnSum();
+    PicProtocol::pic_reset(time_str);
 	printf("reset\t%d,\t%d,\n",net,id);
 }
 //================== 注册SN =====================
@@ -1024,14 +1034,16 @@ void Main::slot_stop_sound()
 //======== 试验 =========
 void Main::slot_btn_try()
 {
-    if(curNet >= 0 && curNode > 0 && curNet < 2 && curNode <= BtnNodeNUm)
-	{
-		Pake::send( curNet, curNode, SET_MOD_TRY, NULL, 0);
-	}
-	else
-	{
-		Message::_show(tr("没有选择节点!"));
-	}
+    whoChePwd = TRY;
+    p_chePwd->_show();
+//    if(curNet >= 0 && curNode > 0 && curNet < 2 && curNode <= BtnNodeNUm)
+//	{
+//		Pake::send( curNet, curNode, SET_MOD_TRY, NULL, 0);
+//	}
+//	else
+//	{
+//		Message::_show(tr("没有选择节点!"));
+//	}
 }
 //======== 按键试验回复 ========
 void Main::slot_ans_try()
@@ -1094,8 +1106,19 @@ void Main::setBtnFalg(int id,int flag)
     }
 	btn_node[id-1].flag = flag;
 }
+void Main::slot_WarnSumOne()
+{
+    WarnSumOne = 1;
+    p_query->_show();
+}
+void Main::slot_WarnSumTwo()
+{
+    WarnSumOne = 2;
+    p_query->_show();
+}
 void Main::slot_query()
 {//信息查询
+    WarnSumOne = 0;
 	p_query->_show();
 }
 void Main::slot_relogin()
@@ -1178,8 +1201,22 @@ void Main::check_pwd()
             memset(Db::username,0,sizeof(Db::username));
 			break;
 		case REBOOT:
-			::system("reboot");
+            //::system("reboot -f");
+            //::system("killall -9 addressbook");
+            ::system("/etc/init.d/rcS_next");
 			break;
+        case TRY:
+            Module::TryAllNode(0);
+            Module::TryAllNode(1);
+//            if(curNet >= 0 && curNode > 0 && curNet < 2 && curNode <= BtnNodeNUm)
+//            {
+//                Pake::send( curNet, curNode, SET_MOD_TRY, NULL, 0);
+//            }
+//            else
+//            {
+//                Message::_show(tr("没有选择节点!"));
+//            }
+            break;
 		case RESET:
 	        mainpower=0;//
 	        prepower=0;//
@@ -1377,6 +1414,8 @@ void Main::initConnect()
 {//连接信号于槽
     for(int i = 0; i < BtnNodeNUm ; i++)
 	connect(&btn_node[i].btn,SIGNAL(clicked()),this,SLOT(slot_btn_node()),Qt::QueuedConnection);//节点按钮
+    connect(lblWarnSumOne,SIGNAL(clicked()),this,SLOT(slot_query()));
+    connect(lblWarnSumTwo,SIGNAL(clicked()),this,SLOT(slot_query()));
 	connect(btn_reset,SIGNAL(clicked()),this,SLOT(slot_btn_reset()));//复位
 	connect(btn_query,SIGNAL(clicked()),this,SLOT(slot_query()));//查询
 	connect(btn_relogin,SIGNAL(clicked()),this,SLOT(slot_relogin()));//重新登录
@@ -1403,7 +1442,7 @@ void Main::showHowNet()
 {
 	btnNet1->setVisible(false);
 	lblNode1->setVisible(false);
-	lblWarnSumTwo->setVisible(false);
+    //lblWarnSumTwo->setVisible(false);
 }
 Main::~Main()
 {
@@ -1476,11 +1515,22 @@ void Main::setLblNodSum()
 void Main::setLblWarnSum()
 {
 	char ch[20];
-	sprintf(ch,"%d",p_mod->warnCount(0));
+#if 1
+    sprintf(ch,"%d",p_mod->warnCount());
+    lblWarnSumOne->setText(tr(ch));//网络报警数
+    sprintf(ch,"%d",p_mod->errorCount());
+    lblWarnSumTwo->setText(tr(ch));//网络故障数
+    sprintf(ch,"%d",p_mod->warnerrorCount());
+    lblWarnSum->setText(tr(ch));
+#else
+    //sprintf(ch,"%d",p_mod->warnCount(0));
+    sprintf(ch,"%d",p_mod->warnerrorCount(0));
 	lblWarnSumOne->setText(tr(ch));//网络0报警数
-	if(NET == 1) return;
-	sprintf(ch,"%d",p_mod->warnCount(1));
+    if(NET == 1) return;
+    //sprintf(ch,"%d",p_mod->warnCount(1));
+    sprintf(ch,"%d",p_mod->warnerrorCount(1));
 	lblWarnSumTwo->setText(tr(ch));//网络1报警数
+ #endif
 }
 //清除颜色
 void Main::clearColor(QWidget& qw)

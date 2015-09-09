@@ -89,7 +89,8 @@ HEADERS += data/pake.h \
     frminput/frminput.h \    
     SYSZUXpinyin/syszuxim.h \
     SYSZUXpinyin/syszuxpinyin.h \
-    mylineedit.h
+    mylineedit.h \
+    mylabel.h
 FORMS += print/main.ui \
          startUp/startUpFrm.ui \
          keyboard/ui/keyboard.ui \
@@ -109,7 +110,8 @@ FORMS += print/main.ui \
          sys/ui/update_pwd.ui \
          sys/ui/user.ui \
     frminput/frminput.ui \
-    SYSZUXpinyin/syszuxpinyin.ui
+    SYSZUXpinyin/syszuxpinyin.ui \
+    main/ui/warn_error.ui
 SOURCES += data/pake.cpp \
            data/signals.cpp \
            keyboard/imframe.cpp \
@@ -154,7 +156,8 @@ SOURCES += data/pake.cpp \
     frminput/frminput.cpp \
     SYSZUXpinyin/syszuxim.cpp \
     SYSZUXpinyin/syszuxpinyin.cpp \
-    mylineedit.cpp
+    mylineedit.cpp \
+    mylabel.cpp
 RESOURCES += img.qrc \
     syszuxpinyin.qrc
 QT += sql

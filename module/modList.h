@@ -71,6 +71,8 @@ public:
 	int warnCount(int net); //返回指定网络报警的数量
 	int errorCount(); //故障总数
 	int warnCount(); //报警总算
+    int warnerrorCount(int net);//报警故障总数
+    int warnerrorCount();//报警故障总数
 	int nodeCount(int net);//返回节点数
 	int getNodeStats(int net,int id); //返回节点的状态 
 	static int s_getNodeStats(int net,int id);//返回节点的状态 
@@ -166,6 +168,7 @@ public:
     static struct mod* getNode(int net,int id);//返回指定的节点
 	static bool nodeIsHave(int net, int id);//是否有节点
 	static struct nodeModName *moTyp;
+    static int TryAllNode(int net);
 private:
 	static struct mod* mod_list;
 	//int sum;

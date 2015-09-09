@@ -43,23 +43,17 @@ Query::~Query()
 	printf("exit Query\n");
 }
 void Query::_show()
-{
-	printf("1\n");
-	init_time( *dte_end, 0);
-	printf("2\n");
-	init_time( *dte_begin, 10);
-	printf("3\n");    
+{	
+	init_time( *dte_end, 0);	
+	init_time( *dte_begin, 10);	
     cmb_note_type->setCurrentIndex(0);
-    //cmb_net->setCurrentIndex(0);
-    //cmb_node->setCurrentIndex(0);
-    //cmb_sub_node->setCurrentIndex(0);
+    cmb_net->setCurrentIndex(0);
+    cmb_node->setCurrentIndex(0);
+    cmb_sub_node->setCurrentIndex(0);
 
-	init_parameter();
-	printf("4\n");
-	init_table();
-	printf("5\n");
-	show();
-	printf("6\n");
+	init_parameter();	
+	init_table();	
+	show();	
 }
 void Query::_hide()
 {

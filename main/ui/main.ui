@@ -725,7 +725,7 @@
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>210</x>
       <y>10</y>
       <width>51</width>
       <height>31</height>
@@ -735,17 +735,17 @@
      <string>节点数:</string>
     </property>
    </widget>
-   <widget class="QLabel" name="lblWarnSumOne">
+   <widget class="mylabel" name="lblWarnSumOne">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>450</x>
       <y>11</y>
       <width>41</width>
       <height>29</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
+     <string notr="true">background-image: url(:/img/images/netBtn1.png);</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::Box</enum>
@@ -785,20 +785,20 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="lblWarnSumTwo">
+   <widget class="mylabel" name="lblWarnSumTwo">
     <property name="enabled">
      <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
-      <x>550</x>
+      <x>570</x>
       <y>11</y>
       <width>41</width>
       <height>29</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 255, 255);</string>
+     <string notr="true">background-image: url(:/img/images/netBtn1.png);</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::Box</enum>
@@ -819,7 +819,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>110</x>
       <y>9</y>
       <width>64</width>
       <height>34</height>
@@ -850,7 +850,7 @@
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>440</x>
+      <x>390</x>
       <y>10</y>
       <width>51</width>
       <height>31</height>
@@ -863,7 +863,7 @@
    <widget class="QLabel" name="lblNode0">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>270</x>
       <y>11</y>
       <width>41</width>
       <height>29</height>
@@ -925,7 +925,7 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>370</x>
+      <x>320</x>
       <y>11</y>
       <width>41</width>
       <height>29</height>
@@ -966,7 +966,7 @@
    <widget class="QFrame" name="frame_4">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>110</x>
       <y>9</y>
       <width>64</width>
       <height>34</height>
@@ -977,6 +977,44 @@
     </property>
     <property name="frameShadow">
      <enum>QFrame::Plain</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>10</y>
+      <width>51</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>故障数:</string>
+    </property>
+   </widget>
+   <widget class="mylabel" name="lblWarnSum">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>10</y>
+      <width>41</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/img/images/netBtn1.png);</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Plain</enum>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <zorder>frame</zorder>
@@ -990,6 +1028,8 @@
    <zorder>label_8</zorder>
    <zorder>lblNode0</zorder>
    <zorder>lblNode1</zorder>
+   <zorder>label_9</zorder>
+   <zorder>lblWarnSum</zorder>
   </widget>
   <widget class="QLabel" name="lbl_reboot_4">
    <property name="geometry">
@@ -1121,6 +1161,13 @@
    </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>mylabel</class>
+   <extends>QLabel</extends>
+   <header location="global">mylabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../../img.qrc"/>
  </resources>

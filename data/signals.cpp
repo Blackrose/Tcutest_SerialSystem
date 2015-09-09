@@ -136,7 +136,7 @@ void Signals::doNet(int net)
 	}
 }
 void Signals::sendNet(int net)
-{
+{    
 	if(netCount[net] > 0)
 	{
 		mo = ((Main*)p_main)->p_mod -> getNode( net, netCurId[net]);
@@ -148,7 +148,7 @@ void Signals::sendNet(int net)
 		{//节点复位
 			unsigned int data[1];
 			data[0] = 1;
-			ModbusTx::writeMem(net, netCurId[net], 401, 1, data);
+			ModbusTx::writeMem(net, netCurId[net], 401, 1, data);            
 		}
 		else 
 		{//节点轮询

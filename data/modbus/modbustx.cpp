@@ -173,7 +173,7 @@ void ModbusTx::haveLoogTimerGetDat(int cmd,unsigned size)
 	}
 	else if(cmd == 0x10)
 	{
-		ModbusTx::timer = PAKETIMER;
+        ModbusTx::timer = PAKETIMER*2;
 	}
 }
 

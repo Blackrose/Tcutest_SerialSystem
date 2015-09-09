@@ -60,7 +60,7 @@ void PutOff::currentTextCh(const QString & text)
     for(i = 0; i < 128 ;i ++)
 	{
 		sn = Module::getNodeSN( text.toInt(), i);
-		if( sn == MC)
+        if( sn == MC)
 		{
 			cbNode->insertItem(index,QString::number(i));
 			index++;

@@ -56,6 +56,7 @@
 #include "SYSZUXpinyin/syszuxim.h"
 #include "SYSZUXpinyin/syszuxpinyin.h"
 #include "nodeStatus.h"
+#include "mylabel.h"
 
 #define NORMAL 	1
 #define WARN	2
@@ -75,6 +76,7 @@
 #define RESET	5
 #define CHECK	6
 #define PRINTER 7
+#define TRY 8
 
 #define DATCOU	9 //当前显示的数据9个
 #define WIAT_SEC 900000//
@@ -201,16 +203,16 @@ public :
 	int 		curNet;		//当前显示的网络 默认0
 	int 		curNode;	//当前选择的节点 默认-1
 	int 		whoReset;	//谁复位 0 启动复位 1 按钮复位
-	int 		mainpower;	//主电源
-	int 		prepower;	//备电源
+    static int 		mainpower;	//主电源
+    static int 		prepower;	//备电源
 	int 		errorLed;	//节点故障灯
 	int 		warnLed;	//led报警灯
     int         warnRelay;  //报警控制继电器
 
 	int		off;		//断路 
 	int 		on;		//短路
-	int 		offStat;	
-	int 		onStat;
+    static int 		offStat;
+    static int 		onStat;
     int         preStat;
     int         mainStat;
 	int 		preJ4;		//j4电平
@@ -230,10 +232,13 @@ public :
     int         flagcolor;
     static int  flagnosound;
     static int  flagreset;
+    static int  WarnSumOne;
 
 public slots:
 	void slot_printer();
 	void slot_help();
+    void slot_WarnSumOne();
+    void slot_WarnSumTwo();
 	void slot_query();		//查询
 	void slot_relogin();		//登录
 	void slot_sys();		//系统管理
