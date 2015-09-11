@@ -285,7 +285,7 @@ void NodeStatus::_show(int net,int id,int mod,int stat)
 /*====================================
 	功能：些下当前数值
 ====================================*/
-void NodeStatus::setCurVal(int* val,int sum)
+void NodeStatus::setCurVal(float* val,int sum)
 {
 	switch( curMod )
 	{
@@ -313,7 +313,7 @@ void NodeStatus::setCurVal(int* val,int sum)
                 break;
 	}
 }
-void NodeStatus::setLblValue(QLabel *lbl,int value, int cora)
+void NodeStatus::setLblValue(QLabel *lbl,float value, int cora)
 {
 	if(cora == 0)
 	{//温度
@@ -334,7 +334,7 @@ void NodeStatus::setLblValue(QLabel *lbl,int value, int cora)
 void NodeStatus::fillRow(QLabel *lbl,QLabel *lblStats,int net, int id,int subId,int stat,bool isHave)
 {
 	char *time;
-	int val;
+    float val;
 	int TOrL = 2; // 1 == t 2 == l normal is l TOrL = 2;
 	lblStats->setEnabled(isHave);
 	lbl->setEnabled(isHave);

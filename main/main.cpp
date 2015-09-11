@@ -121,6 +121,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	showCrurrent = 0;	//当前显示的页
 	AruCount = 0;		//延时计数器
 	screenWaitTime = Mater::read() * 60 * 1000;//屏幕保护时间s
+    lblWarnSum->setVisible(false);
 	initBtnNode();		//初始化节点按钮
 	initSubNode();		//初始化子节点
 	initConnect();		//连接信号于槽
@@ -256,7 +257,7 @@ void Main::slot_warn()
             }
             else if( is == 0)
             {//温度
-                WarnMsg::insertTAlarm( net, id, sudId, dat->data[sudId]/10);
+                WarnMsg::insertTAlarm( net, id, sudId, ((float)dat->data[sudId])/10);
             }
             //显示模块节点号
             curNode = id;
@@ -268,7 +269,7 @@ void Main::slot_warn()
             if(is == 0)
             {
 
-                p_mod->setSubWarn( net, id, sudId, WARN, dat->data[sudId]/10);//写下子节点报警
+                p_mod->setSubWarn( net, id, sudId, WARN, ((float)dat->data[sudId])/10);//写下子节点报警
             }
 
             warn = 1;
@@ -304,10 +305,12 @@ void Main::slot_warn()
             if( is == 2)
             {//漏电故障
                 WarnMsg::insertCError( net, id, sudId);
+                WarnMsg::insertNowTorCError( net, id, sudId);
             }
             else if( is == 0)
             {//温度故障
                 WarnMsg::insertTError( net, id, sudId);
+                WarnMsg::insertNowTorCError( net, id, sudId);
             }
             //==============================================================
             //WarnMsg::insertSubError(net, id, sudId);
@@ -371,15 +374,25 @@ void Main::slot_warn()
     }
     for( sudId = 0 ; sudId < 8 ; sudId++)
     {
-            if(p_mod -> getSubWarn( net, id, sudId) == true)
-            {
-                mo->flag = WARN;
-                if (curNet !=  net) {
-                    showCurrentNet(net);//显示当前网络
-                } else {
-                    setBtnFalg(id, WARN);//
-                }
+        if(p_mod -> getSubError( net, id, sudId) == true)
+        {
+            mo->flag = ERROR;
+            if (curNet !=  net) {
+                showCurrentNet(net);//显示当前网络
+            } else {
+                setBtnFalg(id, ERROR);//
             }
+        }
+
+        if(p_mod -> getSubWarn( net, id, sudId) == true)
+        {
+            mo->flag = WARN;
+            if (curNet !=  net) {
+                showCurrentNet(net);//显示当前网络
+            } else {
+                setBtnFalg(id, WARN);//
+            }
+        }
     }
 }
 //========== 模块当前数据 (电流漏电 温度) ================
@@ -404,7 +417,7 @@ void Main::slot_cur_val()
 			{
 				if(i>3)
 				{
-					dataA[i]=dat->data[i]/10;
+                    dataA[i]=((float)dat->data[i])/10;
 				}
 				else
 				{
@@ -493,7 +506,7 @@ void Main::clearSubNodeDat()
 	}
 }
 /*=================显示子节点的颜色 =================*/
-void Main::setSubNodeStat(int value, struct LblSubNode *sudNode,int cora)
+void Main::setSubNodeStat(float value, struct LblSubNode *sudNode,int cora)
 {
     if(sudNode->lbl.isHidden())
 	{
@@ -1414,8 +1427,8 @@ void Main::initConnect()
 {//连接信号于槽
     for(int i = 0; i < BtnNodeNUm ; i++)
 	connect(&btn_node[i].btn,SIGNAL(clicked()),this,SLOT(slot_btn_node()),Qt::QueuedConnection);//节点按钮
-    connect(lblWarnSumOne,SIGNAL(clicked()),this,SLOT(slot_query()));
-    connect(lblWarnSumTwo,SIGNAL(clicked()),this,SLOT(slot_query()));
+    connect(lblWarnSumOne,SIGNAL(clicked()),this,SLOT(slot_WarnSumOne()));
+    connect(lblWarnSumTwo,SIGNAL(clicked()),this,SLOT(slot_WarnSumTwo()));
 	connect(btn_reset,SIGNAL(clicked()),this,SLOT(slot_btn_reset()));//复位
 	connect(btn_query,SIGNAL(clicked()),this,SLOT(slot_query()));//查询
 	connect(btn_relogin,SIGNAL(clicked()),this,SLOT(slot_relogin()));//重新登录
@@ -1522,6 +1535,7 @@ void Main::setLblWarnSum()
     lblWarnSumTwo->setText(tr(ch));//网络故障数
     sprintf(ch,"%d",p_mod->warnerrorCount());
     lblWarnSum->setText(tr(ch));
+    //lblWarnSum->setVisible(false);
 #else
     //sprintf(ch,"%d",p_mod->warnCount(0));
     sprintf(ch,"%d",p_mod->warnerrorCount(0));

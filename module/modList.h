@@ -49,7 +49,7 @@ struct mod
 	int flag;// 0 掉线  1 正常 2 预警 3 报警
 	int subNodIsWar[SUBNODECOUNT];//子节点状态
 	struct myTime subNodTimer[SUBNODECOUNT];//报警时间
-	int subNodValue[SUBNODECOUNT];//报警数值
+    float subNodValue[SUBNODECOUNT];//报警数值
     int recovery[SUBNODECOUNT];//恢复
 };
 /*========================
@@ -88,7 +88,7 @@ public:
 		net: 网络号 id：节点号 subId:子节点 
 		w：状态 （ 1:正常) (2:预警) (3:报警)
 	================================================*/
-	void setSubWarn(int net,int id,int subId,int flag,int value);
+    void setSubWarn(int net, int id, int subId, int flag, float value);
 	/*====================================
 		功能：返回节点是否报警；
 		net：网络号；
@@ -117,7 +117,7 @@ public:
 		time：传递报警时间的参数；
 		value：报警的数值；
 	=====================================*/
-	static void getWarnTimeAndVal(int net,int id,int subId,char** time,int* value);
+    static void getWarnTimeAndVal(int net, int id, int subId, char** time, float *value);
 	/*====================================
 		功能：注册型号；
 		net：网络号；

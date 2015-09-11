@@ -47,8 +47,8 @@ public :
         virtual ~NodeStatus();
 	void _show(int net,int id,int mod,int stat);
 	void fillRow(QLabel *lbl,QLabel *lblStats,int net, int id,int subId,int stat,bool isHave);
-	void setCurVal(int* val,int sum);
-	void setLblValue(QLabel *lbl,int value, int cora);
+    void setCurVal(float *val, int sum);
+    void setLblValue(QLabel *lbl, float value, int cora);
 
 	int curNet;
 	int curId;

@@ -3,6 +3,7 @@
 =============================*/
 #include "query.h"
 #include "define.h"
+#include "main.h"
 
 #include <stdio.h>
 #include <QWidget>
@@ -45,11 +46,18 @@ Query::~Query()
 void Query::_show()
 {	
 	init_time( *dte_end, 0);	
-	init_time( *dte_begin, 10);	
-    cmb_note_type->setCurrentIndex(0);
-    cmb_net->setCurrentIndex(0);
-    cmb_node->setCurrentIndex(0);
-    cmb_sub_node->setCurrentIndex(0);
+    init_time( *dte_begin, 10);
+    if(Main::WarnSumOne == 0 || Main::WarnSumOne == 1){
+        cmb_note_type->setCurrentIndex(0);
+        cmb_net->setCurrentIndex(0);
+        cmb_node->setCurrentIndex(0);
+        cmb_sub_node->setCurrentIndex(0);
+    }else if(Main::WarnSumOne == 2){
+        cmb_note_type->setCurrentIndex(1);
+        cmb_net->setCurrentIndex(0);
+        cmb_node->setCurrentIndex(0);
+        cmb_sub_node->setCurrentIndex(0);
+    }
 
 	init_parameter();	
 	init_table();	
@@ -124,13 +132,26 @@ void Query::init_parameter()
 		par[0] = cmb_net->currentIndex() - 1;
 		par[1] = cmb_node->currentIndex() - 1;
 		par[2] = cmb_sub_node->currentIndex() - 1;
-		count = WarnMsg::getCount( timer_start, timer_end, par[0], par[1], par[2]);//一共有几条数据 
-    }else if(typeQuery == 1)
+        if(Main::WarnSumOne == 0){
+            cmb_note_type->setEnabled(true);
+            count = WarnMsg::getCount( timer_start, timer_end, par[0], par[1], par[2]);//一共有几条数据
+        }else if(Main::WarnSumOne == 1){
+            cmb_note_type->setEnabled(false);
+            count = WarnMsg::getNowCount( timer_start, timer_end, par[0], par[1], par[2]);//一共有几条数据
+        }
+    }
+    else if(typeQuery == 1)
     {
         par[0] = cmb_net->currentIndex() - 1;
         par[1] = cmb_node->currentIndex() - 1;
         par[2] = cmb_sub_node->currentIndex() - 1;
-        count = WarnMsg::geterrCount( timer_start, timer_end, par[0], par[1], par[2]);//一共有几条数据
+        if(Main::WarnSumOne == 0){
+            cmb_note_type->setEnabled(true);
+            count = WarnMsg::geterrCount( timer_start, timer_end, par[0], par[1], par[2]);//一共有几条数据
+        }else if(Main::WarnSumOne == 2){
+            cmb_note_type->setEnabled(false);
+            count = WarnMsg::getNowerrCount( timer_start, timer_end, par[0], par[1], par[2]);//一共有几条数据
+        }
     }
 	else
 	{
@@ -158,22 +179,32 @@ void Query::init_warn()
 {
     if(typeQuery == 0)
     {
-        WarnMsg::getTable( timer_start, timer_end, par[0], par[1], par[2] , par[3], modelSql);
+        if(Main::WarnSumOne == 0){
+            WarnMsg::getTable( timer_start, timer_end, par[0], par[1], par[2] , par[3], modelSql);
+        }else if(Main::WarnSumOne == 1){
+            printf("now enter Main::WarnSumOne == 1\n");
+            WarnMsg::getNowTable( timer_start, timer_end, par[0], par[1], par[2] , par[3], modelSql);
+        }
     }else
     {
-        WarnMsg::geterrTable( timer_start, timer_end, par[0], par[1], par[2] , par[3], modelSql);
+        if(Main::WarnSumOne == 0){
+            WarnMsg::geterrTable( timer_start, timer_end, par[0], par[1], par[2] , par[3], modelSql);
+        }else if(Main::WarnSumOne == 2){
+            printf("now enter Main::WarnSumOne == 2\n");
+            WarnMsg::getNowErrTable( timer_start, timer_end, par[0], par[1], par[2] , par[3], modelSql);
+        }
     }
 
 	currentCount = modelSql->rowCount();
-    //printf("currentCount===%d\n",currentCount);
- 	qtw = new QTableWidgetItem[ 7 * (currentCount + 1) ];
+    printf("currentCount===%d\n",currentCount);
+    qtw = new QTableWidgetItem[ 8 * (currentCount + 1) ];
     tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);//表格对用户只读
-	tableWidget->setColumnCount(7);
+    tableWidget->setColumnCount(8);
 	tableWidget->setRowCount(currentCount);
 
 	qtw[0].setText( tr("编号") );
-	qtw[1].setText( tr("网络号") );
-	qtw[2].setText( tr("节点号") );
+    qtw[1].setText( tr("网络") );
+    qtw[2].setText( tr("节点") );
 	qtw[3].setText( tr("子节点") );
     if(typeQuery == 0)
     {
@@ -191,16 +222,18 @@ void Query::init_warn()
     {
         qtw[6].setText( tr("故障时间") );
     }
+    qtw[7].setText( tr("安装地址") );
 
-	tableWidget->setColumnWidth ( 0, 55);
-	tableWidget->setColumnWidth ( 1, 55);
-	tableWidget->setColumnWidth ( 2, 56);
+    tableWidget->setColumnWidth ( 0, 45);//55
+    tableWidget->setColumnWidth ( 1, 45);
+    tableWidget->setColumnWidth ( 2, 45);
 	tableWidget->setColumnWidth ( 3, 56);
-	tableWidget->setColumnWidth ( 4, 110);
-	tableWidget->setColumnWidth ( 5, 72);
-	tableWidget->setColumnWidth ( 6, 178);
+    tableWidget->setColumnWidth ( 4, 90);//110
+    tableWidget->setColumnWidth ( 5, 55);//72
+    tableWidget->setColumnWidth ( 6, 168);//178
+    tableWidget->setColumnWidth ( 7, 75);
 
-	for(int i = 0; i < 7; i++)
+    for(int i = 0; i < 8; i++)
 		tableWidget->setHorizontalHeaderItem ( i, &qtw[i]);
 
 	QSqlRecord re;
@@ -209,7 +242,7 @@ void Query::init_warn()
 	for(int i = 0; i < currentCount; i++)
 	{
 		re = modelSql->record(i);
-		ind = (i + 1) * 7;
+        ind = (i + 1) * 8;
 		c = 0;
 
 		for( ; c < 4; c ++){
@@ -240,6 +273,9 @@ void Query::init_warn()
         }
 		qtw[ind].setText(re.value(c).toString());
 		tableWidget->setItem( i, c++, &qtw[ind++]);
+
+        qtw[ind].setText(re.value(c).toString());
+        tableWidget->setItem( i, c++, &qtw[ind++]);
 	}    
 }
 void Query::init_opt()

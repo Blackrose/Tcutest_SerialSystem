@@ -2,6 +2,7 @@
 #include "mater.h"
 #include <QString>
 #include <string.h>
+#include "main/main.h"
 
 int Mater::read()
 {
@@ -333,4 +334,12 @@ bool Mater::write7address(QString str,int addr)
 {
     QString sql="update address set addr7='"+str+"' where id = '"+QString::number(addr)+"'";
     return  Db::IDUdb(sql);
+}
+
+QString Mater::readaddress(int netId,int nodeId,int subNodeId)
+{
+    int addr =netId*BtnNodeNUm + nodeId;    
+    QString sql = "select * from address where id = '"+ QString::number(addr) +"'" ;
+    sql = Db::getValue( sql, (subNodeId+1));
+    return sql;
 }

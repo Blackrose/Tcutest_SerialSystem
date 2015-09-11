@@ -156,7 +156,7 @@ void Module::cleSubWarn(int net,int id)
 	}
 }
 //================= 写下子节点报警 ===============
-void Module::setSubWarn(int net,int id,int subId,int flag,int value)
+void Module::setSubWarn(int net,int id,int subId,int flag,float value)
 {
     int i = net * BtnNodeNUm + id - 1;
 	if( i >= MODCOUNT || subId >= SUBNODECOUNT) return;
@@ -523,7 +523,7 @@ int Module::getWhatErr(int net,int id,int subId)
 	time：传递报警时间的参数；
 	value：报警的数值；
 =====================================*/
-void Module::getWarnTimeAndVal(int net,int id,int subId,char** time,int* value)
+void Module::getWarnTimeAndVal(int net,int id,int subId,char** time,float* value)
 {
     int i = net * BtnNodeNUm + id -1;
 	if( i >= MODCOUNT || subId >= SUBNODECOUNT) return;

@@ -143,7 +143,7 @@ public :
 	void showCurrentNet(int net);//显示当前网络
 	void showCurrentA();//显示当前漏电电流
 	/*=================显示子节点的颜色 =================*/
-	void setSubNodeStat(int value, struct LblSubNode *sudNode,int cora);
+    void setSubNodeStat(float value, struct LblSubNode *sudNode, int cora);
 	void showNOPagSubNode(struct mod *mo);//第一页子节点显示
 	/*================ 网络数 ===================*/
 	void showHowNet();
@@ -222,7 +222,7 @@ public :
 	int 		screenCount;	//计算器
    static int 		whoChePwd;
 	//显示当前电流 、 温度 、漏电数值
-	int  		dataA[DATCOU];	//当前电流值
+    float  		dataA[DATCOU];	//当前电流值
 	int 		showCrurrent;	//当前显示的页
 	int 		AruCount;	//延时计数器
 	int 		time_min;	//时间的分位保存
