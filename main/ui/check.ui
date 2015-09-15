@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>检测结果</string>
+   <string>检测项目</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../../img.qrc">
@@ -40,12 +40,12 @@
      <rect>
       <x>10</x>
       <y>30</y>
-      <width>191</width>
+      <width>251</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>主电灯、备电灯、通讯灯 </string>
+     <string>主电灯、备电灯、通讯灯、 故障灯</string>
     </property>
     <property name="textFormat">
      <enum>Qt::RichText</enum>
@@ -64,7 +64,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>故障灯、报警灯、蜂鸣器、显示器</string>
+     <string>报警灯、蜂鸣器、显示器</string>
     </property>
     <property name="textFormat">
      <enum>Qt::RichText</enum>

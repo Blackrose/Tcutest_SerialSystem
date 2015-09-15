@@ -28,14 +28,20 @@ Query::Query(QWidget *parent): QDialog(parent),Ui_QueryForm()
 	}
         setWindowFlags(Qt::Dialog
 			| Qt::FramelessWindowHint);//窗口没有没有边框
-	tableWidget->setAlternatingRowColors(true);//设置背景交替使用   
-	connect(btn_close, SIGNAL(clicked()), this, SLOT(_hide()));
+    tableWidget->setAlternatingRowColors(true);//设置背景交替使用
+    tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);   //设置整行选择
+    tableWidget->setMouseTracking(true);    //开启捕获鼠标功能
+    defaultBkColor = QColor(215, 245, 255);   //默认背景色
+    previousColorRow = -1;
+
+    connect(btn_close, SIGNAL(clicked()), this, SLOT(_hide()));
 	connect(btn_query, SIGNAL(clicked()), this, SLOT(ok()));
 	connect(btnBefore, SIGNAL(clicked()), this, SLOT(beforePage()));
 	connect(btnNext, SIGNAL(clicked()), this, SLOT(nextPage()));
 	connect(cmb_note_type, SIGNAL(currentIndexChanged(int)), this, SLOT(changedIndex(int)));
 	connect(dte_begin,SIGNAL(dateTimeChanged ( const QDateTime&)),this,SLOT(datTimCha(const QDateTime &)));
 	connect(dte_end,SIGNAL(dateTimeChanged ( const QDateTime&)),this,SLOT(datTimCha(const QDateTime &)));
+    connect(tableWidget,SIGNAL(cellEntered(int,int)),this,SLOT(mycellEntered(int,int)));
 	printf("init Query ok\n");
 }
 Query::~Query()
@@ -43,6 +49,39 @@ Query::~Query()
 	delete modelSql;
 	printf("exit Query\n");
 }
+
+void Query::mycellEntered(int row, int column)
+{
+    QTableWidgetItem *item = 0;
+
+    //还原上一行的颜色
+//    item = tableWidget->item(previousColorRow, 0);
+//    if (item != 0)
+//    {
+//        this->setRowColor(previousColorRow, defaultBkColor);
+//    }
+
+    //设置当前行的颜色
+    item = tableWidget->item(row, column);
+    if (item != 0 && !item->isSelected() && !item->text().isEmpty())
+    {
+        this->setRowColor(row, QColor(193,210,240));
+    }
+
+    //设置行的索引
+    previousColorRow = row;
+}
+
+//设置某一行的颜色
+void Query::setRowColor(int row, QColor color)
+{
+    for (int col=0; col<tableWidget->columnCount(); col++)
+    {
+        QTableWidgetItem *item = tableWidget->item(row, col);
+        item->setBackgroundColor(color);
+    }
+}
+
 void Query::_show()
 {	
 	init_time( *dte_end, 0);	
@@ -203,6 +242,7 @@ void Query::init_warn()
 	tableWidget->setRowCount(currentCount);
 
 	qtw[0].setText( tr("编号") );
+    qtw[0].setText( tr("") );
     qtw[1].setText( tr("网络") );
     qtw[2].setText( tr("节点") );
 	qtw[3].setText( tr("子节点") );
@@ -224,14 +264,14 @@ void Query::init_warn()
     }
     qtw[7].setText( tr("安装地址") );
 
-    tableWidget->setColumnWidth ( 0, 45);//55
+    tableWidget->setColumnWidth ( 0, 0); //45 //55
     tableWidget->setColumnWidth ( 1, 45);
     tableWidget->setColumnWidth ( 2, 45);
 	tableWidget->setColumnWidth ( 3, 56);
     tableWidget->setColumnWidth ( 4, 90);//110
-    tableWidget->setColumnWidth ( 5, 55);//72
+    tableWidget->setColumnWidth ( 5, 60);//72
     tableWidget->setColumnWidth ( 6, 168);//178
-    tableWidget->setColumnWidth ( 7, 75);
+    tableWidget->setColumnWidth ( 7, 110);
 
     for(int i = 0; i < 8; i++)
 		tableWidget->setHorizontalHeaderItem ( i, &qtw[i]);
@@ -246,31 +286,31 @@ void Query::init_warn()
 		c = 0;
 
 		for( ; c < 4; c ++){
-            if(i == 0)
-            {
-                qtw[ind].setBackgroundColor(Qt::yellow);
-            }
+//            if(i == 0)
+//            {
+//                qtw[ind].setBackgroundColor(Qt::yellow);
+//            }
 			qtw[ind].setText(re.value(c).toString());
 			tableWidget->setItem( i, c, &qtw[ind++]);
 		}
-        if(i == 0)
-        {
-            qtw[ind].setBackgroundColor(Qt::yellow);
-        }
+//        if(i == 0)
+//        {
+//            qtw[ind].setBackgroundColor(Qt::yellow);
+//        }
 		qtw[ind].setText(  tr(Db::warnigData[re.value(c).toInt()].str) );
 		tableWidget->setItem( i, c++, &qtw[ind++]);
 
-        if(i == 0)
-        {
-            qtw[ind].setBackgroundColor(Qt::yellow);
-        }
+//        if(i == 0)
+//        {
+//            qtw[ind].setBackgroundColor(Qt::yellow);
+//        }
 		qtw[ind].setText(re.value(c).toString());
 		tableWidget->setItem( i, c++, &qtw[ind++]);
 
-        if(i == 0)
-        {
-            qtw[ind].setBackgroundColor(Qt::yellow);
-        }
+//        if(i == 0)
+//        {
+//            qtw[ind].setBackgroundColor(Qt::yellow);
+//        }
 		qtw[ind].setText(re.value(c).toString());
 		tableWidget->setItem( i, c++, &qtw[ind++]);
 
@@ -306,31 +346,31 @@ void Query::init_opt()
 		re = modelSql->record(i);
 		ind = (i + 1) * 4;
 
-        if(i == 0)
-        {
-            qtw[ind].setBackgroundColor(Qt::yellow);
-        }
+//        if(i == 0)
+//        {
+//            qtw[ind].setBackgroundColor(Qt::yellow);
+//        }
 		qtw[ind].setText(re.value(0).toString());
 		tableWidget->setItem( i, 0, &qtw[ind ++]);
 
-        if(i == 0)
-        {
-            qtw[ind].setBackgroundColor(Qt::yellow);
-        }
+//        if(i == 0)
+//        {
+//            qtw[ind].setBackgroundColor(Qt::yellow);
+//        }
 		qtw[ind].setText(re.value(1).toString());
 		tableWidget->setItem( i, 1, &qtw[ind ++]);
 
-        if(i == 0)
-        {
-            qtw[ind].setBackgroundColor(Qt::yellow);
-        }
+//        if(i == 0)
+//        {
+//            qtw[ind].setBackgroundColor(Qt::yellow);
+//        }
 		qtw[ind].setText( tr(Db::doData[re.value(2).toInt()].str) );
 		tableWidget->setItem( i, 2, &qtw[ind ++]);
 
-        if(i == 0)
-        {
-            qtw[ind].setBackgroundColor(Qt::yellow);
-        }
+//        if(i == 0)
+//        {
+//            qtw[ind].setBackgroundColor(Qt::yellow);
+//        }
 		qtw[ind].setText(re.value(3).toString() );
 		tableWidget->setItem( i, 3, &qtw[ind ++]);
 	}

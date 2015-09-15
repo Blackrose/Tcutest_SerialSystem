@@ -165,6 +165,7 @@ void Module::setSubWarn(int net,int id,int subId,int flag,float value)
 	mod_list[i].subNodValue[subId] = value;
 	Db::copyTime(mod_list[i].subNodTimer[subId].time);
 	mod_list[i].flag = flag;
+    mod_list[i].recovery[subId] = flag;
 }
 /*====================================
 	功能：返回节点是否报警；
@@ -223,6 +224,23 @@ bool Module::getSubErrorRecovery(int net, int id, int subId)
     int i = net* BtnNodeNUm + id -1 ;
     if( i >= MODCOUNT || subId >= SUBNODECOUNT) return false;
     if(mod_list[i].recovery[subId] == ERROR)
+    {
+        return true;
+    }
+    return false;
+}
+
+/*====================================
+    功能：返回节点是否报警恢复；
+    net：网络号；
+    id：节点号；
+    subId：子节点号；
+=====================================*/
+bool Module::getSubWarnRecovery(int net, int id, int subId)
+{
+    int i = net* BtnNodeNUm + id -1 ;
+    if( i >= MODCOUNT || subId >= SUBNODECOUNT) return false;
+    if(mod_list[i].recovery[subId] == WARN)
     {
         return true;
     }

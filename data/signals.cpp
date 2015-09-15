@@ -244,6 +244,11 @@ void Signals::toDo()
                     //printf("warn!!!i==%d\n",i);
                     Pake::send(Pake::readBuf.net,Pake::readBuf.id, QUE_DEV_WAR, NULL, 0);
                     break;
+                }else if(Module::getSubWarnRecovery(Pake::readBuf.net, Pake::readBuf.id , i) == true
+                    && ((Pake::readBuf.data[0] >> i) == 0)){
+                    Pake::send(Pake::readBuf.net,Pake::readBuf.id, QUE_DEV_WAR, NULL, 0);
+                    printf("getSubWarnRecovery\n");
+                    break;
                 } else if (Module::getSubError(Pake::readBuf.net, Pake::readBuf.id , i) == false
                     && (Signals::Flagerror[Pake::readBuf.net] >> i & 0x01)) {
                     //Message::_show("故障！4444");                    

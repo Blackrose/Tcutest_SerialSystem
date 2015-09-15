@@ -383,12 +383,40 @@ void WarnMsg::insertCrestore(int netId, int nodeId, int subNodeId)//漏电故障
 {    
     QString time_str = Db::newTime();
     PicProtocol::pic_c_restore(netId, nodeId, subNodeId, time_str);//漏电故障
+
+    QString sql = "delete from ErrNowMsg where netid = '"+ QString::number(netId) +"' \
+                                    and nodeid = '"+ QString::number(nodeId) +"' \
+                                    and subnodeid = '"+ QString::number(subNodeId) +"'";
+    Db::IDUdb(sql);//删除故障记录中的故障报警
+
+    sql = "delete from ErrNowMsg where netid = '"+ QString::number(netId) +"' \
+                                    and nodeid = '"+ QString::number(nodeId) +"' \
+                                    and typeid = '"+ QString::number(E_ALARM) +"'";
+    Db::IDUdb(sql);//删除故障报警记录中的模块故障
+}
+
+void WarnMsg::insertTorCrestore(int netId, int nodeId, int subNodeId)//温度漏电报警恢复
+{
+    QString sql = "delete from WarnNowMsg where netid = '"+ QString::number(netId) +"' \
+                                    and nodeid = '"+ QString::number(nodeId) +"' \
+                                    and subnodeid = '"+ QString::number(subNodeId) +"'";
+    Db::IDUdb(sql);//删除报警记录中的温度漏电报警
+
+    sql = "delete from ErrNowMsg where netid = '"+ QString::number(netId) +"' \
+                                    and nodeid = '"+ QString::number(nodeId) +"' \
+                                    and typeid = '"+ QString::number(E_ALARM) +"'";
+    Db::IDUdb(sql);//删除故障报警记录中的模块故障
 }
 
 void WarnMsg::insertTrestore(int netId, int nodeId, int subNodeId)//温度故障恢复
 {
     QString time_str = Db::newTime();
     PicProtocol::pic_t_restore(netId, nodeId, subNodeId, time_str);//温度故障
+
+    QString sql = "delete from ErrNowMsg where netid = '"+ QString::number(netId) +"' \
+                                    and nodeid = '"+ QString::number(nodeId) +"' \
+                                    and subnodeid = '"+ QString::number(subNodeId) +"'";
+    Db::IDUdb(sql);//删除故障记录中的故障报警
 }
 
 void WarnMsg::insertSubError(int netId, int nodeId, int subNodeId)
@@ -483,6 +511,28 @@ int WarnMsg::insertNowNodeDo(int netId, int nodeId, int wDo)
     return Db::IDUdb(sql);
 }
 
+//模块故障报警恢复
+int WarnMsg::insertNowNodeDorestore(int netId, int nodeId, int wDo)
+{
+    QString sql = "select count(*) from ErrNowMsg";
+    QString time_str = Db::newTime();
+
+    if(wDo == E_ALARM)
+    {
+        if( Db::selectCount(sql) >= SQLMAXDATA)//SQLMAX
+        {
+            sql = "delete from ErrNowMsg where id = '"+ QString::number(++flagnowerrdelete) +"'";
+            if(Db::IDUdb(sql)){printf("insertNodeDo ok\n");}
+        }
+
+        sql = "delete from ErrNowMsg where netid = '"+ QString::number(netId) +"' \
+                                        and nodeid = '"+ QString::number(nodeId) +"' \
+                                        and typeid = '"+ QString::number(E_ALARM) +"'";
+        //Db::IDUdb(sql);//删除故障报警记录中的模块故障
+    }
+    return Db::IDUdb(sql);
+}
+
 //模块故障报警
 void WarnMsg::insertEAlarm(int netId,int nodeId)
 {
@@ -549,7 +599,8 @@ void WarnMsg::getNowErrTable(QString time_bg,QString timer_end, int net,int id, 
     {
         sql += " and SubNodeId = '"+QString::number(subId)+"'";
     }
-    sql += " ORDER BY id DESC limit 9 offset "+ QString::number(big);//按照数据库id降序排列取出9条记录
+    sql += " ORDER BY id DESC limit 9 offset "+ QString::number(big);//按照数据库id降序排列取出9条记录 跳过big条记录
+    //sql += " ORDER BY id DESC";
     Db::fillModel(sql,model);
 }
 

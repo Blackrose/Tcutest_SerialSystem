@@ -33,6 +33,7 @@ public :
     void init_warn();
 	void init_parameter();
 	void _show();
+    void setRowColor(int row, QColor color);
 private:
 	QTableWidgetItem *qtw;
 	QSqlQueryModel *modelSql;
@@ -46,6 +47,9 @@ private:
 	int 		par[4];
 	QString 	timer_start;
     QString 	timer_end;
+    QColor      defaultBkColor;
+    int         previousColorRow;
+
 public slots:
 	void changedIndex(int index);
 	void ok();
@@ -53,5 +57,6 @@ public slots:
 	void beforePage();
 	void nextPage();
 	void _hide();
+    void mycellEntered(int row, int column);
 };
 #endif

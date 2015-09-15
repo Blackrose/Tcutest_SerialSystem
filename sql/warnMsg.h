@@ -21,6 +21,7 @@ public:
     static int insertnow(int netId, int nodeId, int subNodeId, int warn, float value);
 	static int insertNodeDo(int netId, int nodeId, int wDo);
     static int insertNowNodeDo(int netId, int nodeId, int wDo);
+    static int insertNowNodeDorestore(int netId, int nodeId, int wDo);
     static void getNowTable(QString time_bg,QString timer_end, int net,int id, int subId, int big , QSqlQueryModel *model);
     static void getNowErrTable(QString time_bg,QString timer_end, int net,int id, int subId, int big , QSqlQueryModel *model);
     static void getTable(QString time_bg,QString timer_end, int net,int id, int subId, int big , QSqlQueryModel *model);
@@ -35,6 +36,7 @@ public:
 	static void insertCAlarm(int netId,int nodeId,int subNodeId,int value);//电流报警
     static void insertTAlarm(int netId, int nodeId, int subNodeId, float value);//温度报警
     static void insertMAlarm(int netId,int nodeId,int subNodeId,float value);//漏电报警
+    static void insertTorCrestore(int netId, int nodeId, int subNodeId);//温度漏电报警恢复
     static void insertNowTorCError(int netId, int nodeId, int subNodeId);//温度漏电故障
     static void insertTError(int netId, int nodeId, int subNodeId);//温度故障
     static void insertCError(int netId, int nodeId, int subNodeId);//漏电故障

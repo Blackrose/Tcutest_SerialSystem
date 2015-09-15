@@ -189,6 +189,7 @@ void Main::slot_reg(int net,int id)
 			p_nodeStatus->_show( net, id, mo->sn, NORMAL);
 		}
         PicProtocol::pic_channel_restore(net, id, 99, time_str);//通道故障恢复
+        WarnMsg::insertNowNodeDorestore(net, id, E_ALARM );
 	}
 }
 //===== 故障  ==================
@@ -287,6 +288,21 @@ void Main::slot_warn()
             //显示模块节点号
             curNode = id;
             lblNode->setText(QString::number(id));
+        }else if(p_mod->getSubWarnRecovery(net, id, sudId) == true &&(dat->data[sudId] == 0)){
+            printf("getSubWarnRecovery1111111111111111111\n");
+            //if(dat->data[sudId] == 0){
+                 printf("getSubWarnRecovery222222222222222222222222\n");
+                 is = p_mod->getWhatWarn( net, id, sudId);
+                 if( is == 2)
+                 {//漏电
+                     WarnMsg::insertTorCrestore(net, id, sudId);
+                 }
+                 else if( is == 0)
+                 {//温度
+                     WarnMsg::insertTorCrestore(net, id, sudId);
+                 }
+            //}
+             p_mod->setSubWarn(net, id, sudId, NORMAL,0);//
         }
         else if (p_mod->getSubError(net, id, sudId) == false && (Signals::Flagerror[net] >> sudId & 0x01)) {
 
