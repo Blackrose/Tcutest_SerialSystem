@@ -96,7 +96,8 @@ int WarnMsg::insertnow(int netId,int nodeId,int subNodeId,int warn,float value)
                                                     '"+QString::number(warn)+"',\
                                                      '"+QString::number(value)+dan+"',\
                                                        '"+time_str+"',\
-                                                          '"+addr+"'); ";
+                                                          '"+addr+"',\
+                                                            'X'); ";
     printf("enter insertnow\n");
     return Db::IDUdb(sql);
 }
@@ -126,7 +127,7 @@ void WarnMsg::insertMainNo()//主电欠压
     sql = "delete from ErrNowMsg where typeid = '"+ QString::number(MAIN_NO) +"'";
     Db::IDUdb(sql);
 
-    sql = "insert into ErrNowMsg values(NULL,' ',' ',' ','"+QString::number(MAIN_NO)+"',' ','"+time_str+"');";
+    sql = "insert into ErrNowMsg values(NULL,' ',' ',' ','"+QString::number(MAIN_NO)+"',' ','"+time_str+"',' ','X');";
     Db::IDUdb(sql);
 
 }
@@ -161,7 +162,7 @@ void WarnMsg::insertPreMainNo()//备电欠压
     sql = "delete from ErrNowMsg where typeid = '"+ QString::number(PREMAIN_OFF) +"'";
     Db::IDUdb(sql);
 
-    sql = "insert into ErrNowMsg values(NULL,' ',' ',' ','"+QString::number(PREMAIN_NO)+"',' ','"+time_str+"');";
+    sql = "insert into ErrNowMsg values(NULL,' ',' ',' ','"+QString::number(PREMAIN_NO)+"',' ','"+time_str+"',' ','X');";
     Db::IDUdb(sql);
 
 }
@@ -237,7 +238,7 @@ void WarnMsg::insertPreMainOn()//备电短路
     sql = "delete from ErrNowMsg where typeid = '"+ QString::number(PREMAIN_OFF) +"'";
     Db::IDUdb(sql);
 
-    sql = "insert into ErrNowMsg values(NULL,' ',' ',' ','"+QString::number(PREMAIN_ON)+"',' ','"+time_str+"');";
+    sql = "insert into ErrNowMsg values(NULL,' ',' ',' ','"+QString::number(PREMAIN_ON)+"',' ','"+time_str+"',' ','X');";
     Db::IDUdb(sql);
 
 }
@@ -271,7 +272,7 @@ void WarnMsg::insertPreMainOff()//备电断路
     sql = "delete from ErrNowMsg where typeid = '"+ QString::number(PREMAIN_ON) +"'";
     Db::IDUdb(sql);
 
-    sql = "insert into ErrNowMsg values(NULL,' ',' ',' ','"+QString::number(PREMAIN_OFF)+"',' ','"+time_str+"');";
+    sql = "insert into ErrNowMsg values(NULL,' ',' ',' ','"+QString::number(PREMAIN_OFF)+"',' ','"+time_str+"',' ','X');";
     Db::IDUdb(sql);
 
 }
@@ -325,7 +326,8 @@ void WarnMsg::insertNowTorCError(int netId, int nodeId, int subNodeId)//温度�
                                                  '"+QString::number(warn)+"',\
                                                    '"+QString::number(value)+"',\
                                                     '"+time_str+"',\
-                                                      '"+addr+"');";
+                                                      '"+addr+"',\
+                                                        'X');";
 
     Db::IDUdb(sql);
 }
@@ -506,7 +508,7 @@ int WarnMsg::insertNowNodeDo(int netId, int nodeId, int wDo)
         Db::IDUdb(sql);//删除故障报警记录中的故障
 
         sql = "insert into ErrNowMsg values(NULL,'"+QString::number(netId)+"','"+
-                QString::number(nodeId)+"',' ','"+QString::number(wDo)+"',' ','"+time_str+"',' ');";
+                QString::number(nodeId)+"',' ','"+QString::number(wDo)+"',' ','"+time_str+"',' ','X');";
     }
     return Db::IDUdb(sql);
 }

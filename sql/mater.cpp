@@ -343,3 +343,15 @@ QString Mater::readaddress(int netId,int nodeId,int subNodeId)
     sql = Db::getValue( sql, (subNodeId+1));
     return sql;
 }
+
+bool Mater::writeErrOK(QString str)
+{
+    QString sql="update ErrNowMsg set ok='√' where id = '"+str+"'";
+    return  Db::IDUdb(sql);
+}
+
+bool Mater::writeWarnOK(QString str)
+{
+    QString sql="update WarnNowMsg set ok='√' where id = '"+str+"'";
+    return  Db::IDUdb(sql);
+}

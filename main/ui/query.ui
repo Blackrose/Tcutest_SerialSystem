@@ -31,9 +31,9 @@
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>30</x>
       <y>40</y>
-      <width>621</width>
+      <width>661</width>
       <height>101</height>
      </rect>
     </property>
@@ -90,7 +90,7 @@
     <widget class="QComboBox" name="cmb_node">
      <property name="geometry">
       <rect>
-       <x>390</x>
+       <x>430</x>
        <y>20</y>
        <width>71</width>
        <height>31</height>
@@ -111,7 +111,7 @@
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>330</x>
+       <x>370</x>
        <y>20</y>
        <width>51</width>
        <height>31</height>
@@ -124,7 +124,7 @@
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>470</x>
+       <x>510</x>
        <y>20</y>
        <width>51</width>
        <height>31</height>
@@ -150,7 +150,7 @@
     <widget class="QComboBox" name="cmb_sub_node">
      <property name="geometry">
       <rect>
-       <x>530</x>
+       <x>570</x>
        <y>20</y>
        <width>71</width>
        <height>31</height>
@@ -250,7 +250,7 @@
     <widget class="QDateTimeEdit" name="dte_end">
      <property name="geometry">
       <rect>
-       <x>390</x>
+       <x>430</x>
        <y>60</y>
        <width>211</width>
        <height>31</height>
@@ -269,7 +269,7 @@
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
-       <x>320</x>
+       <x>360</x>
        <y>60</y>
        <width>71</width>
        <height>31</height>
@@ -311,9 +311,9 @@
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>30</x>
       <y>170</y>
-      <width>621</width>
+      <width>661</width>
       <height>371</height>
      </rect>
     </property>
@@ -337,7 +337,7 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>601</width>
+       <width>631</width>
        <height>297</height>
       </rect>
      </property>
@@ -434,7 +434,7 @@
     <widget class="QPushButton" name="btnBefore">
      <property name="geometry">
       <rect>
-       <x>300</x>
+       <x>330</x>
        <y>328</y>
        <width>71</width>
        <height>31</height>
@@ -462,7 +462,7 @@
     <widget class="QPushButton" name="btnNext">
      <property name="geometry">
       <rect>
-       <x>380</x>
+       <x>410</x>
        <y>328</y>
        <width>71</width>
        <height>31</height>
@@ -484,7 +484,7 @@
     <widget class="QPushButton" name="btn_query">
      <property name="geometry">
       <rect>
-       <x>460</x>
+       <x>490</x>
        <y>328</y>
        <width>71</width>
        <height>31</height>
@@ -512,7 +512,7 @@
     <widget class="QPushButton" name="btn_close">
      <property name="geometry">
       <rect>
-       <x>540</x>
+       <x>570</x>
        <y>328</y>
        <width>71</width>
        <height>31</height>
@@ -533,8 +533,6 @@
     </widget>
    </widget>
   </widget>
-  <zorder>groupBox_3</zorder>
-  <zorder>btn_close_2</zorder>
  </widget>
  <resources/>
  <connections/>

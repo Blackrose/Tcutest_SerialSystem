@@ -65,7 +65,15 @@ void Query::mycellEntered(int row, int column)
     item = tableWidget->item(row, column);
     if (item != 0 && !item->isSelected() && !item->text().isEmpty())
     {
-        this->setRowColor(row, QColor(193,210,240));
+        //this->setRowColor(row, QColor(193,210,240));
+        if(Main::WarnSumOne == 1){
+            Mater::writeWarnOK(tableWidget->item(row, 0)->text());
+        }else{
+            Mater::writeErrOK(tableWidget->item(row, 0)->text());
+        }
+        tableWidget->clearSelection();
+        init_parameter();
+        init_table();
     }
 
     //设置行的索引
@@ -216,107 +224,166 @@ void Query::init_parameter()
 }
 void Query::init_warn()
 {
-    if(typeQuery == 0)
-    {
-        if(Main::WarnSumOne == 0){
+    if(Main::WarnSumOne == 0){
+        if(typeQuery == 0){
             WarnMsg::getTable( timer_start, timer_end, par[0], par[1], par[2] , par[3], modelSql);
-        }else if(Main::WarnSumOne == 1){
-            printf("now enter Main::WarnSumOne == 1\n");
-            WarnMsg::getNowTable( timer_start, timer_end, par[0], par[1], par[2] , par[3], modelSql);
-        }
-    }else
-    {
-        if(Main::WarnSumOne == 0){
+        }else{
             WarnMsg::geterrTable( timer_start, timer_end, par[0], par[1], par[2] , par[3], modelSql);
-        }else if(Main::WarnSumOne == 2){
-            printf("now enter Main::WarnSumOne == 2\n");
-            WarnMsg::getNowErrTable( timer_start, timer_end, par[0], par[1], par[2] , par[3], modelSql);
+        }
+        currentCount = modelSql->rowCount();
+        printf("currentCount===%d\n",currentCount);
+        qtw = new QTableWidgetItem[ 8 * (currentCount + 1) ];
+        tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);//表格对用户只读
+        tableWidget->setColumnCount(8);
+        tableWidget->setRowCount(currentCount);
+
+        qtw[0].setText( tr("编号") );
+        qtw[1].setText( tr("网络") );
+        qtw[2].setText( tr("节点") );
+        qtw[3].setText( tr("子节点") );
+        if(typeQuery == 0)
+        {
+            qtw[4].setText( tr("报警类型") );
+        }else
+        {
+            qtw[4].setText( tr("故障类型") );
+        }
+        qtw[5].setText( tr("数值") );
+
+        if(typeQuery == 0)
+        {
+            qtw[6].setText( tr("报警时间") );
+        }else
+        {
+            qtw[6].setText( tr("故障时间") );
+        }
+        qtw[7].setText( tr("安装地址") );
+
+        tableWidget->setColumnWidth ( 0, 40); //45 //55
+        tableWidget->setColumnWidth ( 1, 40);
+        tableWidget->setColumnWidth ( 2, 40);
+        tableWidget->setColumnWidth ( 3, 56);
+        tableWidget->setColumnWidth ( 4, 90);//110
+        tableWidget->setColumnWidth ( 5, 65);//72
+        tableWidget->setColumnWidth ( 6, 168);//178
+        tableWidget->setColumnWidth ( 7, 110);
+
+        for(int i = 0; i < 8; i++)
+            tableWidget->setHorizontalHeaderItem ( i, &qtw[i]);
+
+        QSqlRecord re;
+        int ind = 0;
+        int c = 0;
+        for(int i = 0; i < currentCount; i++)
+        {
+            re = modelSql->record(i);
+            ind = (i + 1) * 8;
+            c = 0;
+
+            for( ; c < 4; c ++){
+                qtw[ind].setText(re.value(c).toString());
+                tableWidget->setItem( i, c, &qtw[ind++]);
+            }
+
+            qtw[ind].setText(  tr(Db::warnigData[re.value(c).toInt()].str) );
+            tableWidget->setItem( i, c++, &qtw[ind++]);
+
+            qtw[ind].setText(re.value(c).toString());
+            tableWidget->setItem( i, c++, &qtw[ind++]);
+
+            qtw[ind].setText(re.value(c).toString());
+            tableWidget->setItem( i, c++, &qtw[ind++]);
+
+            qtw[ind].setText(re.value(c).toString());
+            tableWidget->setItem( i, c++, &qtw[ind++]);
+        }
+    }else{
+        if(typeQuery == 0){
+            if(Main::WarnSumOne == 1){
+                printf("now enter Main::WarnSumOne == 1\n");
+                WarnMsg::getNowTable( timer_start, timer_end, par[0], par[1], par[2] , par[3], modelSql);
+            }
+        }else{
+            if(Main::WarnSumOne == 2){
+                printf("now enter Main::WarnSumOne == 2\n");
+                WarnMsg::getNowErrTable( timer_start, timer_end, par[0], par[1], par[2] , par[3], modelSql);
+            }
+        }
+
+        currentCount = modelSql->rowCount();
+        printf("currentCount===%d\n",currentCount);
+        qtw = new QTableWidgetItem[ 9 * (currentCount + 1) ];
+        tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);//表格对用户只读
+        tableWidget->setColumnCount(9);
+        tableWidget->setRowCount(currentCount);
+
+        qtw[0].setText( tr("编号") );
+        qtw[0].setText( tr("") );
+        qtw[1].setText( tr("网络") );
+        qtw[2].setText( tr("节点") );
+        qtw[3].setText( tr("子节点") );
+        if(typeQuery == 0)
+        {
+            qtw[4].setText( tr("报警类型") );
+        }else
+        {
+            qtw[4].setText( tr("故障类型") );
+        }
+        qtw[5].setText( tr("数值") );
+
+        if(typeQuery == 0)
+        {
+            qtw[6].setText( tr("报警时间") );
+        }else
+        {
+            qtw[6].setText( tr("故障时间") );
+        }
+        qtw[7].setText( tr("安装地址") );
+        qtw[8].setText( tr("确认") );
+
+        tableWidget->setColumnWidth ( 0, 0); //45 //55
+        tableWidget->setColumnWidth ( 1, 40);
+        tableWidget->setColumnWidth ( 2, 40);
+        tableWidget->setColumnWidth ( 3, 56);
+        tableWidget->setColumnWidth ( 4, 90);//110
+        tableWidget->setColumnWidth ( 5, 60);//72
+        tableWidget->setColumnWidth ( 6, 168);//178
+        tableWidget->setColumnWidth ( 7, 115);
+        tableWidget->setColumnWidth ( 8, 40);
+
+        for(int i = 0; i < 9; i++)
+            tableWidget->setHorizontalHeaderItem ( i, &qtw[i]);
+
+        QSqlRecord re;
+        int ind = 0;
+        int c = 0;
+        for(int i = 0; i < currentCount; i++)
+        {
+            re = modelSql->record(i);
+            ind = (i + 1) * 9;
+            c = 0;
+
+            for( ; c < 4; c ++){
+                qtw[ind].setText(re.value(c).toString());
+                tableWidget->setItem( i, c, &qtw[ind++]);
+            }
+
+            qtw[ind].setText(  tr(Db::warnigData[re.value(c).toInt()].str) );
+            tableWidget->setItem( i, c++, &qtw[ind++]);
+
+            qtw[ind].setText(re.value(c).toString());
+            tableWidget->setItem( i, c++, &qtw[ind++]);
+
+            qtw[ind].setText(re.value(c).toString());
+            tableWidget->setItem( i, c++, &qtw[ind++]);
+
+            qtw[ind].setText(re.value(c).toString());
+            tableWidget->setItem( i, c++, &qtw[ind++]);
+
+            qtw[ind].setText(re.value(c).toString());
+            tableWidget->setItem( i, c++, &qtw[ind++]);
         }
     }
-
-	currentCount = modelSql->rowCount();
-    printf("currentCount===%d\n",currentCount);
-    qtw = new QTableWidgetItem[ 8 * (currentCount + 1) ];
-    tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);//表格对用户只读
-    tableWidget->setColumnCount(8);
-	tableWidget->setRowCount(currentCount);
-
-	qtw[0].setText( tr("编号") );
-    qtw[0].setText( tr("") );
-    qtw[1].setText( tr("网络") );
-    qtw[2].setText( tr("节点") );
-	qtw[3].setText( tr("子节点") );
-    if(typeQuery == 0)
-    {
-        qtw[4].setText( tr("报警类型") );
-    }else
-    {
-        qtw[4].setText( tr("故障类型") );
-    }
-	qtw[5].setText( tr("数值") );
-
-    if(typeQuery == 0)
-    {
-        qtw[6].setText( tr("报警时间") );
-    }else
-    {
-        qtw[6].setText( tr("故障时间") );
-    }
-    qtw[7].setText( tr("安装地址") );
-
-    tableWidget->setColumnWidth ( 0, 0); //45 //55
-    tableWidget->setColumnWidth ( 1, 45);
-    tableWidget->setColumnWidth ( 2, 45);
-	tableWidget->setColumnWidth ( 3, 56);
-    tableWidget->setColumnWidth ( 4, 90);//110
-    tableWidget->setColumnWidth ( 5, 60);//72
-    tableWidget->setColumnWidth ( 6, 168);//178
-    tableWidget->setColumnWidth ( 7, 110);
-
-    for(int i = 0; i < 8; i++)
-		tableWidget->setHorizontalHeaderItem ( i, &qtw[i]);
-
-	QSqlRecord re;
-	int ind = 0;
-	int c = 0;
-	for(int i = 0; i < currentCount; i++)
-	{
-		re = modelSql->record(i);
-        ind = (i + 1) * 8;
-		c = 0;
-
-		for( ; c < 4; c ++){
-//            if(i == 0)
-//            {
-//                qtw[ind].setBackgroundColor(Qt::yellow);
-//            }
-			qtw[ind].setText(re.value(c).toString());
-			tableWidget->setItem( i, c, &qtw[ind++]);
-		}
-//        if(i == 0)
-//        {
-//            qtw[ind].setBackgroundColor(Qt::yellow);
-//        }
-		qtw[ind].setText(  tr(Db::warnigData[re.value(c).toInt()].str) );
-		tableWidget->setItem( i, c++, &qtw[ind++]);
-
-//        if(i == 0)
-//        {
-//            qtw[ind].setBackgroundColor(Qt::yellow);
-//        }
-		qtw[ind].setText(re.value(c).toString());
-		tableWidget->setItem( i, c++, &qtw[ind++]);
-
-//        if(i == 0)
-//        {
-//            qtw[ind].setBackgroundColor(Qt::yellow);
-//        }
-		qtw[ind].setText(re.value(c).toString());
-		tableWidget->setItem( i, c++, &qtw[ind++]);
-
-        qtw[ind].setText(re.value(c).toString());
-        tableWidget->setItem( i, c++, &qtw[ind++]);
-	}    
 }
 void Query::init_opt()
 {
@@ -334,7 +401,7 @@ void Query::init_opt()
 	tableWidget->setColumnWidth ( 0, 72);
 	tableWidget->setColumnWidth ( 1, 83);
 	tableWidget->setColumnWidth ( 2, 227);
-	tableWidget->setColumnWidth ( 3, 200);
+    tableWidget->setColumnWidth ( 3, 220);
 
 	for(int i = 0; i < 4; i++)
 		tableWidget->setHorizontalHeaderItem ( i, &qtw[i]);

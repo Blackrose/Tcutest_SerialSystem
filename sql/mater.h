@@ -76,6 +76,8 @@ public:
     static bool write6address(QString str, int addr);
     static bool write7address(QString str,int addr);
     static QString readaddress(int netId,int nodeId,int subNodeId);
+    static bool writeErrOK(QString str);
+    static bool writeWarnOK(QString str);
 };
 
 
