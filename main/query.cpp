@@ -71,9 +71,11 @@ void Query::mycellEntered(int row, int column)
         }else{
             Mater::writeErrOK(tableWidget->item(row, 0)->text());
         }
-        tableWidget->clearSelection();
-        init_parameter();
-        init_table();
+        if(Main::WarnSumOne == 1 || Main::WarnSumOne == 2){
+            tableWidget->clearSelection();
+            //init_parameter();
+            init_table();
+        }
     }
 
     //设置行的索引
@@ -88,6 +90,7 @@ void Query::setRowColor(int row, QColor color)
         QTableWidgetItem *item = tableWidget->item(row, col);
         item->setBackgroundColor(color);
     }
+    printf("now end\n");
 }
 
 void Query::_show()
@@ -384,6 +387,7 @@ void Query::init_warn()
             tableWidget->setItem( i, c++, &qtw[ind++]);
         }
     }
+    setRowColor(0, Qt::yellow);
 }
 void Query::init_opt()
 {
