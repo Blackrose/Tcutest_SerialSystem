@@ -658,7 +658,7 @@ void Main::slot_timer()
 		Watchdog::kellLive();//喂狗
         //printf("timer_time\n");
 		Db::newTimeNoSec(lblLocalTime,&time_min);//界面时钟
-        //::system("free");
+        ::system("free");
         //printfCPU();
 		p_timer->start(500);
 		return ;
@@ -1195,7 +1195,9 @@ void Main::slot_printer()
 
 void Main::slot_help()
 {
-        p_help->_show();
+    //QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),0,0,800,600);
+    //pixmap.save("1.png","png");
+    p_help->_show();
 }
 
 void Main::check_pwd()

@@ -493,7 +493,7 @@ void NodeStatus::fillRow(QLabel *lbl,QLabel *lblStats,int net, int id,int subId,
 ====================================*/
 void NodeStatus::slot_reset()
 {    
-    Main::flagreset = 1;
+    //Main::flagreset = 1;
     imf_my->updateHandler(QWSInputMethod::FocusOut);
     QWSServer::setCurrentInputMethod(p_imf);
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
@@ -519,8 +519,28 @@ void NodeStatus::slot_reset()
 	功能：试验
 ====================================*/
 void NodeStatus::slot_try()
-{
-	Pake::send( curNet, curId, SET_MOD_TRY, NULL, 0);
+{    //printf("Db::purview==%d\n",Db::purview);
+     if((curMod == ML4T4) || (curMod == ML8))
+     {
+         txt0->setEnabled(false);
+         txt1->setEnabled(false);
+         txt2->setEnabled(false);
+         txt3->setEnabled(false);
+         txt4->setEnabled(false);
+         txt5->setEnabled(false);
+         txt6->setEnabled(false);
+         txt7->setEnabled(false);
+     }
+     else
+     {
+         txt0->setEnabled(false);
+         txt4->setEnabled(false);
+     }
+    if( Db::purview == QUERY){
+        Message::_show(tr("请登录后使用!"));
+    }else{
+        Pake::send( curNet, curId, SET_MOD_TRY, NULL, 0);
+    }
 }
 void NodeStatus::slot_clear()
 {
@@ -654,29 +674,33 @@ void NodeStatus::slot_ok()
 }
 
 void NodeStatus::slot_change()
-{
-    if(Main::flagreset == 1)
-    {
-        return ;
-    }
-    QTextCodec::setCodecForCStrings(0);
-    QWSServer::setCurrentInputMethod(imf_my);
-    imf_my->updateHandler(QWSInputMethod::FocusOut);
+{ //printf("111111111Db::purview==%d\n",Db::purview);
+    if( Db::purview == QUERY){
+        Message::_show(tr("请登录后使用!"));
+    }else{
+        if(Main::flagreset == 1)
+        {
+            return ;
+        }
+        QTextCodec::setCodecForCStrings(0);
+        QWSServer::setCurrentInputMethod(imf_my);
+        imf_my->updateHandler(QWSInputMethod::FocusOut);
 
-    if((curMod == ML4T4) || (curMod == ML8))
-    {
-        txt0->setEnabled(true);
-        txt1->setEnabled(true);
-        txt2->setEnabled(true);
-        txt3->setEnabled(true);
-        txt4->setEnabled(true);
-        txt5->setEnabled(true);
-        txt6->setEnabled(true);
-        txt7->setEnabled(true);
-    }
-    else
-    {
-        txt0->setEnabled(true);
-        txt4->setEnabled(true);
+        if((curMod == ML4T4) || (curMod == ML8))
+        {
+            txt0->setEnabled(true);
+            txt1->setEnabled(true);
+            txt2->setEnabled(true);
+            txt3->setEnabled(true);
+            txt4->setEnabled(true);
+            txt5->setEnabled(true);
+            txt6->setEnabled(true);
+            txt7->setEnabled(true);
+        }
+        else
+        {
+            txt0->setEnabled(true);
+            txt4->setEnabled(true);
+        }
     }
 }

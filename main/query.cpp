@@ -120,10 +120,13 @@ void Query::_hide()
 }
 // 查询
 void Query::ok()
-{    
-	tableWidget->clearSelection();
-	init_parameter();
-	init_table();
+{
+//    QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),0,0,800,600);
+//    pixmap.save("3.png","png");
+
+    tableWidget->clearSelection();
+    init_parameter();
+    init_table();
 }
 // 上一条
 void Query::beforePage()

@@ -347,8 +347,8 @@ SysSet::set ()
     QMessageBox::information(this, tr("输入错误"), tr("最多128节点."), tr("确定"));
     return;
   }
-  if (txtTimer->text().toInt() > 5) {
-    QMessageBox::information(this, tr("输入错误"), tr("重发最多5次."), tr("确定"));
+  if (txtTimer->text().toInt() > 100) {
+    QMessageBox::information(this, tr("输入错误"), tr("重发最多100次."), tr("确定"));
     return;
   }
   if ((local_slave_address_txt->text().toInt() < 1) || (local_slave_address_txt->text().toInt() > 247)) {
