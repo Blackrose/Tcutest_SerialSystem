@@ -390,15 +390,15 @@ void Main::slot_warn()
     }
     for( sudId = 0 ; sudId < 8 ; sudId++)
     {
-        if(p_mod -> getSubError( net, id, sudId) == true)
-        {
-            mo->flag = ERROR;
-            if (curNet !=  net) {
-                showCurrentNet(net);//显示当前网络
-            } else {
-                setBtnFalg(id, ERROR);//
-            }
-        }
+//        if(p_mod -> getSubError( net, id, sudId) == true)
+//        {
+//            mo->flag = ERROR;
+//            if (curNet !=  net) {
+//                showCurrentNet(net);//显示当前网络
+//            } else {
+//                setBtnFalg(id, ERROR);//
+//            }
+//        }
 
         if(p_mod -> getSubWarn( net, id, sudId) == true)
         {
