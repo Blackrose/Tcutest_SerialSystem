@@ -731,3 +731,19 @@ bool WarnMsg::delerrAll()
     flagnowerrdelete = 0;
     return Db::IDUdb(sql);
 }
+
+bool WarnMsg::delnowAll()
+{
+    QString sql= "delete from WarnNowMsg";
+    flagwarndelete = 0;
+    flagnowwarndelete = 0;
+    return Db::IDUdb(sql);
+}
+
+bool WarnMsg::delnowerrAll()
+{
+    QString sql= "delete from ErrNowMsg";
+    flagwarndelete = 0;
+    flagnowwarndelete = 0;
+    return Db::IDUdb(sql);
+}

@@ -12,11 +12,13 @@ bool ModbusRx::sendDataToPake(int net,int id)
 	unsigned int crc;
 	bool ret = false; 
 	ModbusRx::dataStatus = 0;
+    //printf("net ===%d id==%d RxThread::netData[net].len==%d  sendDataToPake   ModbusRx::dataStatus = 0\n",net,id,RxThread::netData[net].len);
 	if( RxThread::netData[net].len > 1)
-	{
+    {
 		crc = RxThread::netData[net].data[RxThread::netData[net].len-1]*256 
 			+ RxThread::netData[net].data[RxThread::netData[net].len-2] ;
  		ModbusRx::dataStatus = 1;//crc error
+        //printf("sendDataToPake   ModbusRx::dataStatus = 1\n");
 		if( crc == Crc::CRC16(RxThread::netData[net].data, RxThread::netData[net].len-2) )
 		{
  			ModbusRx::dataStatus = 2;//id error
@@ -110,7 +112,7 @@ bool ModbusRx::sendDataToPake(int net,int id)
  					ModbusRx::dataStatus = 4;//right
 				}
 				else
-				{
+                {//printf("ModbusRx::dataStatus = 3\n");
  					ModbusRx::dataStatus = 3;//
 				}
 			}

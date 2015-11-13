@@ -68,6 +68,7 @@ public:
 	Module();
 	virtual ~Module();
 	void unreg(int net,int id);//注销
+    void reset(int net,int id);//reset
 	int warnCount(int net); //返回指定网络报警的数量
 	int errorCount(); //故障总数
 	int warnCount(); //报警总算

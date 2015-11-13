@@ -92,11 +92,47 @@ void Module::unreg(int net,int id)
 	if(i >= MODCOUNT) return;
 	mod_list[i].isHave = true;
 	mod_list[i].sn = NO_SN;
-	mod_list[i].flag = ERROR;//0 掉线  1 正常 2 预警 3 报警 
+    mod_list[i].flag = UNABLE;//ERROR;//0 掉线  1 正常 2 预警 3 报警
 	for(int j = 0 ; j < SUBNODECOUNT;  j++)
 	{
 		mod_list[i].subNodIsWar[j] = NORMAL ;
 	}
+}
+//==============reset=============
+void Module::reset(int net,int id)
+{
+    for(int i = 0 ; i < MODCOUNT ; i++)
+    {
+        mod_list[i].isHave = false;
+        //mod_list[i].sn = NO_SN;
+        mod_list[i].flag = NORMAL;//0 掉线  1 正常  2 报警
+        for(int j = 0; j < SUBNODECOUNT ; j++)
+        {
+            mod_list[i].subNodIsWar[j] = NORMAL;
+        }
+        for(int j = 0; j < SUBNODECOUNT ; j++)
+        {
+            mod_list[i].recovery[j] = NORMAL;
+        }
+        mod_list[i].isReset = false;
+    }
+
+    net0All = Mater::readNet0Count();
+    if (net0All > BtnNodeNUm)
+        net0All = BtnNodeNUm;
+    net1All = Mater::readNet1Count();
+        if (net1All > BtnNodeNUm)
+                net1All = BtnNodeNUm;
+    int i ;
+    for(i = 0; i < net0All && i < BtnNodeNUm; i++)
+    {
+        mod_list[i].isHave = true;
+    }
+    for(i = 0; i < net1All && i < BtnNodeNUm; i++)
+    {
+        mod_list[BtnNodeNUm + i].isHave = true;
+    }
+
 }
 //===============返回节点数==============
 int Module::nodeCount(int net)
@@ -450,9 +486,9 @@ void Module::setIsReset(int net, int id,bool val)
 int Module::getWhatWarn(int net,int id,int subId)
 {
     int i = net * BtnNodeNUm + id - 1;
-	if(i >= MODCOUNT ) return 0;
+	if(i >= MODCOUNT ) return 0;   
 	if(mod_list[i].isHave == true)
-	{
+    {
 		if(mod_list[i].sn == MC)
 		{
 			switch(subId)
@@ -497,8 +533,9 @@ int Module::getWhatErr(int net,int id,int subId)
 {
     int i = net * BtnNodeNUm + id - 1;
     if(i >= MODCOUNT ) return 0;
+     printf("getWhatErr111\n");
     if(mod_list[i].isHave == true)
-    {
+    {printf("getWhatErr222  mod_list[i].sn===%d\n",mod_list[i].sn);
         if(mod_list[i].sn == MC)
         {
             switch(subId)

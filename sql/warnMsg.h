@@ -32,6 +32,8 @@ public:
     static int getNowerrCount(QString time_bg,QString timer_end, int net,int id, int subId);
 	static bool delAll();
     static bool delerrAll();
+    static bool delnowAll();
+    static bool delnowerrAll();
 
 	static void insertCAlarm(int netId,int nodeId,int subNodeId,int value);//电流报警
     static void insertTAlarm(int netId, int nodeId, int subNodeId, float value);//温度报警

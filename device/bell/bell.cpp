@@ -81,7 +81,7 @@ void Bell::hanlde()
 
 	count++;
 	
-	if (Bell::warn_flag) {
+    if (Bell::warn_flag) {//&& (!Main::flagnosound)
 		Bell::on();
     } else if (Bell::error_flag && (!Main::flagnosound)) {
 		if (count % 2)

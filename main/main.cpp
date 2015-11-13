@@ -133,14 +133,14 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	Watchdog::kellLive();//喂狗
 
 	show();
-	
+    deleteall();
 	setLblNodSum();
 	for(int i = 0; i < p_mod->net0All; i++)
 	{
 		btn_node[i].btn.setVisible(true);
 	}
 
-	Signals::netCount[0] =  p_mod->net0All;
+    Signals::netCount[0] =  p_mod->net0All;
 	Signals::netCount[1] = p_mod->net1All;
 	Signals::timer = Mater::readSendTimer();
 	Db::newTimeNoSec(lblLocalTime,&time_min);//界面时钟
@@ -289,9 +289,9 @@ void Main::slot_warn()
             curNode = id;
             lblNode->setText(QString::number(id));
         }else if(p_mod->getSubWarnRecovery(net, id, sudId) == true &&(dat->data[sudId] == 0)){
-            printf("getSubWarnRecovery1111111111111111111\n");
+            //printf("getSubWarnRecovery1111111111111111111\n");
             //if(dat->data[sudId] == 0){
-                 printf("getSubWarnRecovery222222222222222222222222\n");
+                 //printf("getSubWarnRecovery222222222222222222222222\n");
                  is = p_mod->getWhatWarn( net, id, sudId);
                  if( is == 2)
                  {//漏电
@@ -307,9 +307,9 @@ void Main::slot_warn()
         else if (p_mod->getSubError(net, id, sudId) == false && (Signals::Flagerror[net] >> sudId & 0x01)) {
 
             mo->flag = ERROR;
-            //printf("11111Signals::Flagerror[%d]= %x ",net,Signals::Flagerror[net]);
-            //printf("\n");
-            //printf("getSubError net ==%d id ===%d sudId===%d\n",net,id,sudId);
+//            printf("11111Signals::Flagerror[%d]= %x ",net,Signals::Flagerror[net]);
+//            printf("\n");
+//            printf("getSubError net ==%d id ===%d sudId===%d\n",net,id,sudId);
 
             if (curNet !=  net) {
                 showCurrentNet(net);//显示当前网络
@@ -321,12 +321,12 @@ void Main::slot_warn()
             if( is == 2)
             {//漏电故障
                 WarnMsg::insertCError( net, id, sudId);
-                WarnMsg::insertNowTorCError( net, id, sudId);
+                WarnMsg::insertNowTorCError( net, id, sudId);                
             }
             else if( is == 0)
             {//温度故障
                 WarnMsg::insertTError( net, id, sudId);
-                WarnMsg::insertNowTorCError( net, id, sudId);
+                WarnMsg::insertNowTorCError( net, id, sudId);                
             }
             //==============================================================
             //WarnMsg::insertSubError(net, id, sudId);
@@ -1210,25 +1210,120 @@ void Main::check_pwd()
 			p_sys->_show();
 			printf("sys 2\n");
 			break;
-		case TUO:
-			p_putOff->_show();
+        case TUO:
+            //p_putOff->_show();
+            mainpower=0;//
+            prepower=0;//
+            errorLed=0;//
+            warnLed=0;//
+            error=0;//
+            warn=0;//
+            offStat=0;//
+            onStat=0;//
+            preStat=0;//
+            mainStat=0;
+            off=0;//
+            on=0;//
+            preJ4=0;//
+            relayStats=0;//
+            warnRelay = 0;
+            //Led::CtlOff();//
+            setBellAndLedStatus();
+            Led::commLightOff();
+            Led::mainLightOff();//主电源灯
+            Led::preMainLightOff();
+
+            lblNode->setText("");
+            lblXing->setText("");
+            Signals::netCount[0] =  Mater::readNet0Count();
+            Signals::netCount[1] = Mater::readNet1Count();
+            Signals::timer = Mater::readSendTimer();
+            sig.netCurId[0] = 1;
+            sig.netCurId[1] = 1;
+            //p_mod = new Module();	//初始化模块:
+
+            if(curNet >= 0 && curNode >= 0 && curNet < 2 && curNode < BtnNodeNUm)
+            {
+                //p_mod->unreg( curNet, curNode);
+                p_mod->reset( curNet, curNode);
+                //setBtnFalg(curNode, ERROR);
+                setBtnFalg(curNode, UNABLE);
+                //lblNode0 -> setText("0");//网络0节点数
+                //lblNode1 -> setText("0");//网络1节点数
+                lblWarnSumOne->setText("0");//网络报警数
+                lblWarnSumTwo->setText("0");//网络故障数
+
+            }
+            else
+            {
+                Message::_show(tr("节点不存在!"));
+            }
+            deleteall();
+
+            //usleep(2000000);
+//            checkError();
+//            checkWarn();
+//            powerCheck();
+//            checkRelayWarn();
+
+//            for(int id=1;id<=BtnNodeNUm;id++)
+//            {
+//                mo=p_mod->getNode(0,id);p_mod -> cleSubWarn( 0 , id);
+//                if(mo==NULL) continue;
+//                if(mo->isHave==true && mo->flag==UNABLE)
+//                {
+//                    printf("0000now enter mo->flag==UNABLE\n");
+//                    WarnMsg::insertEAlarm(0,id);
+//                    Bell::error();
+//                    Led::modErrorLightOn();
+//                }
+//            }
+
+//            for(int id=1;id<=BtnNodeNUm;id++)
+//            {
+//                mo=p_mod->getNode(1,id);p_mod -> cleSubWarn( 1 , id);
+//                if(mo==NULL) continue;
+//                if(mo->isHave==true && mo->flag==UNABLE)
+//                {
+//                    printf("1111now enter mo->flag==UNABLE\n");
+//                    WarnMsg::insertEAlarm(1,id);
+//                    Bell::error();
+//                    Led::modErrorLightOn();
+//                }
+//            }
+
+//            Signals::netCount[0] =  Mater::readNet0Count();
+//            Signals::netCount[1] = Mater::readNet1Count();
+//            Signals::timer = Mater::readSendTimer();
+
+            //p_mod = new Module();	//初始化模块:
+
+            setLblNodSum();
+            //setLblWarnSum();
 			break;
 		case PRINTER:            
             p_printer->_show();
 			break;
 		case LOGOUT:
-            if(curNet >= 0 && curNode >= 0 && curNet < 2 && curNode < BtnNodeNUm)
-			{
-				p_mod->unreg( curNet, curNode);
-				setBtnFalg(curNode, ERROR);
-				checkError();
-				WarnMsg::insertNodeRemove(curNet,curNode);
-			}
-			else
-			{
-				Message::_show(tr("节点不存在!"));
-			}
-			setLblNodSum();
+//            if(curNet >= 0 && curNode >= 0 && curNet < 2 && curNode < BtnNodeNUm)
+//			{
+//				p_mod->unreg( curNet, curNode);
+//                //setBtnFalg(curNode, ERROR);
+//                setBtnFalg(curNode, UNABLE);
+//                lblNode0 -> setText("0");//网络0节点数
+//                lblNode1 -> setText("0");//网络1节点数
+//                lblWarnSumOne->setText("0");//网络报警数
+//                lblWarnSumTwo->setText("0");//网络故障数
+
+//				checkError();
+//				WarnMsg::insertNodeRemove(curNet,curNode);
+//			}
+//			else
+//			{
+//				Message::_show(tr("节点不存在!"));
+//			}
+//			setLblNodSum();
+//            setLblWarnSum();
             memset(Db::username,0,sizeof(Db::username));
 			break;
 		case REBOOT:
@@ -1249,21 +1344,21 @@ void Main::check_pwd()
 //            }
             break;
 		case RESET:
-	        mainpower=0;//
-	        prepower=0;//
+            //mainpower=0;//
+            //prepower=0;//
 	        errorLed=0;//
 	        warnLed=0;//
 	        error=0;//
 	        warn=0;//
-	        offStat=0;//
-	        onStat=0;//
-            preStat=0;//
-            mainStat=0;
-	        off=0;//
-	        on=0;//
-	        preJ4=0;//
-	        relayStats=0;//
-            warnRelay = 0;
+            //offStat=0;//
+            //onStat=0;//
+            //preStat=0;//
+            //mainStat=0;
+            //off=0;//
+            //on=0;//
+            //preJ4=0;//
+            //relayStats=0;//
+            //warnRelay = 0;
             //Led::CtlOff();//
 			setBellAndLedStatus();
 			for( int i = 0 ; i < 2; i ++)
@@ -1282,9 +1377,9 @@ void Main::check_pwd()
 			{
 				mo=p_mod->getNode(curNet,id);
 				if(mo==NULL) continue;
-				if(mo->isHave==true && mo->flag==ERROR)
+                if(mo->isHave==true && mo->flag==UNABLE)
 				{
-                    printf("now enter mo->flag==ERROR\n");                    
+                    printf("now enter mo->flag==UNABLE\n");
 					WarnMsg::insertEAlarm(curNet,id);
 					Bell::error();
 					Led::modErrorLightOn();
@@ -1347,7 +1442,7 @@ void Main::check_pwd()
 			{
 				mo = p_mod->getNode(curNet,id);
 				if(mo==NULL) continue;
-				if(mo->isHave==true && mo->flag==ERROR)
+                if(mo->isHave==true && mo->flag==UNABLE)
 				{
 					//WarnMsg::insertEAlarm(curNet,id);
 					//Bell::error();
@@ -1452,7 +1547,7 @@ void Main::initConnect()
 	connect(btn_relogin,SIGNAL(clicked()),this,SLOT(slot_relogin()));//重新登录
 	connect(btn_sysCheck,SIGNAL(clicked()),this,SLOT(slot_check_main()));//系统检测
 	connect(btn_reboot,SIGNAL(clicked()),this,SLOT(slot_reboot()));//系统重启
-	connect(btn_tuo,SIGNAL(clicked()),this,SLOT(slot_put_off()));//脱扣
+    connect(btn_tuo,SIGNAL(clicked()),this,SLOT(slot_put_off()));//--脱扣  复位
 	connect(btn_logout,SIGNAL(clicked()),this,SLOT(slot_logout()));//模块注销
 	connect(btn_try,SIGNAL(clicked()),this,SLOT(slot_btn_try()));//试验
 	connect(btn_sysSet,SIGNAL(clicked()),this,SLOT(slot_sys()));//系统设置
@@ -1532,6 +1627,13 @@ void Main::newErrorTest()
 		printf("p_chePwd new error\n");
 	}
 }
+
+void Main::deleteall()
+{
+    WarnMsg::delnowAll();
+    WarnMsg::delnowerrAll();
+}
+
 //写下节点数
 void Main::setLblNodSum()
 {

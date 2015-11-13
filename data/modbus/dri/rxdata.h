@@ -23,5 +23,7 @@ public:
 	static struct NodeCache netData[2];
 	static void clearNet0();
 	static void clearNet1();
+    static int WRONG1;
+    static int WRONG2;
 };
 #endif

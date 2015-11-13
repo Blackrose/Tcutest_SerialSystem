@@ -174,6 +174,7 @@ public :
     void hideAll();
     void displayAll();
     void paintEvent( QPaintEvent * );
+    void deleteall();
 
 public :
 	IMFrame *p_imf;			//键盘

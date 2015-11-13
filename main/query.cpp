@@ -85,10 +85,12 @@ void Query::mycellEntered(int row, int column)
 //设置某一行的颜色
 void Query::setRowColor(int row, QColor color)
 {
-    for (int col=0; col<tableWidget->columnCount(); col++)
-    {
-        QTableWidgetItem *item = tableWidget->item(row, col);
-        item->setBackgroundColor(color);
+    if(currentCount > 0){
+        for (int col=0; col<tableWidget->columnCount(); col++)
+        {
+            QTableWidgetItem *item = tableWidget->item(row, col);
+            item->setBackgroundColor(color);
+        }
     }
     printf("now end\n");
 }

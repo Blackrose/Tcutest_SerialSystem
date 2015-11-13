@@ -7,6 +7,7 @@
 #include "modbusrx.h"
 #include "mater.h"
 #include "modList.h"
+
 //int dbuf[8]={0};
 int Signals::netCount[] = {0,0};
 int Signals::timer = 0;
@@ -48,11 +49,11 @@ void Signals::send()
 	}
 	else
 	{//发送插入的信息
-        //printf("enter sendInsert\n");
+        //printf("enter sendInsert isRun = false\n");
 		isRun = false;
 		sendInsert();
 	}
-
+//printf("111ModbusRx::dataStatus==%d\n",ModbusRx::dataStatus);
     if(Main::com_led==1)
     {
         if (ModbusRx::dataStatus == 0)
@@ -107,33 +108,35 @@ void Signals::doNet(int net)
 	//网络故障处理
 	if(netCount[net] > 0)
 	{//是否有节点
-		if ( ModbusRx::sendDataToPake(net , netCurId[net]) == false)
-		{//节点掉线处理
-			Can::reSetNet(net);
-            mo = ((Main*)p_main)->p_mod -> getNode( net, netCurId[net]);
-            if(mo->flag == UNABLE)//ERROR
-			{
-				netCurId[net] = ++netCurId[net] % netCount[net];
-				if(netCurId[net] == 0 ) netCurId[net] = netCount[net];
-				netTimer[net] = 0;
-			}
-			else if(netTimer[net]++ >= timer )
-			{
-                ((Main*)p_main)->slot_error( net, netCurId[net]);//故障
-				netCurId[net] = ++netCurId[net] % netCount[net];
-				if(netCurId[net] == 0 ) netCurId[net] = netCount[net];
-				netTimer[net] = 0; //网络0从发次数                
-			}
-		}
-		else
-		{            
-			((Main*)p_main)->slot_reg( net, netCurId[net]);
-			netCurId[net] = ++netCurId[net] % netCount[net];
-			if(netCurId[net] == 0 ) netCurId[net] = netCount[net];
-            netTimer[net] = 0;
-			toDo();
-		}
-	}
+        //if((RxThread::WRONG1 == 0 && net == 0)|| (RxThread::WRONG2 == 0 && net == 1)){//printf("RxThread::WRONG == 0\n");
+            if ( ModbusRx::sendDataToPake(net , netCurId[net]) == false)
+            {//节点掉线处理
+                Can::reSetNet(net);
+                mo = ((Main*)p_main)->p_mod -> getNode( net, netCurId[net]);
+                if(mo->flag == UNABLE)//ERROR
+                {
+                    netCurId[net] = ++netCurId[net] % netCount[net];
+                    if(netCurId[net] == 0 ) netCurId[net] = netCount[net];
+                    netTimer[net] = 0;
+                }
+                else if(netTimer[net]++ >= timer )
+                {printf("net==%d netCurId[net]==%d\n",net,netCurId[net]);
+                    ((Main*)p_main)->slot_error( net, netCurId[net]);//故障
+                    netCurId[net] = ++netCurId[net] % netCount[net];
+                    if(netCurId[net] == 0 ) netCurId[net] = netCount[net];
+                    netTimer[net] = 0; //网络0从发次数
+                }
+            }
+            else
+            {
+                ((Main*)p_main)->slot_reg( net, netCurId[net]);
+                netCurId[net] = ++netCurId[net] % netCount[net];
+                if(netCurId[net] == 0 ) netCurId[net] = netCount[net];
+                netTimer[net] = 0;
+                toDo();
+            }
+        }
+    //}
 }
 void Signals::sendNet(int net)
 {    
@@ -142,6 +145,7 @@ void Signals::sendNet(int net)
 		mo = ((Main*)p_main)->p_mod -> getNode( net, netCurId[net]);
 		if(mo->sn == 0)
 		{//读取SN
+            //printf("------SN\n");
 			ModbusTx::readMem( net, netCurId[net], 201, 1);
 		}
 		else if(mo->isReset == true)
@@ -152,35 +156,38 @@ void Signals::sendNet(int net)
 		}
 		else 
 		{//节点轮询
+            //printf("sendNet  %d======\n",net);
 			ModbusTx::readMem( net, netCurId[net], 25, 2);            
 		}
 	}
 }
 void Signals::doInsert()
-{
-	if ( ModbusRx::sendDataToPake( pak->net, pak->id) == false)
-	{//节点掉线处理
-		Can::reSetNet(pak->net);
-		mo = ((Main*)p_main)->p_mod -> getNode( pak->net, pak->id);
-        if(mo->flag == UNABLE)//ERROR
-		{
-			Pake::next();
-			insertTimer = 0;
-		}
-		else if ( insertTimer++ >= timer)
-		{
-			Pake::next();
-			insertTimer = 0;
-			((Main*)p_main)->slot_error( pak->net, pak->id);            
-		}
-	}
-	else
-    {
-		toDo();
-		Pake::next();
-		insertTimer = 0;        
-        ((Main*)p_main)->slot_reg(pak->net, pak->id);
-	}
+{printf("enter doInsert pak->net==%d pak->id==%d\n",pak->net,pak->id);
+    //if((RxThread::WRONG1 == 0 && pak->net == 0)|| (RxThread::WRONG2 == 0 && pak->net == 1)){//printf("RxThread::WRONG == 0\n");
+        if ( ModbusRx::sendDataToPake( pak->net, pak->id) == false)
+        {//节点掉线处理
+            Can::reSetNet(pak->net);
+            mo = ((Main*)p_main)->p_mod -> getNode( pak->net, pak->id);
+            if(mo->flag == UNABLE)//ERROR
+            {
+                Pake::next();
+                insertTimer = 0;
+            }
+            else if ( insertTimer++ >= timer)
+            {
+                Pake::next();
+                insertTimer = 0;
+                ((Main*)p_main)->slot_error( pak->net, pak->id);
+            }
+        }
+        else
+        {
+            toDo();
+            Pake::next();
+            insertTimer = 0;
+            ((Main*)p_main)->slot_reg(pak->net, pak->id);
+        }
+    //}
 } 
 void Signals::sendInsert()
 {

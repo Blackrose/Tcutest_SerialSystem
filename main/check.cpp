@@ -130,7 +130,7 @@ void Check::b()
 			//timer.start(1000);
             //Led::CtlOn();
             //Led::onRelay();
-            usleep(1000000);//1.0s
+            usleep(2000000);//1.0s
 }
 void Check::a()
 {

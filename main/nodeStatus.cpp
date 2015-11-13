@@ -230,7 +230,7 @@ void NodeStatus::_show(int net,int id,int mod,int stat)
                 break;
 	}
 
-	Pake::send( curNet, curId, QUE_CUR_VAL, NULL, 0);
+    Pake::send( curNet, curId, QUE_CUR_VAL, NULL, 0);
 	show();
 
 

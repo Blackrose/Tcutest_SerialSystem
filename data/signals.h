@@ -4,6 +4,7 @@
 #include <QObject>
 #include "pake.h"
 #include "modList.h"
+#include "rxdata.h"
 //#include "main.h"
 class Signals
 {
