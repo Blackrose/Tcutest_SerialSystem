@@ -106,11 +106,11 @@ bool Led::preMainLightStats()
 }
 void Led::commLightOn()//通讯电源灯
 {
-	Led::write(2, 0);
+    Led::write(2, 0);
 }
 void Led::commLightOff()//通讯灯灭
 {
-	Led::write(2, 1);
+    Led::write(2, 1);
 }
 bool Led::commLightStats()
 {
@@ -187,3 +187,18 @@ void Led::offRelay()
         Led::write(5, 0);
 }
 
+int Led::readRelay()
+{
+    char OnorOff[10] = {0};
+    if (::read(Led::fd, OnorOff, 7) > 0){
+        //printf("OnorOff[0]==%x  %d %x\n",OnorOff[0],OnorOff[0],OnorOff[0]>>3 & 0x01);
+        if((OnorOff[0]>>3 & 0x01) == 0)
+        {
+            printf("OnorOff[0]==%x  %d %x\n",OnorOff[0],OnorOff[0],OnorOff[0]>>3 & 0x01);
+            return 1;
+        }
+        else
+            return 0;
+    }
+    return 0;
+}

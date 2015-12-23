@@ -77,6 +77,8 @@
 #define CHECK	6
 #define PRINTER 7
 #define TRY 8
+#define CHANGE  9
+#define SYSRESET 10
 
 #define DATCOU	9 //当前显示的数据9个
 #define WIAT_SEC 900000//
@@ -189,12 +191,15 @@ public :
 	Sys 		*p_sys;		//系统管理
 	Relogin 	*p_relog;	//重启
 	//RxThread 	*p_rx;		//接收数据
-	QTimer 		*p_timer;	//1s 定时器
+
+    QTimer 		*p_timer;	//1s 定时器
     QTimer 		*pic_rebuild_timer;
 	QTimer          *pic_timer;       //
     QTimer      *s_timer;
     QTimer      *led_timer; //通讯灯闪烁变化定时器－－－－－－－－－－－－－
-	Module 		*p_mod;		//模块链表
+    QTimer      *r_timer;
+
+    Module 		*p_mod;		//模块链表
 	CheckPwd	*p_chePwd;	//密码验证
 	NodeStatus      *p_nodeStatus;	//节点的详细状态
 	Signals         sig;
@@ -234,8 +239,11 @@ public :
     static int  flagnosound;
     static int  flagreset;
     static int  WarnSumOne;
+    static int  resetwarn;
+    static int  resetnow;
 
 public slots:
+    void slot_change();
 	void slot_printer();
 	void slot_help();
     void slot_WarnSumOne();
@@ -254,11 +262,15 @@ public slots:
 	void slot_btn_node();		//node 按钮
 	void slot_btn_reset();		//主机复位
 	void slot_net();		//单击网络
-	void slot_timer();		//定时器
+    void slot_sys_reset();//系统复位
+
+    void slot_timer();		//定时器
     void pic_rebuild();
 	void pic_handle();
     void sound_timer();
     void led_slot_timer();
+    void reset_timer();
+
 	void clearScreenCount();
 public:
 	void slot_warn();		//报警

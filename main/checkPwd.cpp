@@ -66,6 +66,11 @@ void CheckPwd::_show()
 {
 	setGeometry(200,180,211,121);
 	txt_password->setFocus();
+    if(Main::whoChePwd == SYSRESET){
+        this->setWindowTitle("系统复位");
+    }else{
+        this->setWindowTitle("输入用户名密码");
+    }
 	show();
 }
 void CheckPwd::clear_txt()

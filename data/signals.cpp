@@ -247,29 +247,49 @@ void Signals::toDo()
                     && (Pake::readBuf.data[0] >> i & 0x01)) {
                     //Message::_show("warn!!!");
                     //Message::_show(QString::number(i));
-                    //printf("Pake::readBuf.data[0] = %x   ",Pake::readBuf.data[0]);
-                    //printf("warn!!!i==%d\n",i);
+                    printf("Pake::readBuf.data[0] = %x   ",Pake::readBuf.data[0]);
+                    printf("warn!!!i==%d\n",i);
                     Pake::send(Pake::readBuf.net,Pake::readBuf.id, QUE_DEV_WAR, NULL, 0);
                     break;
                 }else if(Module::getSubWarnRecovery(Pake::readBuf.net, Pake::readBuf.id , i) == true
                     && ((Pake::readBuf.data[0] >> i) == 0)){
-                    Pake::send(Pake::readBuf.net,Pake::readBuf.id, QUE_DEV_WAR, NULL, 0);
+                    if(Main::resetwarn == 1){
+                        Pake::send(Pake::readBuf.net,Pake::readBuf.id, QUE_DEV_WAR, NULL, 0);
+                        Main::resetwarn = 0;
+                    }
                     printf("getSubWarnRecovery\n");
                     break;
                 } else if (Module::getSubError(Pake::readBuf.net, Pake::readBuf.id , i) == false
                     && (Signals::Flagerror[Pake::readBuf.net] >> i & 0x01)) {
                     //Message::_show("故障！4444");                    
 					//((Main*)p_main)->slot_warn_error();                    
-                    //printf("Signals::Flagerror[%d]= %x   ",Pake::readBuf.net,Signals::Flagerror[Pake::readBuf.net]);
-                    //printf("errorFlag Pake::readBuf.net==%d Pake::readBuf.id==%d i===%d \n",Pake::readBuf.net,Pake::readBuf.id,i);
-					Pake::send(Pake::readBuf.net,Pake::readBuf.id, QUE_DEV_WAR, NULL, 0);
+                    printf("Signals::Flagerror[%d]= %x   ",Pake::readBuf.net,Signals::Flagerror[Pake::readBuf.net]);
+                    printf("errorFlag Pake::readBuf.net==%d Pake::readBuf.id==%d i===%d \n",Pake::readBuf.net,Pake::readBuf.id,i);
+                    if (Module::getSubWarn(Pake::readBuf.net, Pake::readBuf.id , i) == true
+                        && (Pake::readBuf.data[0] >> i & 0x01)) {
+                        printf("warn++++++++++++++++++++++++=\n");
+                    }
+                    else{
+                        Pake::send(Pake::readBuf.net,Pake::readBuf.id, QUE_DEV_WAR, NULL, 0);
+                    }
 					break;
                 }else if(Module::getSubErrorRecovery(Pake::readBuf.net, Pake::readBuf.id , i) == true
-                    &&((Signals::Flagerror[Pake::readBuf.net] >> i) == 0)){
+                    &&((Signals::Flagerror[Pake::readBuf.net] >> i) == 0)&& ((Pake::readBuf.data[0] >> i) == 0)){
                     //Message::_show("故障恢复！");                    
                     Pake::send(Pake::readBuf.net,Pake::readBuf.id, QUE_DEV_WAR, NULL, 0);
                     break;
-                 }
+                 }/*else if(Module::getSubErrorRecovery(Pake::readBuf.net, Pake::readBuf.id , i) == true){
+                          if((Signals::Flagerror[Pake::readBuf.net] >> i & 0x01) == 0 && ((Pake::readBuf.data[0] >> i) == 0))
+                          {
+                              printf("111111111111111111111111i=====%d\n",i);
+                              Pake::send(Pake::readBuf.net,Pake::readBuf.id, QUE_DEV_WAR, NULL, 0);
+                              break;
+                          }else{
+                              printf("2222222222222222222 i===%d   %x\n",i,(Signals::Flagerror[Pake::readBuf.net] >> i));
+                          }
+
+                }*/
+
             }
 		   	if (Pake::readBuf.data[0] >> 8 & 0x01) {
 				((Main*)p_main)->slot_ans_try();

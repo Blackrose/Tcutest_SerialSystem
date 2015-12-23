@@ -49,11 +49,13 @@ public :
 	void fillRow(QLabel *lbl,QLabel *lblStats,int net, int id,int subId,int stat,bool isHave);
     void setCurVal(float *val, int sum);
     void setLblValue(QLabel *lbl, float value, int cora);
+    void changeaddr();
 
 	int curNet;
 	int curId;
 	int curMod;
-	int check;
+    int check;
+    //static int changeaddr;
 private:
 	void nodeWarn(QLabel *lbl);
 	void nodeError(QLabel *lbl);

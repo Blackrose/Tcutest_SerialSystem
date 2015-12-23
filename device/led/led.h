@@ -55,6 +55,7 @@ public:
 	
 	static void onRelay();
 	static void offRelay();
+    static int readRelay();
 };
 #endif
 

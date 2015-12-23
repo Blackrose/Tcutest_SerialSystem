@@ -11,6 +11,7 @@
 
 
 SyszuxIM* NodeStatus::imf_my;
+//int NodeStatus::changeaddr = 0;
 /*====================================
 	功能：初始化资源
 ====================================*/
@@ -68,8 +69,7 @@ void NodeStatus::_show(int net,int id,int mod,int stat)
 	
 	curNet = net;
 	curId = id;
-	curMod = mod;
-
+	curMod = mod;    
 	switch( curMod )
 	{
 		case ML1T1:
@@ -286,8 +286,8 @@ void NodeStatus::_show(int net,int id,int mod,int stat)
 	功能：些下当前数值
 ====================================*/
 void NodeStatus::setCurVal(float* val,int sum)
-{
-	switch( curMod )
+{//printf("curMod===%d\n",curMod);
+    switch( curMod )
 	{
 	case ML1T1:
 	case DL1T1:
@@ -559,7 +559,7 @@ void NodeStatus::slot_hide()
 	curId = -1;
     imf_my->updateHandler(QWSInputMethod::FocusOut);
     QWSServer::setCurrentInputMethod(p_imf);
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));    
 }	
 /*====================================
 	功能：写下lbl报警
@@ -674,33 +674,69 @@ void NodeStatus::slot_ok()
 }
 
 void NodeStatus::slot_change()
-{ //printf("111111111Db::purview==%d\n",Db::purview);
-    if( Db::purview == QUERY){
-        Message::_show(tr("请登录后使用!"));
-    }else{
-        if(Main::flagreset == 1)
-        {
-            return ;
-        }
-        QTextCodec::setCodecForCStrings(0);
-        QWSServer::setCurrentInputMethod(imf_my);
-        imf_my->updateHandler(QWSInputMethod::FocusOut);
+{ //printf("111111111Db::purview==%d\n",Db::purview);    
+    imf_my->updateHandler(QWSInputMethod::FocusOut);
+    QWSServer::setCurrentInputMethod(p_imf);
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    ((Main*)par)->slot_change();
+//    if( Db::purview == QUERY){
+//        Message::_show(tr("请登录后使用!"));
+//    }else{
+//        if(NodeStatus::changeaddr == CHANGE)
+//        {
+//            if(Main::flagreset == 1)
+//            {
+//                return ;
+//            }
+//            QTextCodec::setCodecForCStrings(0);
+//            QWSServer::setCurrentInputMethod(imf_my);
+//            imf_my->updateHandler(QWSInputMethod::FocusOut);
 
-        if((curMod == ML4T4) || (curMod == ML8))
-        {
-            txt0->setEnabled(true);
-            txt1->setEnabled(true);
-            txt2->setEnabled(true);
-            txt3->setEnabled(true);
-            txt4->setEnabled(true);
-            txt5->setEnabled(true);
-            txt6->setEnabled(true);
-            txt7->setEnabled(true);
-        }
-        else
-        {
-            txt0->setEnabled(true);
-            txt4->setEnabled(true);
-        }
+//            if((curMod == ML4T4) || (curMod == ML8))
+//            {
+//                txt0->setEnabled(true);
+//                txt1->setEnabled(true);
+//                txt2->setEnabled(true);
+//                txt3->setEnabled(true);
+//                txt4->setEnabled(true);
+//                txt5->setEnabled(true);
+//                txt6->setEnabled(true);
+//                txt7->setEnabled(true);
+//            }
+//            else
+//            {
+//                txt0->setEnabled(true);
+//                txt4->setEnabled(true);
+//            }
+//        }
+//    }
+}
+
+
+void NodeStatus::changeaddr()
+{
+    if(Main::flagreset == 1)
+    {
+        return ;
+    }
+    QTextCodec::setCodecForCStrings(0);
+    QWSServer::setCurrentInputMethod(imf_my);
+    imf_my->updateHandler(QWSInputMethod::FocusOut);
+
+    if((curMod == ML4T4) || (curMod == ML8))
+    {
+        txt0->setEnabled(true);
+        txt1->setEnabled(true);
+        txt2->setEnabled(true);
+        txt3->setEnabled(true);
+        txt4->setEnabled(true);
+        txt5->setEnabled(true);
+        txt6->setEnabled(true);
+        txt7->setEnabled(true);
+    }
+    else
+    {
+        txt0->setEnabled(true);
+        txt4->setEnabled(true);
     }
 }

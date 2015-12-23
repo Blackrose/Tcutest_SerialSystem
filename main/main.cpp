@@ -19,6 +19,8 @@ int Main::prepower = 0;
 int Main::onStat = 0;
 int Main::offStat = 0;
 int Main::WarnSumOne = 0;
+int Main::resetwarn = 0;
+int Main::resetnow = 0;
 
 Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 {
@@ -55,11 +57,14 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
     Led::CtlOff();
 
 	proBar->setValue(24);
-	p_timer	= new QTimer(this);	//初始化定时器
+
+    p_timer	= new QTimer(this);	//初始化定时器
     //led_timer = new QTimer(this);
     //pic_rebuild_timer = new QTimer(this);
 	pic_timer = new QTimer(this); 
     s_timer = new QTimer(this);
+    r_timer = new QTimer(this);
+
 	proBar->setValue(32);
 	Watchdog::kellLive();//喂狗
 	p_sys 	= new Sys(p_imf);//系统管理sig
@@ -144,11 +149,14 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	Signals::netCount[1] = p_mod->net1All;
 	Signals::timer = Mater::readSendTimer();
 	Db::newTimeNoSec(lblLocalTime,&time_min);//界面时钟
+
 	p_timer->start(3000);//启动定时器
 	pic_timer->start(50);
     //pic_rebuild_timer->start(1000);
     //led_timer->start(500);//0.5s
-	newErrorTest();
+    r_timer->start(50);
+
+    newErrorTest();
 	printf("init Main ok\n");
 
 }
@@ -303,13 +311,29 @@ void Main::slot_warn()
                  }
             //}
              p_mod->setSubWarn(net, id, sudId, NORMAL,0);//
+             warn = 0;
+             warnLed = 0;
+             warnRelay = 0;
+             setBellAndLedStatus();
+             if(p_nodeStatus->curNet == net && p_nodeStatus->curId == id )
+             {
+                 p_nodeStatus->_show(curNet,curNode,mo->sn,NORMAL);
+             }
+             setLblWarnSum();
+             //显示模块型号
+             lblXing->setText(tr(Module::moTyp[mo->sn].name));
+             //显示模块节点号
+             curNode = id;
+             lblNode->setText(QString::number(id));
         }
         else if (p_mod->getSubError(net, id, sudId) == false && (Signals::Flagerror[net] >> sudId & 0x01)) {
-
+            if (p_mod -> getSubWarn( net, id, sudId) == true && dat->data[sudId] > 0){
+                printf("warn-------------------\n");
+            }else{
             mo->flag = ERROR;
-//            printf("11111Signals::Flagerror[%d]= %x ",net,Signals::Flagerror[net]);
-//            printf("\n");
-//            printf("getSubError net ==%d id ===%d sudId===%d\n",net,id,sudId);
+            printf("11111Signals::Flagerror[%d]= %x ",net,Signals::Flagerror[net]);
+            printf("\n");
+            printf("getSubError net ==%d id ===%d sudId===%d\n",net,id,sudId);
 
             if (curNet !=  net) {
                 showCurrentNet(net);//显示当前网络
@@ -347,11 +371,12 @@ void Main::slot_warn()
             //显示模块节点号
             curNode = id;
             lblNode->setText(QString::number(id));
+            }
         }
-        else if(p_mod->getSubErrorRecovery(net, id, sudId) == true && ((Signals::Flagerror[net] >> sudId) == 0)){//没有故障
+        else if(p_mod->getSubErrorRecovery(net, id, sudId) == true && ((Signals::Flagerror[net] >> sudId & 0x01) == 0)){//没有故障
                 //Message::_show(tr("没有故障！"));
             mo->flag = NORMAL;
-            printf("enter getSubErrorRecovery id ===%d\n",id);
+            printf("enter getSubErrorRecovery id ===%d  sudId===%d\n",id,sudId);
             if (curNet !=  net) {
                 showCurrentNet(net);//显示当前网络
             } else {
@@ -448,8 +473,8 @@ void Main::slot_cur_val()
 			showNOPagSubNode(mo);
 		}
 		else
-		{
-			p_nodeStatus->setCurVal(dataA, 8);
+        {printf("sn===%d\n",mo->sn);
+            p_nodeStatus->setCurVal(dataA, 8);
 		}
 	}
 }
@@ -724,6 +749,20 @@ void Main::led_slot_timer()
          //usleep(500000);
     }
 
+}
+
+void Main::reset_timer()
+{
+    if((Led::readRelay() == 1)){
+        printf("reset===========");
+        resetnow = 1;
+        if(resetnow == 1){
+            //slot_put_off();
+            //slot_btn_reset();
+            slot_sys_reset();
+            resetnow = 0;
+        }
+    }
 }
 
 void Main::clearScreenCount()
@@ -1039,6 +1078,7 @@ void Main::slot_no_sound()
 	Bell::error_flag = 0;
 	Bell::warn_flag = 0;
 	Bell::off();
+    //Led::CtlOn();
 }
 
 void Main::slot_start_sound()
@@ -1063,16 +1103,18 @@ void Main::slot_stop_sound()
 //======== 试验 =========
 void Main::slot_btn_try()
 {
+    //Led::readRelay();
+
     whoChePwd = TRY;
     p_chePwd->_show();
-//    if(curNet >= 0 && curNode > 0 && curNet < 2 && curNode <= BtnNodeNUm)
-//	{
-//		Pake::send( curNet, curNode, SET_MOD_TRY, NULL, 0);
-//	}
-//	else
-//	{
-//		Message::_show(tr("没有选择节点!"));
-//	}
+    if(curNet >= 0 && curNode > 0 && curNet < 2 && curNode <= BtnNodeNUm)
+    {
+        Pake::send( curNet, curNode, SET_MOD_TRY, NULL, 0);
+    }
+    else
+    {
+        Message::_show(tr("没有选择节点!"));
+    }
 }
 //======== 按键试验回复 ========
 void Main::slot_ans_try()
@@ -1188,6 +1230,7 @@ void Main::slot_put_off()
 
 void Main::slot_printer()
 {
+    //Led::CtlOff();
     //frmInput::Instance()->hide();
     whoChePwd = PRINTER;
     p_chePwd->_show();
@@ -1197,7 +1240,20 @@ void Main::slot_help()
 {
     //QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),0,0,800,600);
     //pixmap.save("1.png","png");
-    p_help->_show();
+    //p_help->_show();
+    slot_sys_reset();
+}
+
+void Main::slot_change()
+{
+    whoChePwd = CHANGE;
+    p_chePwd->_show();
+}
+
+void Main::slot_sys_reset()
+{
+    whoChePwd = SYSRESET;
+    p_chePwd->_show();
 }
 
 void Main::check_pwd()
@@ -1211,6 +1267,7 @@ void Main::check_pwd()
 			printf("sys 2\n");
 			break;
         case TUO:
+            resetwarn = 1;
             //p_putOff->_show();
             mainpower=0;//
             prepower=0;//
@@ -1299,6 +1356,9 @@ void Main::check_pwd()
             //p_mod = new Module();	//初始化模块:
 
             setLblNodSum();
+            showCurrentNet(1);
+            showCurrentNet(0);
+            showCurrentNet(curNet);
             //setLblWarnSum();
 			break;
 		case PRINTER:            
@@ -1344,6 +1404,7 @@ void Main::check_pwd()
 //            }
             break;
 		case RESET:
+            resetwarn = 1;
             //mainpower=0;//
             //prepower=0;//
 	        errorLed=0;//
@@ -1361,30 +1422,63 @@ void Main::check_pwd()
             //warnRelay = 0;
             //Led::CtlOff();//
 			setBellAndLedStatus();
-			for( int i = 0 ; i < 2; i ++)
-			{
-                for(int j = 1 ; j <= BtnNodeNUm; j ++)
-				{
-					p_mod->setIsReset( i, j, true);
-				}
-			}
-            
+
+            if( p_nodeStatus->isHidden() ){
+                for( int i = 0 ; i < 2; i ++)
+                {
+                    for(int j = 1 ; j <= BtnNodeNUm; j ++)
+                    {
+                        p_mod->setIsReset( i, j, true);
+                    }
+                }
+
+                for(int id=1;id<=BtnNodeNUm;id++)
+                {
+                    mo=p_mod->getNode(0,id);
+                    if(mo==NULL) continue;
+                    if(mo->isHave==true && mo->flag==UNABLE)
+                    {
+                        printf("now enter mo->flag==UNABLE\n");
+                        WarnMsg::insertEAlarm(0,id);
+                        Bell::error();
+                        Led::modErrorLightOn();
+                    }
+                }
+                for(int id=1;id<=BtnNodeNUm;id++)
+                {
+                    mo=p_mod->getNode(1,id);
+                    if(mo==NULL) continue;
+                    if(mo->isHave==true && mo->flag==UNABLE)
+                    {
+                        printf("now enter mo->flag==UNABLE\n");
+                        WarnMsg::insertEAlarm(1,id);
+                        Bell::error();
+                        Led::modErrorLightOn();
+                    }
+                }
+
+            }
+            else{
+                    p_mod->setIsReset( curNet, curNode, true);
+                 }
+
 			checkError();
 			//checkWarn();
 			powerCheck();
 		   // setBellAndLedStatus();
-            for(int id=1;id<=BtnNodeNUm;id++)
-			{
-				mo=p_mod->getNode(curNet,id);
-				if(mo==NULL) continue;
-                if(mo->isHave==true && mo->flag==UNABLE)
-				{
-                    printf("now enter mo->flag==UNABLE\n");
-					WarnMsg::insertEAlarm(curNet,id);
-					Bell::error();
-					Led::modErrorLightOn();
-				}
-			}
+//            for(int id=1;id<=BtnNodeNUm;id++)
+//            {
+//                mo=p_mod->getNode(curNet,id);
+//                if(mo==NULL) continue;
+//                if(mo->isHave==true && mo->flag==UNABLE)
+//                {
+//                    printf("now enter mo->flag==UNABLE\n");
+//                    WarnMsg::insertEAlarm(curNet,id);
+//                    Bell::error();
+//                    Led::modErrorLightOn();
+//                }
+//            }
+
 			for(int i=0;i<5000;i++)
 			{
 				for(int j=0;j<5000;j++)
@@ -1470,6 +1564,12 @@ void Main::check_pwd()
 			//powerCheck();
 			//setBellAndLedStatus();
 			break;
+        case CHANGE:
+            p_nodeStatus->changeaddr();
+            break;
+        case SYSRESET:
+            printf("SYSRESET\n");
+            break;
 	}
 	whoChePwd = NONE;
 }
@@ -1563,6 +1663,7 @@ void Main::initConnect()
     //connect(pic_rebuild_timer, SIGNAL(timeout()), this, SLOT(pic_rebuild()));//自动上传
     connect(s_timer, SIGNAL(timeout()), this, SLOT(sound_timer()));
     //connect(led_timer, SIGNAL(timeout()), this, SLOT(led_slot_timer()));
+    //connect(r_timer,SIGNAL(timeout()),this,SLOT(reset_timer()));//reset
 }
 void Main::showHowNet()
 {

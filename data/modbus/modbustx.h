@@ -9,7 +9,7 @@
 
 #include "can.h"
 #include "crc.h"
-#define PAKETIMER 60//30
+#define PAKETIMER 60//240//60//30
 class ModbusTx
 {
 public:
