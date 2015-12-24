@@ -79,6 +79,7 @@
 #define TRY 8
 #define CHANGE  9
 #define SYSRESET 10
+#define WARNDATA 11
 
 #define DATCOU	9 //当前显示的数据9个
 #define WIAT_SEC 900000//
@@ -241,6 +242,7 @@ public :
     static int  WarnSumOne;
     static int  resetwarn;
     static int  resetnow;
+    //static int  warndata;
 
 public slots:
     void slot_change();

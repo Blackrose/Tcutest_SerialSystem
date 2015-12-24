@@ -21,10 +21,11 @@ int Main::offStat = 0;
 int Main::WarnSumOne = 0;
 int Main::resetwarn = 0;
 int Main::resetnow = 0;
+//int Main::warndata = 0;
 
 Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 {
-	setupUi(this);
+    setupUi(this);
         setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
 	setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存        
     p_imf = new IMFrame();	//键盘
@@ -296,6 +297,8 @@ void Main::slot_warn()
             //显示模块节点号
             curNode = id;
             lblNode->setText(QString::number(id));
+            whoChePwd = WARNDATA;
+            check_pwd();
         }else if(p_mod->getSubWarnRecovery(net, id, sudId) == true &&(dat->data[sudId] == 0)){
             //printf("getSubWarnRecovery1111111111111111111\n");
             //if(dat->data[sudId] == 0){
@@ -1569,6 +1572,12 @@ void Main::check_pwd()
             break;
         case SYSRESET:
             printf("SYSRESET\n");
+            break;
+        case WARNDATA:
+            printf("WARNDATA\n");
+            usleep(1000000);
+            WarnSumOne = 1;
+            p_query->_show();
             break;
 	}
 	whoChePwd = NONE;
