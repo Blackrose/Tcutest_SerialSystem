@@ -27,7 +27,7 @@ public:
 	
 	void toDo();
 	QObject *p_main;
-	QObject *p_putOff;
+    //QObject *p_putOff;
 	QObject *p_nodeStatus;
 	QObject *p_Mset;
 	struct  mod* mo;

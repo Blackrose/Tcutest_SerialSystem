@@ -73,7 +73,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	p_chePwd = new CheckPwd(p_imf, this);	//密码检测
 	proBar->setValue(48);
 	Watchdog::kellLive();//喂狗
-	p_putOff= new PutOff( &sig, this); //脱扣
+    //p_putOff= new PutOff( &sig, this); //脱扣
 	proBar->setValue(56);
 	p_relog	= new Relogin( p_imf, this, this); //重新登录
 	proBar->setValue(64);
@@ -92,7 +92,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 
 
 	sig.p_main = this;
-	sig.p_putOff = p_putOff;
+    //sig.p_putOff = p_putOff;
 	sig.p_nodeStatus = p_nodeStatus;
 
     curNet = 0;		//当前显示的网络 默认0
@@ -128,6 +128,11 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	AruCount = 0;		//延时计数器
 	screenWaitTime = Mater::read() * 60 * 1000;//屏幕保护时间s
     lblWarnSum->setVisible(false);
+    btn_tuo->setVisible(false);
+    lbl_tuo->setVisible(false);
+    btn_try->setVisible(false);
+    lbl_tuo_2->setVisible(false);
+
 	initBtnNode();		//初始化节点按钮
 	initSubNode();		//初始化子节点
 	initConnect();		//连接信号于槽
@@ -1259,8 +1264,8 @@ void Main::slot_help()
 {
     //QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),0,0,800,600);
     //pixmap.save("1.png","png");
-    //p_help->_show();
-    slot_sys_reset();    
+    p_help->_show();
+    //slot_sys_reset();
 }
 
 void Main::slot_change()
@@ -1745,12 +1750,12 @@ void Main::initConnect()
 	connect(&btn_node[i].btn,SIGNAL(clicked()),this,SLOT(slot_btn_node()),Qt::QueuedConnection);//节点按钮
     connect(lblWarnSumOne,SIGNAL(clicked()),this,SLOT(slot_WarnSumOne()));
     connect(lblWarnSumTwo,SIGNAL(clicked()),this,SLOT(slot_WarnSumTwo()));
-	connect(btn_reset,SIGNAL(clicked()),this,SLOT(slot_btn_reset()));//复位
+    connect(btn_reset,SIGNAL(clicked()),this,SLOT(slot_sys_reset()));//复位
 	connect(btn_query,SIGNAL(clicked()),this,SLOT(slot_query()));//查询
 	connect(btn_relogin,SIGNAL(clicked()),this,SLOT(slot_relogin()));//重新登录
 	connect(btn_sysCheck,SIGNAL(clicked()),this,SLOT(slot_check_main()));//系统检测
 	connect(btn_reboot,SIGNAL(clicked()),this,SLOT(slot_reboot()));//系统重启
-    connect(btn_tuo,SIGNAL(clicked()),this,SLOT(slot_reset()));//--脱扣  复位
+    //connect(btn_tuo,SIGNAL(clicked()),this,SLOT(slot_reset()));//--脱扣  复位
 	connect(btn_logout,SIGNAL(clicked()),this,SLOT(slot_logout()));//模块注销
 	connect(btn_try,SIGNAL(clicked()),this,SLOT(slot_btn_try()));//试验
 	connect(btn_sysSet,SIGNAL(clicked()),this,SLOT(slot_sys()));//系统设置
@@ -1784,7 +1789,7 @@ Main::~Main()
 	delete  p_imf;
 	delete 	p_query;	//查询界面指针
 	delete 	p_check;	//系统检测
-	delete 	p_putOff;	//脱扣
+    //delete 	p_putOff;	//脱扣
 	delete 	p_sys;		//系统管理
 	delete 	p_relog;	//重启
 	//delete 	p_rx;	//接收数据
@@ -1808,10 +1813,10 @@ void Main::newErrorTest()
 	{
 		printf("p_check new error\n");
 	}
-	if(p_putOff == NULL)
-	{
-		printf("p_putOff new error\n");
-	}
+//	if(p_putOff == NULL)
+//	{
+//		printf("p_putOff new error\n");
+//	}
 	if( p_sys == NULL)
 	{
 		printf(" p_sys new error\n");
@@ -1988,7 +1993,7 @@ void Main::hideAll()
 void Main::displayAll()
 {
     btn_relogin->setVisible(true);
-    lbl_tuo_2->setVisible(true);
+    //lbl_tuo_2->setVisible(true);
     btn_reset->setVisible(true);
     label_3->setVisible(true);
     lbl_sysCheck->setVisible(true);
@@ -1997,7 +2002,7 @@ void Main::displayAll()
     btn_logout->setVisible(true);
     lbl_sysSet->setVisible(true);
     btn_query->setVisible(true);
-    lbl_tuo->setVisible(true);
+    //lbl_tuo->setVisible(true);
     lbl_logout->setVisible(true);
     btn_try->setVisible(true);
     btn_sysSet->setVisible(true);
@@ -2005,7 +2010,7 @@ void Main::displayAll()
     btn_noSound->setVisible(true);
     lbl_sysCheck_2->setVisible(true);
     lbl_reboot->setVisible(true);
-    btn_tuo->setVisible(true);
+    //btn_tuo->setVisible(true);
     lbl_reboot_3->setVisible(true);
     nodePerent->setVisible(true);
     frame_2->setVisible(true);

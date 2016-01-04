@@ -188,7 +188,7 @@ public :
 	Help            *p_help;
 	Query 		*p_query;	//查询界面指针
 	Check 		*p_check;	//系统检测
-	PutOff 		*p_putOff;	//脱扣
+    //PutOff 		*p_putOff;	//脱扣
 	Sys 		*p_sys;		//系统管理
 	Relogin 	*p_relog;	//重启
 	//RxThread 	*p_rx;		//接收数据
