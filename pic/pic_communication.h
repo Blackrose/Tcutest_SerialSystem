@@ -17,7 +17,7 @@
 
 #define CIRC_LEN        1024
 #define RETRY_TIME_MS   1010//60//30
-#define RETRY_COUNT     2//3
+#define RETRY_COUNT     1//3
 #define PIC_BUF_LEN     16
 
 #define PIC_FREAM_MIN_LEN  10

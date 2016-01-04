@@ -70,10 +70,10 @@
 
 #define NONE	0
 #define SYS	1
-#define TUO	2
+#define RESET 2
 #define LOGOUT	3
 #define REBOOT	4
-#define RESET	5
+#define NODERESET	5
 #define CHECK	6
 #define PRINTER 7
 #define TRY 8
@@ -256,13 +256,14 @@ public slots:
 	void slot_check_main();		//系统检测
 	void slot_reboot();		//系统重启
 	void slot_put_off();		//脱扣
+    void slot_reset();      //主机复位
 	void slot_logout();		//模块注销
 	void slot_btn_try();		//试验
 	void slot_no_sound(); 		//静音
     void slot_start_sound();
     void slot_stop_sound();
 	void slot_btn_node();		//node 按钮
-	void slot_btn_reset();		//主机复位
+    void slot_btn_reset();		//node复位
 	void slot_net();		//单击网络
     void slot_sys_reset();//系统复位
 

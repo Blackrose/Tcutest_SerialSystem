@@ -761,7 +761,9 @@ void Main::reset_timer()
         resetnow = 1;
         if(resetnow == 1){
             //slot_put_off();
+
             //slot_btn_reset();
+
             slot_sys_reset();
             resetnow = 0;
         }
@@ -856,7 +858,11 @@ void Main::powerCheck()
 			onStat = 0;
 			checkError();
 			setBellAndLedStatus();
-			Message::_show(tr("备电短路恢复了！"));
+            if(off == 1){
+                printf("备电断路！");
+            }else{
+                Message::_show(tr("备电短路恢复了！"));
+            }
 			WarnMsg::insertPreMainOk();
 		}
 	}
@@ -880,8 +886,12 @@ void Main::powerCheck()
 		if(offStat == 1)
 		{
 			offStat = 0;
-			checkError();
-			Message::_show(tr("备电断路恢复了！"));
+            checkError();
+            if(on == 1){
+                printf("备电短路！");
+            }else{
+                Message::_show(tr("备电断路恢复了！"));
+            }
 			WarnMsg::insertPreMainOk();
 			setBellAndLedStatus();
 		}
@@ -1110,14 +1120,14 @@ void Main::slot_btn_try()
 
     whoChePwd = TRY;
     p_chePwd->_show();
-    if(curNet >= 0 && curNode > 0 && curNet < 2 && curNode <= BtnNodeNUm)
-    {
-        Pake::send( curNet, curNode, SET_MOD_TRY, NULL, 0);
-    }
-    else
-    {
-        Message::_show(tr("没有选择节点!"));
-    }
+//    if(curNet >= 0 && curNode > 0 && curNet < 2 && curNode <= BtnNodeNUm)
+//    {
+//        Pake::send( curNet, curNode, SET_MOD_TRY, NULL, 0);
+//    }
+//    else
+//    {
+//        Message::_show(tr("没有选择节点!"));
+//    }
 }
 //======== 按键试验回复 ========
 void Main::slot_ans_try()
@@ -1201,7 +1211,7 @@ void Main::slot_relogin()
 }
 void Main::slot_btn_reset()
 {//复位按键 
-	whoChePwd = RESET;
+    whoChePwd = NODERESET;
 	p_chePwd->_show();
 }
 void Main::slot_check_main()
@@ -1227,7 +1237,13 @@ void Main::slot_reboot()
 void Main::slot_put_off()
 {//C型脱扣    
     //frmInput::Instance()->show();
-    whoChePwd = TUO;
+    //whoChePwd = RESET;
+    //p_chePwd->_show();
+}
+
+void Main::slot_reset()
+{
+    whoChePwd = RESET;
     p_chePwd->_show();
 }
 
@@ -1244,7 +1260,7 @@ void Main::slot_help()
     //QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),0,0,800,600);
     //pixmap.save("1.png","png");
     //p_help->_show();
-    slot_sys_reset();
+    slot_sys_reset();    
 }
 
 void Main::slot_change()
@@ -1254,7 +1270,13 @@ void Main::slot_change()
 }
 
 void Main::slot_sys_reset()
-{
+{        
+//    whoChePwd = RESET;
+//    check_pwd();
+//    usleep(5000000);
+//    whoChePwd = NODERESET;
+//    check_pwd();
+
     whoChePwd = SYSRESET;
     p_chePwd->_show();
 }
@@ -1269,7 +1291,7 @@ void Main::check_pwd()
 			p_sys->_show();
 			printf("sys 2\n");
 			break;
-        case TUO:
+        case RESET:
             resetwarn = 1;
             //p_putOff->_show();
             mainpower=0;//
@@ -1406,7 +1428,7 @@ void Main::check_pwd()
 //                Message::_show(tr("没有选择节点!"));
 //            }
             break;
-		case RESET:
+        case NODERESET:
             resetwarn = 1;
             //mainpower=0;//
             //prepower=0;//
@@ -1466,8 +1488,8 @@ void Main::check_pwd()
                  }
 
 			checkError();
-			//checkWarn();
-			powerCheck();
+            //checkWarn();
+            //powerCheck();
 		   // setBellAndLedStatus();
 //            for(int id=1;id<=BtnNodeNUm;id++)
 //            {
@@ -1566,12 +1588,84 @@ void Main::check_pwd()
 			}
 			//powerCheck();
 			//setBellAndLedStatus();
+            Module::TryAllNode(0);
+            Module::TryAllNode(1);
 			break;
         case CHANGE:
             p_nodeStatus->changeaddr();
             break;
         case SYSRESET:
             printf("SYSRESET\n");
+  #if 1
+            resetwarn = 1;//
+            mainpower=0;//
+            prepower=0;//
+            errorLed=0;//
+            warnLed=0;//
+            error=0;//
+            warn=0;//
+            offStat=0;//
+            onStat=0;//
+            preStat=0;//
+            mainStat=0;
+            off=0;//
+            on=0;//
+            preJ4=0;//
+            relayStats=0;//
+            warnRelay = 0;
+            //Led::CtlOff();//
+            setBellAndLedStatus();
+            Led::commLightOff();
+            Led::mainLightOff();//主电源灯
+            Led::preMainLightOff();
+
+            lblNode->setText("");
+            lblXing->setText("");
+            Signals::netCount[0] =  Mater::readNet0Count();
+            Signals::netCount[1] = Mater::readNet1Count();
+            Signals::timer = Mater::readSendTimer();
+            sig.netCurId[0] = 1;
+            sig.netCurId[1] = 1;
+
+
+            if(curNet >= 0 && curNode >= 0 && curNet < 2 && curNode < BtnNodeNUm)
+            {
+                //p_mod->unreg( curNet, curNode);
+                p_mod->reset( curNet, curNode);
+                //setBtnFalg(curNode, ERROR);
+                setBtnFalg(curNode, UNABLE);
+                //lblNode0 -> setText("0");//网络0节点数
+                //lblNode1 -> setText("0");//网络1节点数
+                lblWarnSumOne->setText("0");//网络报警数
+                lblWarnSumTwo->setText("0");//网络故障数
+
+            }
+            else
+            {
+                Message::_show(tr("节点不存在!"));
+            }
+            deleteall();
+            setLblNodSum();
+            showCurrentNet(1);
+            showCurrentNet(0);
+            showCurrentNet(curNet);
+            //usleep(5000000);
+   #endif
+            resetwarn = 1;
+            errorLed=0;//
+            warnLed=0;//
+            error=0;//
+            warn=0;//
+            setBellAndLedStatus();
+
+            for( int i = 0 ; i < 2; i ++)
+            {
+                for(int j = 1 ; j <= BtnNodeNUm; j ++)
+                {
+                    p_mod->setIsReset( i, j, true);
+                }
+            }
+            checkError();
             break;
         case WARNDATA:
             printf("WARNDATA\n");
@@ -1656,7 +1750,7 @@ void Main::initConnect()
 	connect(btn_relogin,SIGNAL(clicked()),this,SLOT(slot_relogin()));//重新登录
 	connect(btn_sysCheck,SIGNAL(clicked()),this,SLOT(slot_check_main()));//系统检测
 	connect(btn_reboot,SIGNAL(clicked()),this,SLOT(slot_reboot()));//系统重启
-    connect(btn_tuo,SIGNAL(clicked()),this,SLOT(slot_put_off()));//--脱扣  复位
+    connect(btn_tuo,SIGNAL(clicked()),this,SLOT(slot_reset()));//--脱扣  复位
 	connect(btn_logout,SIGNAL(clicked()),this,SLOT(slot_logout()));//模块注销
 	connect(btn_try,SIGNAL(clicked()),this,SLOT(slot_btn_try()));//试验
 	connect(btn_sysSet,SIGNAL(clicked()),this,SLOT(slot_sys()));//系统设置
@@ -1666,7 +1760,9 @@ void Main::initConnect()
 	connect(btnNet0,SIGNAL(clicked()),this,SLOT(slot_net()));//单击网络
 	connect(btnNet1,SIGNAL(clicked()),this,SLOT(slot_net()));//单击网络
 	connect(btn_printer, SIGNAL(clicked()), this, SLOT(slot_printer()));
-	connect(btn_help, SIGNAL(clicked()), this, SLOT(slot_help()));
+    connect(btn_help, SIGNAL(clicked()), this, SLOT(slot_help()));
+    //connect(btn_help, SIGNAL(clicked()), this, SLOT(slot_btn_reset()));
+    //connect(btn_help, SIGNAL(clicked()), this, SLOT(slot_reset()));
 	connect(p_timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//显示系统时间
     connect(pic_timer, SIGNAL(timeout()), this, SLOT(pic_handle()));//自动上传
     //connect(pic_rebuild_timer, SIGNAL(timeout()), this, SLOT(pic_rebuild()));//自动上传

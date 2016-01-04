@@ -14,7 +14,7 @@
 #define SAMPLE_NUM 100
 #define TIME_MS 20
 #define POWER_LOW_VOLTAGE       5.0  //need test
-#define POWER_SCHMIDT           0.3
+#define POWER_SCHMIDT           0.5  //0.3
 #define PREPOWER_LOW_VOLTAGE    9.0  //need test
 #define PREPOWER_SCHMIDT        0.5
 #define PREPOWER_FULL_VOLTAGE   12.2//11.8

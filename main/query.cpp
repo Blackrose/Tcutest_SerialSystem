@@ -110,6 +110,17 @@ void Query::_show()
         cmb_node->setCurrentIndex(0);
         cmb_sub_node->setCurrentIndex(0);
     }
+    if(Main::WarnSumOne == 1 || Main::WarnSumOne == 2){
+        dte_begin->setVisible(false);
+        dte_end->setVisible(false);
+        label_6->setVisible(false);
+        label_7->setVisible(false);
+    }else{
+        dte_begin->setVisible(true);
+        dte_end->setVisible(true);
+        label_6->setVisible(true);
+        label_7->setVisible(true);
+    }
 
 	init_parameter();	
 	init_table();	
