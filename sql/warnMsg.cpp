@@ -564,7 +564,8 @@ void WarnMsg::insertNodeRemove(int netId,int nodeId)
 
 void WarnMsg::getNowTable(QString time_bg,QString timer_end, int net,int id, int subId, int big , QSqlQueryModel *model)
 {
-    QString sql="select * from WarnNowMsg where  _warntime > '"+time_bg+"' and _warntime <'"+timer_end+"'";
+    //QString sql="select * from WarnNowMsg where  _warntime > '"+time_bg+"' and _warntime <'"+timer_end+"'";
+    QString sql="select * from WarnNowMsg where  _warntime <'"+timer_end+"'";
     if( net != ALL)
     {
         sql += " and NetId = '"+QString::number(net)+"'";
@@ -588,7 +589,8 @@ void WarnMsg::getNowTable(QString time_bg,QString timer_end, int net,int id, int
 
 void WarnMsg::getNowErrTable(QString time_bg,QString timer_end, int net,int id, int subId, int big , QSqlQueryModel *model)
 {
-    QString sql="select * from ErrNowMsg where  _warntime > '"+time_bg+"' and _warntime <'"+timer_end+"'";
+    //QString sql="select * from ErrNowMsg where  _warntime > '"+time_bg+"' and _warntime <'"+timer_end+"'";
+    QString sql="select * from ErrNowMsg where  _warntime <'"+timer_end+"'";
     if( net != ALL)
     {
         sql += " and NetId = '"+QString::number(net)+"'";
@@ -664,7 +666,8 @@ int WarnMsg::getCount(QString time_bg,QString timer_end,int net,int id, int subI
 
 int WarnMsg::getNowCount(QString time_bg,QString timer_end,int net,int id, int subId)
 {
-    QString sql = "select count(*) from WarnNowMsg where  _warntime > '"+ time_bg +"' and _warntime <'"+timer_end+"'";
+    //QString sql = "select count(*) from WarnNowMsg where  _warntime > '"+ time_bg +"' and _warntime <'"+timer_end+"'";
+    QString sql = "select count(*) from WarnNowMsg where  _warntime <'"+timer_end+"'";
     if( net != ALL)
     {
         sql += " and NetId = '"+QString::number(net)+"'";
@@ -700,7 +703,8 @@ int WarnMsg::geterrCount(QString time_bg,QString timer_end,int net,int id, int s
 
 int WarnMsg::getNowerrCount(QString time_bg,QString timer_end,int net,int id, int subId)
 {
-    QString sql = "select count(*) from ErrNowMsg where  _warntime > '"+ time_bg +"' and _warntime <'"+timer_end+"'";
+    //QString sql = "select count(*) from ErrNowMsg where  _warntime > '"+ time_bg +"' and _warntime <'"+timer_end+"'";
+    QString sql = "select count(*) from ErrNowMsg where  _warntime <'"+timer_end+"'";
     if( net != ALL)
     {
         sql += " and NetId = '"+QString::number(net)+"'";

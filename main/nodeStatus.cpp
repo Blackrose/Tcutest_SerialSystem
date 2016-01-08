@@ -520,6 +520,9 @@ void NodeStatus::slot_reset()
 ====================================*/
 void NodeStatus::slot_try()
 {    //printf("Db::purview==%d\n",Db::purview);
+    imf_my->updateHandler(QWSInputMethod::FocusOut);
+    QWSServer::setCurrentInputMethod(p_imf);
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
      if((curMod == ML4T4) || (curMod == ML8))
      {
          txt0->setEnabled(false);
@@ -536,11 +539,12 @@ void NodeStatus::slot_try()
          txt0->setEnabled(false);
          txt4->setEnabled(false);
      }
-    if( Db::purview == QUERY){
-        Message::_show(tr("请登录后使用!"));
-    }else{
-        Pake::send( curNet, curId, SET_MOD_TRY, NULL, 0);
-    }
+     ((Main*)par)->slot_btn_try();
+//    if( Db::purview == QUERY){
+//        Message::_show(tr("请登录后使用!"));
+//    }else{
+//        Pake::send( curNet, curId, SET_MOD_TRY, NULL, 0);
+//    }
 }
 void NodeStatus::slot_clear()
 {

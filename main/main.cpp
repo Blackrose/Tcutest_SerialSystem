@@ -140,6 +140,13 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	//p_rx->start();	//现在
 	if(NET == 1)
 		showHowNet();
+    if(p_mod->net0All == 0)
+    {
+        showCurrentNet(0);
+    }else if(p_mod->net1All == 0)
+    {
+        showCurrentNet(1);
+    }
 	proBar->setValue(100);
 	Watchdog::kellLive();//喂狗
 
@@ -1138,7 +1145,11 @@ void Main::slot_btn_try()
 void Main::slot_ans_try()
 {
 	struct pake* dat = &Pake::readBuf;
-	Message::_show(tr("网络")+QString::number(dat->net)+tr("节点")+QString::number(dat->id)+tr("试验成功!"));
+    if(p_nodeStatus->isHidden()){
+        printf("zhu jie mian\n");
+    }else{
+        Message::_show(tr("网络")+QString::number(dat->net)+tr("节点")+QString::number(dat->id)+tr("试验成功!"));
+    }
 }
 //=============== 初始化 预警 报警 故障  按钮 ===============
 void Main::initBtnNode()
@@ -1275,13 +1286,7 @@ void Main::slot_change()
 }
 
 void Main::slot_sys_reset()
-{        
-//    whoChePwd = RESET;
-//    check_pwd();
-//    usleep(5000000);
-//    whoChePwd = NODERESET;
-//    check_pwd();
-
+{
     whoChePwd = SYSRESET;
     p_chePwd->_show();
 }
@@ -1422,8 +1427,13 @@ void Main::check_pwd()
             ::system("/etc/init.d/rcS_next");
 			break;
         case TRY:
-            Module::TryAllNode(0);
-            Module::TryAllNode(1);
+            if(p_nodeStatus->isHidden()){
+                Module::TryAllNode(0);
+                Module::TryAllNode(1);
+            }else{
+                Pake::send( curNet, curNode, SET_MOD_TRY, NULL, 0);
+            }
+
 //            if(curNet >= 0 && curNode > 0 && curNet < 2 && curNode <= BtnNodeNUm)
 //            {
 //                Pake::send( curNet, curNode, SET_MOD_TRY, NULL, 0);
@@ -1757,7 +1767,7 @@ void Main::initConnect()
 	connect(btn_reboot,SIGNAL(clicked()),this,SLOT(slot_reboot()));//系统重启
     //connect(btn_tuo,SIGNAL(clicked()),this,SLOT(slot_reset()));//--脱扣  复位
 	connect(btn_logout,SIGNAL(clicked()),this,SLOT(slot_logout()));//模块注销
-	connect(btn_try,SIGNAL(clicked()),this,SLOT(slot_btn_try()));//试验
+    //connect(btn_try,SIGNAL(clicked()),this,SLOT(slot_btn_try()));//试验
 	connect(btn_sysSet,SIGNAL(clicked()),this,SLOT(slot_sys()));//系统设置
 	connect(btn_noSound,SIGNAL(clicked()),this,SLOT(slot_no_sound()));//静音
     connect(btn_noSound,SIGNAL(pressed()),this,SLOT(slot_start_sound()));//静音
@@ -2004,7 +2014,7 @@ void Main::displayAll()
     btn_query->setVisible(true);
     //lbl_tuo->setVisible(true);
     lbl_logout->setVisible(true);
-    btn_try->setVisible(true);
+    //btn_try->setVisible(true);
     btn_sysSet->setVisible(true);
     btn_reboot->setVisible(true);
     btn_noSound->setVisible(true);

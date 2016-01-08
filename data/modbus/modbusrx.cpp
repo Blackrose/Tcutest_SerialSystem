@@ -36,11 +36,11 @@ bool ModbusRx::sendDataToPake(int net,int id)
 						Pake::readBuf.cmd = QUE_MOD_STA;
 						Pake::readBuf.data[0] = RxThread::netData[net].data[3]*256 + RxThread::netData[net].data[4];
 						Pake::readBuf.data[1] = RxThread::netData[net].data[5]*256 + RxThread::netData[net].data[6];
-                        printf("testdata_warn= %x ",Pake::readBuf.data[0]);
-                        printf("\n");
-                        printf("testdata_err= %x ",Pake::readBuf.data[1]);
-                        printf("\n");
-                        printf("net ==%d\n",net);
+//                        printf("testdata_warn= %x ",Pake::readBuf.data[0]);
+//                        printf("\n");
+//                        printf("testdata_err= %x ",Pake::readBuf.data[1]);
+//                        printf("\n");
+//                        printf("net ==%d\n",net);
                         if(net == 0){
                             Signals::Flagerror[0] = Pake::readBuf.data[1];
                         }else{
