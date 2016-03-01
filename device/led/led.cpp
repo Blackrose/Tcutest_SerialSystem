@@ -194,7 +194,7 @@ int Led::readRelay()
         //printf("OnorOff[0]==%x  %d %x\n",OnorOff[0],OnorOff[0],OnorOff[0]>>3 & 0x01);
         if((OnorOff[0]>>3 & 0x01) == 0)
         {
-            printf("OnorOff[0]==%x  %d %x\n",OnorOff[0],OnorOff[0],OnorOff[0]>>3 & 0x01);
+            //printf("OnorOff[0]==%x  %d %x\n",OnorOff[0],OnorOff[0],OnorOff[0]>>3 & 0x01);
             return 1;
         }
         else

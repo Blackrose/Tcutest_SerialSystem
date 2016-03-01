@@ -799,6 +799,7 @@ void Main::powerCheck()
 			mainpower = 0;
 			checkError();
 			WarnMsg::insertMainOk();
+            Message::_show(tr(""));
 			Message::_show(tr("主电正常了！"));
 			setBellAndLedStatus();
 		}
@@ -813,6 +814,7 @@ void Main::powerCheck()
 			error = 1;
 			errorLed = 1;
 			WarnMsg::insertMainNo();
+            Message::_show(tr(""));
 			Message::_show(tr("主电欠压！"));
 			setBellAndLedStatus();
 		}        
@@ -858,6 +860,7 @@ void Main::powerCheck()
 			error = 1;
 			errorLed = 1;
 			WarnMsg::insertPreMainOn();	
+            Message::_show(tr(""));
 			Message::_show(tr("备电短路！"));
 			setBellAndLedStatus();
 		}
@@ -887,7 +890,8 @@ void Main::powerCheck()
 			offStat = 1;
 			error = 1;
 			errorLed = 1;
-			WarnMsg::insertPreMainOff();	
+            WarnMsg::insertPreMainOff();
+            Message::_show(tr(""));
 			Message::_show(tr("备电断路！"));
 			setBellAndLedStatus();
 		}
@@ -902,6 +906,7 @@ void Main::powerCheck()
             if(on == 1){
                 printf("备电短路！");
             }else{
+                Message::_show(tr(""));
                 Message::_show(tr("备电断路恢复了！"));
             }
 			WarnMsg::insertPreMainOk();
@@ -946,13 +951,14 @@ void Main::powerCheck()
             relayStats = 1;
             if(preStat == 0){
                 preStat = 1;
+                Message::_show(tr(""));
                 Message::_show(tr("电池充电!"));
             }
             //printf("on relay\n");
         }else{
             if(mainStat == 1){
                 mainStat = 0;
-                Message::_show(tr("请连接主电源充电!"));
+                //Message::_show(tr("请连接主电源充电!"));
             }
         }
 
@@ -961,7 +967,7 @@ void Main::powerCheck()
         relayStats = 0;
         if(preStat == 1){
             preStat = 0;
-            Message::_show(tr("电池电量充足!"));
+            //Message::_show(tr("电池电量充足!"));
         }
         //printf("off relay when full\n");
     }else {
@@ -1621,7 +1627,7 @@ void Main::check_pwd()
             warn=0;//
             offStat=0;//
             onStat=0;//
-            preStat=0;//
+            //preStat=0;//
             mainStat=0;
             off=0;//
             on=0;//
@@ -1783,7 +1789,7 @@ void Main::initConnect()
     //connect(pic_rebuild_timer, SIGNAL(timeout()), this, SLOT(pic_rebuild()));//自动上传
     connect(s_timer, SIGNAL(timeout()), this, SLOT(sound_timer()));
     //connect(led_timer, SIGNAL(timeout()), this, SLOT(led_slot_timer()));
-    //connect(r_timer,SIGNAL(timeout()),this,SLOT(reset_timer()));//reset
+    //connect(r_timer,SIGNAL(timeout()),this,SLOT(reset_timer()));//reset 系统复位
 }
 void Main::showHowNet()
 {
