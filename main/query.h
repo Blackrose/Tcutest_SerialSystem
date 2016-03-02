@@ -19,7 +19,8 @@
 #include "keyboard/imframe.h"
 #include "sql/warnMsg.h"
 #include "sql/optMsg.h"
-
+#include "bell.h"
+//#include "main.h"
 
 class  Query:public QDialog,public Ui_QueryForm
 {
@@ -35,6 +36,7 @@ public :
 	void _show();
     void setRowColor(int row, QColor color);
 private:
+    QWidget *par1;
 	QTableWidgetItem *qtw;
 	QSqlQueryModel *modelSql;
 	QDateTime	 dte_b_time,
@@ -57,6 +59,7 @@ public slots:
 	void beforePage();
 	void nextPage();
 	void _hide();
+    void slot_clear();
     void mycellEntered(int row, int column);
 };
 #endif

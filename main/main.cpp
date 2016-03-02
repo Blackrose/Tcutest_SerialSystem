@@ -83,7 +83,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 	p_printer = new Printer();
     proBar->setValue(80);
 	p_help = new Help();
-	p_query = new Query();//报警、操作记录查询
+    p_query = new Query(this);//报警、操作记录查询
     proBar->setValue(88);
 	Watchdog::kellLive();//喂狗
     p_nodeStatus = new NodeStatus(p_imf,this);//详细记录的状态
@@ -1108,11 +1108,11 @@ void Main::slot_btn_node()
 //========= 静音 ==========
 void Main::slot_no_sound()
 {
-	error = 0;
-	warn = 0;
-	Bell::error_flag = 0;
-	Bell::warn_flag = 0;
-	Bell::off();
+    error = 0;
+    warn = 0;
+    Bell::error_flag = 0;
+	Bell::warn_flag = 0;   
+	Bell::off();   
     //Led::CtlOn();
 }
 

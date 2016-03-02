@@ -14,7 +14,7 @@
 
 Query::Query(QWidget *parent): QDialog(parent),Ui_QueryForm()
 {
-	setupUi(this);
+    setupUi(this);par1 = parent;
 	setAttribute(Qt::WA_DeleteOnClose);
 	countNumber = 0; 	//有几页
 	currentNumber = 0; 	//当前页
@@ -34,6 +34,7 @@ Query::Query(QWidget *parent): QDialog(parent),Ui_QueryForm()
     defaultBkColor = QColor(215, 245, 255);   //默认背景色
     previousColorRow = -1;
 
+    connect(btn_no_bell, SIGNAL(clicked()), this, SLOT(slot_clear()));
     connect(btn_close, SIGNAL(clicked()), this, SLOT(_hide()));
 	connect(btn_query, SIGNAL(clicked()), this, SLOT(ok()));
 	connect(btnBefore, SIGNAL(clicked()), this, SLOT(beforePage()));
@@ -115,17 +116,27 @@ void Query::_show()
         dte_end->setVisible(false);
         label_6->setVisible(false);
         label_7->setVisible(false);
+        btn_no_bell->setVisible(true);
     }else{
         dte_begin->setVisible(true);
         dte_end->setVisible(true);
         label_6->setVisible(true);
         label_7->setVisible(true);
+        btn_no_bell->setVisible(false);
     }
 
 	init_parameter();	
 	init_table();	
 	show();	
 }
+
+void Query::slot_clear()
+{
+//    QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),0,0,800,600);
+//    pixmap.save("7.png","png");
+    ((Main*)par1)->slot_no_sound();
+}
+
 void Query::_hide()
 {
 	tableWidget->clearSelection();    
