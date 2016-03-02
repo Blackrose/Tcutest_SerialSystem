@@ -255,7 +255,7 @@ void Signals::toDo()
                     && ((Pake::readBuf.data[0] >> i) == 0)){
                     if(Main::resetwarn == 1){
                         Pake::send(Pake::readBuf.net,Pake::readBuf.id, QUE_DEV_WAR, NULL, 0);
-                        Main::resetwarn = 0;
+                        Main::resetwarn = 0;printf("resetwarn!!!!!!!!!");
                     }
                     printf("getSubWarnRecovery\n");
                     break;

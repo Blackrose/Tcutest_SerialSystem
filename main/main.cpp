@@ -315,6 +315,8 @@ void Main::slot_warn()
             //printf("getSubWarnRecovery1111111111111111111\n");
             //if(dat->data[sudId] == 0){
                  //printf("getSubWarnRecovery222222222222222222222222\n");
+            printf("resetwarn====%d\n",resetwarn);
+            if(resetwarn == 1){
                  is = p_mod->getWhatWarn( net, id, sudId);
                  if( is == 2)
                  {//漏电
@@ -340,6 +342,8 @@ void Main::slot_warn()
              //显示模块节点号
              curNode = id;
              lblNode->setText(QString::number(id));
+             resetwarn = 0;
+            }
         }
         else if (p_mod->getSubError(net, id, sudId) == false && (Signals::Flagerror[net] >> sudId & 0x01)) {
             if (p_mod -> getSubWarn( net, id, sudId) == true && dat->data[sudId] > 0){
