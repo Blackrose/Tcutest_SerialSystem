@@ -132,8 +132,8 @@ void Query::_show()
 
 void Query::slot_clear()
 {
-//    QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),0,0,800,600);
-//    pixmap.save("7.png","png");
+    QPixmap pixmap = QPixmap::grabWindow(QApplication::desktop()->winId(),0,0,800,600);
+    pixmap.save("7.png","png");
     ((Main*)par1)->slot_no_sound();
 }
 
