@@ -274,7 +274,7 @@ void Signals::toDo()
                     }
 					break;
                 }else if(Module::getSubErrorRecovery(Pake::readBuf.net, Pake::readBuf.id , i) == true
-                    &&((Signals::Flagerror[Pake::readBuf.net] >> i) == 0)&& ((Pake::readBuf.data[0] >> i) == 0)){
+                    &&((Signals::Flagerror[Pake::readBuf.net] >> i & 0x01) == 0)&& ((Pake::readBuf.data[0] >> i) == 0)){
                     //Message::_show("故障恢复！");                    
                     Pake::send(Pake::readBuf.net,Pake::readBuf.id, QUE_DEV_WAR, NULL, 0);
                     break;
