@@ -1805,7 +1805,7 @@ void Main::initConnect()
     //connect(pic_rebuild_timer, SIGNAL(timeout()), this, SLOT(pic_rebuild()));//自动上传
     connect(s_timer, SIGNAL(timeout()), this, SLOT(sound_timer()));
     //connect(led_timer, SIGNAL(timeout()), this, SLOT(led_slot_timer()));
-    //connect(r_timer,SIGNAL(timeout()),this,SLOT(reset_timer()));//reset 系统复位
+    connect(r_timer,SIGNAL(timeout()),this,SLOT(reset_timer()));//reset 系统复位
 }
 void Main::showHowNet()
 {

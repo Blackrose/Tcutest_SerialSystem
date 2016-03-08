@@ -117,7 +117,7 @@ void Query::_show()
         label_6->setVisible(false);
         label_7->setVisible(false);
         btn_no_bell->setVisible(false);
-        //btn_no_bell->setVisible(true);
+        btn_no_bell->setVisible(true);
     }else{
         dte_begin->setVisible(true);
         dte_end->setVisible(true);

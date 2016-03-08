@@ -31,6 +31,7 @@ Check::~Check()
 }
 void Check::_show()
 {	
+    btn_check->setVisible(false);
 	show();
 	start();
 	setGeometry(185, 145, 290, 190);
