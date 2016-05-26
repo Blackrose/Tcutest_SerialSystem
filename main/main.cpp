@@ -3,33 +3,64 @@
 =============================*/
 #include "main.h"
 #include "startUpFrm.h"
-#include "modbustx.h"
-#include "modbusrx.h"
-#include "Mset.h"
-#include "can.h"
-#include "pic/pic_communication.h"
-
-int Main::screenWaitTime = 600; //屏幕保护时间s
-int Main::whoChePwd = NONE;
-int Main::com_led = 1;
-int Main::flagnosound = 0;
-int Main::flagreset = 0;
-int Main::mainpower = 0;
-int Main::prepower = 0;
-int Main::onStat = 0;
-int Main::offStat = 0;
-int Main::WarnSumOne = 0;
-int Main::resetwarn = 0;
-int Main::resetnow = 0;
-//int Main::warndata = 0;
+#include "secondwindow.h"
+#include "ui/charging_monitoring.h"
+#include "ui/equipment_information.h"
+#include "ui/car_information.h"
+#include <QLabel>
+#include <QMovie>
 
 Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 {
     setupUi(this);
-        setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
-	setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存        
-    p_imf = new IMFrame();	//键盘
-	proBar->setValue(8);
+        //setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
+    QPalette palette;
+    palette.setBrush(QPalette::Background, QBrush(QPixmap(":/img/images/Main.png")));
+    this->setPalette(palette);
+    setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存
+    //p_imf = new IMFrame();	//键盘
+#if 1
+    //w_second = new Secondwindow;
+
+    proBar->setValue(8);
+    usleep(100000);
+    proBar->setValue(16);
+    usleep(100000);
+    proBar->setValue(24);
+    usleep(100000);
+    proBar->setValue(32);
+    usleep(100000);
+    proBar->setValue(40);
+    usleep(100000);
+    proBar->setValue(48);
+    usleep(100000);
+    proBar->setValue(56);
+    usleep(100000);
+    proBar->setValue(64);
+    usleep(100000);
+    proBar->setValue(72);
+    usleep(100000);
+    proBar->setValue(80);
+    usleep(100000);
+    proBar->setValue(88);
+    usleep(100000);
+    proBar->setValue(96);
+    usleep(100000);
+    proBar->setValue(100);
+    usleep(100000);
+    show();
+
+    connect(second,SIGNAL(clicked()),this,SLOT(secondwindow()));//查询
+
+#endif
+
+    QMovie*movie=new QMovie(":/img/images/gif.gif");
+    main_gif->setMovie(movie);
+    movie->start();
+
+
+
+ #if 0
 	Message::static_msg = new Message();
 
 	Print::init();
@@ -170,9 +201,31 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
     r_timer->start(50);
 
     newErrorTest();
+#endif
 	printf("init Main ok\n");
 
 }
+
+void Main::secondwindow()
+{
+    //w_second->show();
+#if 0
+    Secondwindow *w_second = new Secondwindow;
+    w_second->show();
+#endif
+    Charging_monitoring *w_charging_monitoring = new Charging_monitoring;
+    w_charging_monitoring->show();
+
+//    Equipment_information *w_equipment_information = new Equipment_information;
+//    w_equipment_information->show();
+
+//    Car_information *w_car_information = new Car_information;
+//    w_car_information->show();
+}
+
+
+#if 0
+
 /*void Main::set_pwd(int a)
 {
 	whoChePwd=a;
@@ -2159,4 +2212,12 @@ void Main::LCDmain()
  {
     //QPalette bgdefaultPalette = this->palette();
     //printf("colorcount == %d  now enter paintEvent\n",colorcount);
+ }
+
+#endif
+
+
+ Main::~Main()
+ {
+     printf("exit Main\n");
  }
