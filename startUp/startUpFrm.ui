@@ -23,7 +23,7 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(91, 91, 91);ss</string>
+   <string notr="true">background-color: rgb(91, 91, 91);</string>
   </property>
   <widget class="QProgressBar" name="progressBar">
    <property name="geometry">

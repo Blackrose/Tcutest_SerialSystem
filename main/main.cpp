@@ -4,6 +4,9 @@
 #include "main.h"
 #include "startUpFrm.h"
 #include "secondwindow.h"
+#include "test_manual.h"
+#include "test_auto.h"
+#include "test_manual.h"
 #include "ui/charging_monitoring.h"
 #include "ui/equipment_information.h"
 #include "ui/car_information.h"
@@ -50,14 +53,17 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
     usleep(100000);
     show();
 
-    connect(second,SIGNAL(clicked()),this,SLOT(secondwindow()));//查询
-
+    //connect(auto_but,SIGNAL(clicked()),this,SLOT(secondwindow()));//
+    connect(auto_but,SIGNAL(clicked()),this,SLOT(autotestwindow()));//自动测试
+    connect(manual_but,SIGNAL(clicked()),this,SLOT(manualtestwindow()));//手动测试
+    //connect(back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK
 #endif
 
+#if 0
     QMovie*movie=new QMovie(":/img/images/gif.gif");
     main_gif->setMovie(movie);
     movie->start();
-
+#endif
 
 
  #if 0
@@ -209,20 +215,34 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 void Main::secondwindow()
 {
     //w_second->show();
-#if 0
+
+#if 1
+    test_Manual *w_second = new test_Manual;
+    w_second->show();
+#else
     Secondwindow *w_second = new Secondwindow;
     w_second->show();
-#endif
+
     Charging_monitoring *w_charging_monitoring = new Charging_monitoring;
     w_charging_monitoring->show();
-
+#endif
 //    Equipment_information *w_equipment_information = new Equipment_information;
 //    w_equipment_information->show();
 
 //    Car_information *w_car_information = new Car_information;
 //    w_car_information->show();
 }
+void Main::autotestwindow()
+{
+    test_auto *w_autotest = new test_auto;
+    w_autotest->show();
+}
 
+void Main::manualtestwindow()
+{
+    test_Manual *w_manualtest = new test_Manual;
+    w_manualtest->show();
+}
 
 #if 0
 

@@ -61,8 +61,9 @@ public :
         virtual ~Main();
         //Secondwindow  *w_second;
 public slots:
-       void secondwindow();
-
+        void secondwindow();
+        void autotestwindow();
+        void manualtestwindow();
 public:
 
 

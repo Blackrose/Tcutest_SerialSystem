@@ -18,6 +18,7 @@ Secondwindow::Secondwindow(QMainWindow *parent) : QMainWindow(parent), Ui_Second
     main_gif->setMovie(movie);
     movie->start();
 
+    connect(back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK
     printf("init Secondwindow ok\n");
 }
 

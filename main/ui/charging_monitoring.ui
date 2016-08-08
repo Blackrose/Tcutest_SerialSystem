@@ -45,7 +45,7 @@
   <widget class="QLabel" name="full_charge">
    <property name="geometry">
     <rect>
-     <x>350</x>
+     <x>410</x>
      <y>130</y>
      <width>171</width>
      <height>61</height>
@@ -346,7 +346,7 @@
     </font>
    </property>
    <property name="text">
-    <string>100</string>
+    <string>120</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="bat_power">
@@ -366,7 +366,7 @@
     </font>
    </property>
    <property name="text">
-    <string>100</string>
+    <string>60</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="bat_vol">
@@ -386,7 +386,7 @@
     </font>
    </property>
    <property name="text">
-    <string>100</string>
+    <string>500</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="bat_status">
@@ -466,7 +466,7 @@
     </font>
    </property>
    <property name="text">
-    <string>100</string>
+    <string>0</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="bat_timelife">
@@ -486,7 +486,191 @@
     </font>
    </property>
    <property name="text">
-    <string>100</string>
+    <string>60</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="bat_electricity1">
+   <property name="geometry">
+    <rect>
+     <x>266</x>
+     <y>265</y>
+     <width>65</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border :1px ;background-color:rgba(255, 255, 255, 0)</string>
+   </property>
+   <property name="text">
+    <string>120</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="bat_electricity2">
+   <property name="geometry">
+    <rect>
+     <x>335</x>
+     <y>265</y>
+     <width>65</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border :1px ;background-color:rgba(255, 255, 255, 0)</string>
+   </property>
+   <property name="text">
+    <string>120</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="bat_electricity1_3">
+   <property name="geometry">
+    <rect>
+     <x>405</x>
+     <y>265</y>
+     <width>65</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border :1px ;background-color:rgba(255, 255, 255, 0)</string>
+   </property>
+   <property name="text">
+    <string>120</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="bat_electricity1_4">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>265</y>
+     <width>65</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border :1px ;background-color:rgba(255, 255, 255, 0)</string>
+   </property>
+   <property name="text">
+    <string>120</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="elec_prices4">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>300</y>
+     <width>65</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border :1px ;background-color:rgba(255, 255, 255, 0)</string>
+   </property>
+   <property name="text">
+    <string>1.3</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="elec_prices3">
+   <property name="geometry">
+    <rect>
+     <x>405</x>
+     <y>300</y>
+     <width>65</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border :1px ;background-color:rgba(255, 255, 255, 0)</string>
+   </property>
+   <property name="text">
+    <string>1.0</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="elec_prices1">
+   <property name="geometry">
+    <rect>
+     <x>266</x>
+     <y>300</y>
+     <width>65</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border :1px ;background-color:rgba(255, 255, 255, 0)</string>
+   </property>
+   <property name="text">
+    <string>1.2</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="elec_prices2">
+   <property name="geometry">
+    <rect>
+     <x>335</x>
+     <y>300</y>
+     <width>65</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border :1px ;background-color:rgba(255, 255, 255, 0)</string>
+   </property>
+   <property name="text">
+    <string>1.5</string>
    </property>
   </widget>
  </widget>
