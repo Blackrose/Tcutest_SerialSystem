@@ -10,7 +10,7 @@
 StartUp::StartUp(QWidget *parent): QWidget(parent),Ui_startUpFrm()
 {
 	setupUi(this);
-        //setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
+        setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
 	connect(&timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//显示系统时间
 	setAttribute(Qt::WA_DeleteOnClose);
     //Print::init();
@@ -18,9 +18,9 @@ StartUp::StartUp(QWidget *parent): QWidget(parent),Ui_startUpFrm()
     show();
 	myFlag = 0;
 
-//    QMovie*movie=new QMovie(":/img/images/gif.gif");//("url(:/img/images/gif.gif)");//:/display/Resources/loading.gif
-//    main_gif->setMovie(movie);
-//    movie->start();
+    //QMovie*movie=new QMovie(":/img/images/gif.gif");//("url(:/img/images/gif.gif)");//:/display/Resources/loading.gif
+    //main_gif->setMovie(movie);
+    //movie->start();
 	printf("init StartUp ok\n");
 }
 StartUp::~StartUp()

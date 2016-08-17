@@ -10,7 +10,11 @@ Secondwindow::Secondwindow(QMainWindow *parent) : QMainWindow(parent), Ui_Second
     setupUi(this);
     //par = parent;
     //setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint);//窗口没有没有边框  是 一个模太对话框
-   // connect(btn_close,SIGNAL(clicked()),this,SLOT(hide()));
+    setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
+    //connect(btn_close,SIGNAL(clicked()),this,SLOT(hide()));
+    QPalette palette;
+    palette.setBrush(QPalette::Background, QBrush(QPixmap(":/img/images/Main.png")));
+    this->setPalette(palette);
     setAttribute(Qt::WA_DeleteOnClose);
 
 
@@ -30,4 +34,7 @@ void Secondwindow::_show()
 {
     show();
 }
-
+void Secondwindow::slot_hide()
+{
+    hide();
+}

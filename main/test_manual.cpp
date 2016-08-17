@@ -7,7 +7,7 @@ test_Manual::test_Manual(QWidget *parent) :
     ui(new Ui::test_Manual)
 {
     ui->setupUi(this);
-    //setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
+    setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(QPixmap(":/img/images/Main.png")));
     this->setPalette(palette);
@@ -15,8 +15,8 @@ test_Manual::test_Manual(QWidget *parent) :
 
     connect(ui->back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK
     connect(ui->Card_but,SIGNAL(clicked()),this,SLOT(slot_card()));
-    connect(ui->Emeter_but,SIGNAL(clicked()),this,SLOT(slot_card()));
-    connect(ui->Canbus_but,SIGNAL(clicked()),this,SLOT(slot_card()));
+    connect(ui->Emeter_but,SIGNAL(clicked()),this,SLOT(slot_emter()));
+    connect(ui->Canbus_but,SIGNAL(clicked()),this,SLOT(slot_canbus()));
 }
 
 test_Manual::~test_Manual()
@@ -33,4 +33,13 @@ void test_Manual::slot_card()
 {
     CardWindow *w_card = new CardWindow(this);
     w_card->show();
+}
+void test_Manual::slot_emter()
+{
+    CardWindow *w_emter = new CardWindow(this);
+    w_emter->show();
+}
+void test_Manual::slot_canbus()
+{
+
 }

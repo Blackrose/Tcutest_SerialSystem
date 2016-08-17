@@ -24,8 +24,8 @@ CardWindow::CardWindow(QWidget *parent) :QMainWindow(parent),ui(new Ui::CardWind
     ::close(pd);
 
     ui->setupUi(this);
-    //setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
-   // setWindowFlags(Qt::WindowCloseButtonHint);
+    setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
+    setWindowFlags(Qt::WindowCloseButtonHint);
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(QPixmap(":/img/images/Main.png")));
     this->setPalette(palette);

@@ -17,7 +17,7 @@ public :
     void _show();
 
 public slots:
-
+    void slot_hide();
 
 };
 

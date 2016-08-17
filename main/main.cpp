@@ -16,7 +16,7 @@
 Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 {
     setupUi(this);
-        //setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
+        setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(QPixmap(":/img/images/Main.png")));
     this->setPalette(palette);
@@ -53,18 +53,17 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
     usleep(100000);
     show();
 
-    //connect(auto_but,SIGNAL(clicked()),this,SLOT(secondwindow()));//
-    connect(auto_but,SIGNAL(clicked()),this,SLOT(autotestwindow()));//自动测试
+    connect(auto_but,SIGNAL(clicked()),this,SLOT(secondwindow()));//
+    //connect(auto_but,SIGNAL(clicked()),this,SLOT(autotestwindow()));//自动测试
     connect(manual_but,SIGNAL(clicked()),this,SLOT(manualtestwindow()));//手动测试
     //connect(back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK
 #endif
 
-#if 0
+#if 1
     QMovie*movie=new QMovie(":/img/images/gif.gif");
     main_gif->setMovie(movie);
     movie->start();
 #endif
-
 
  #if 0
 	Message::static_msg = new Message();
@@ -216,15 +215,15 @@ void Main::secondwindow()
 {
     //w_second->show();
 
-#if 1
+#if 0
     test_Manual *w_second = new test_Manual;
     w_second->show();
 #else
     Secondwindow *w_second = new Secondwindow;
     w_second->show();
 
-    Charging_monitoring *w_charging_monitoring = new Charging_monitoring;
-    w_charging_monitoring->show();
+    //Charging_monitoring *w_charging_monitoring = new Charging_monitoring;
+    //w_charging_monitoring->show();
 #endif
 //    Equipment_information *w_equipment_information = new Equipment_information;
 //    w_equipment_information->show();

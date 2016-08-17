@@ -53,8 +53,8 @@
   <widget class="QPushButton" name="back_but">
    <property name="geometry">
     <rect>
-     <x>650</x>
-     <y>410</y>
+     <x>630</x>
+     <y>380</y>
      <width>99</width>
      <height>41</height>
     </rect>
@@ -153,7 +153,7 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-image: url(:/img/serial_logo.png)</string>
+    <string notr="true">background-image: url(:/img/images/serial_logo.png)</string>
    </property>
    <property name="text">
     <string/>
@@ -184,7 +184,7 @@
     <string notr="true">background-image:url()</string>
    </property>
    <property name="text">
-    <string>电能表</string>
+    <string>Can通讯</string>
    </property>
   </widget>
  </widget>

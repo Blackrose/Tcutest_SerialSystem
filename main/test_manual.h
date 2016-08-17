@@ -21,6 +21,8 @@ private:
 public slots:
     void slot_hide();
     void slot_card();
+    void slot_emter();
+    void slot_canbus();
 };
 
 #endif // TEST_MANUAL_H

@@ -6,7 +6,7 @@ test_auto::test_auto(QWidget *parent) :
     ui(new Ui::test_auto)
 {
     ui->setupUi(this);
-    //setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
+    setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
     QPalette palette;
     palette.setBrush(QPalette::Background, QBrush(QPixmap(":/img/images/Main.png")));
     this->setPalette(palette);

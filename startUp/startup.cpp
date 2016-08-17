@@ -21,7 +21,7 @@ bool MyEvent::eventFilter(QObject *obj, QEvent *event)
 
 int main(int argc,char **argv)
 {
-    //QApplication::addLibraryPath("./plugins");
+    QApplication::addLibraryPath("./plugins");
 	QApplication app(argc,argv);
 
 	MyEvent *my_event = new MyEvent;
