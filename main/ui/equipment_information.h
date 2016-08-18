@@ -17,6 +17,11 @@ public:
 
 private:
     Ui::Equipment_information *ui;
+
+public slots:
+    void change_moni();
+    void change_batinf();
+    void change_billinf();
 };
 
 #endif // EQUIPMENT_INFORMATION_H

@@ -1,12 +1,12 @@
-#include "billing_info.h"
-#include "ui_billing_info.h"
+#include "bat_information.h"
+#include "ui_bat_information.h"
 #include "charging_monitoring.h"
 #include "equipment_information.h"
-#include "bat_information.h"
+#include "billing_info.h"
 
-Billing_info::Billing_info(QWidget *parent) :
+bat_information::bat_information(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::Billing_info)
+    ui(new Ui::bat_information)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
@@ -14,28 +14,28 @@ Billing_info::Billing_info(QWidget *parent) :
 
     connect(ui->change_moni_but,SIGNAL(clicked()),this,SLOT(change_moni()));//
     connect(ui->change_equ_but,SIGNAL(clicked()),this,SLOT(change_equinf()));//
-    connect(ui->change_batinf_but,SIGNAL(clicked()),this,SLOT(change_batinf()));//
+    connect(ui->change_billinf_but,SIGNAL(clicked()),this,SLOT(change_billinf()));//
 }
 
-void Billing_info::change_moni()
+void bat_information::change_moni()
 {
     Charging_monitoring *w_change_moni = new Charging_monitoring;
     w_change_moni->show();
 }
 
-void Billing_info::change_equinf()
+void bat_information::change_equinf()
 {
     Equipment_information *w_equipment_information = new Equipment_information;
     w_equipment_information->show();
 }
 
-void Billing_info::change_batinf()
+void bat_information::change_billinf()
 {
-    bat_information *w_bat_information = new bat_information;
-    w_bat_information->show();
+    Billing_info *w_billing_information = new Billing_info;
+    w_billing_information->show();
 }
 
-Billing_info::~Billing_info()
+bat_information::~bat_information()
 {
     delete ui;
 }

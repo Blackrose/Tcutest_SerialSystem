@@ -9,7 +9,6 @@
 #include "test_manual.h"
 #include "ui/charging_monitoring.h"
 #include "ui/equipment_information.h"
-#include "ui/car_information.h"
 #include <QLabel>
 #include <QMovie>
 
@@ -218,12 +217,12 @@ void Main::secondwindow()
 #if 0
     test_Manual *w_second = new test_Manual;
     w_second->show();
-#else
+
     Secondwindow *w_second = new Secondwindow;
     w_second->show();
-
-    //Charging_monitoring *w_charging_monitoring = new Charging_monitoring;
-    //w_charging_monitoring->show();
+#else
+    Charging_monitoring *w_charging_monitoring = new Charging_monitoring;
+    w_charging_monitoring->show();
 #endif
 //    Equipment_information *w_equipment_information = new Equipment_information;
 //    w_equipment_information->show();

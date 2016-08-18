@@ -26,7 +26,7 @@
     <bool>false</bool>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-image:url(:/img/images/E2new.png)</string>
+    <string notr="true">border-image:url(:/img/images/31.png)</string>
    </property>
    <property name="text">
     <string/>
@@ -41,24 +41,8 @@
      <height>81</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true">background: transparent;</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="flat">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="change_end_but">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>360</y>
-     <width>98</width>
-     <height>81</height>
-    </rect>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">background: transparent;</string>
@@ -70,7 +54,7 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="change_carinf_but">
+  <widget class="QPushButton" name="change_batinf_but">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -78,6 +62,9 @@
      <width>98</width>
      <height>81</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">background: transparent;</string>
@@ -92,11 +79,14 @@
   <widget class="QPushButton" name="change_moni_but">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>100</y>
+     <x>28</x>
+     <y>98</y>
      <width>98</width>
      <height>81</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">background: transparent;</string>
@@ -106,6 +96,148 @@
    </property>
    <property name="flat">
     <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="change_billinf_but">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>360</y>
+     <width>98</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: transparent;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="charger_sn">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>115</y>
+     <width>284</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>01010101</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="charger_interface_ID">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>166</y>
+     <width>284</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="charger_status">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>248</y>
+     <width>140</width>
+     <height>38</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>待机</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="charge_power">
+   <property name="geometry">
+    <rect>
+     <x>600</x>
+     <y>248</y>
+     <width>140</width>
+     <height>38</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>60</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="charge_current">
+   <property name="geometry">
+    <rect>
+     <x>600</x>
+     <y>304</y>
+     <width>140</width>
+     <height>38</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>120</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="charge_vol">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>304</y>
+     <width>140</width>
+     <height>38</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>500</string>
    </property>
   </widget>
  </widget>

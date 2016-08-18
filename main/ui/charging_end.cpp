@@ -6,6 +6,7 @@ charging_end::charging_end(QWidget *parent) :
     ui(new Ui::charging_end)
 {
     ui->setupUi(this);
+    setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
 }
 
 charging_end::~charging_end()

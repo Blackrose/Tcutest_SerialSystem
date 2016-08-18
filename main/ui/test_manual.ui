@@ -97,7 +97,7 @@
   <widget class="QPushButton" name="Emeter_but">
    <property name="geometry">
     <rect>
-     <x>190</x>
+     <x>200</x>
      <y>120</y>
      <width>81</width>
      <height>51</height>

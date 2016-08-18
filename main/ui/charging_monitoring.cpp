@@ -1,15 +1,18 @@
 #include "charging_monitoring.h"
 #include "ui_charging_monitoring.h"
 #include "equipment_information.h"
-#include "car_information.h"
+#include "bat_information.h"
+#include "billing_info.h"
 #include "charging_end.h"
+#include "main.h"
 #include <QLabel>
 #include <stdio.h>
 
 Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(new Ui::Charging_monitoring)
 {
     ui->setupUi(this);
-
+    setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
+    setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存
 
     ui->full_charge_but->setVisible(true);
     ui->charge_7but->setVisible(false);
@@ -23,9 +26,12 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
     connect(ui->soc_set,SIGNAL(clicked()),this,SLOT(set_soc()));//查询
     //connect(ui->change_moni_but,SIGNAL(clicked()),this-,SLOT(change_moni());
     connect(ui->change_equ_but,SIGNAL(clicked()),this,SLOT(change_equinf()));//
-    connect(ui->change_carinf_but,SIGNAL(clicked()),this,SLOT(change_carinf()));//
-    connect(ui->change_end_but,SIGNAL(clicked()),this,SLOT(change_end()));//
-
+    connect(ui->change_batinf_but,SIGNAL(clicked()),this,SLOT(change_batinf()));//
+    //connect(ui->change_carinf_but,SIGNAL(clicked()),this,SLOT(change_carinf()));//
+    connect(ui->change_billinf_but,SIGNAL(clicked()),this,SLOT(change_billinf()));//
+    //connect(ui->change_end_but,SIGNAL(clicked()),this,SLOT(change_end()));//
+    //connect(ui->soc_stop,SIGNAL(clicked()),this,SLOT(Charging_monitoring_hide()));
+    //connect(ui->soc_stop,SIGNAL(clicked()),this,SLOT(change_main()));
 #if 0
     if(bat_soc_int<100){//90
         ui->full_charge_but->setVisible(false);
@@ -149,17 +155,35 @@ void Charging_monitoring::change_equinf()
     w_equipment_information->show();
 }
 
-void Charging_monitoring::change_carinf()
+void Charging_monitoring::change_batinf()
 {
-    Car_information *w_car_information = new Car_information;
-    w_car_information->show();
+    bat_information *w_bat_information = new bat_information;
+    w_bat_information->show();
+}
+
+void Charging_monitoring::change_billinf()
+{
+    Billing_info *w_billing_information = new Billing_info;
+    w_billing_information->show();
 }
 
 void Charging_monitoring::change_end()
-{
+{    
     charging_end *w_charging_end = new charging_end;
     w_charging_end->show();
 }
+
+void Charging_monitoring::Charging_monitoring_hide()
+{
+    hide();
+}
+
+void Charging_monitoring::change_main()// error
+{
+    //Main *w_change_main = new Main();
+    //w_change_main->show();
+}
+
 Charging_monitoring::~Charging_monitoring()
 {
     delete ui;

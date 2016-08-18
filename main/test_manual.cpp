@@ -1,6 +1,8 @@
 #include "test_manual.h"
 #include "ui_test_manual.h"
 #include "Card_window.h"
+#include "connect_charge.h"
+#include "equipment_testing.h"
 
 test_Manual::test_Manual(QWidget *parent) :
     QWidget(parent),
@@ -41,5 +43,10 @@ void test_Manual::slot_emter()
 }
 void test_Manual::slot_canbus()
 {
+    //connect_charge *w_connect = new connect_charge(this);
+    //w_connect->show();
+
+    equipment_testing *w_equ_testing = new equipment_testing(this);
+    w_equ_testing->show();
 
 }

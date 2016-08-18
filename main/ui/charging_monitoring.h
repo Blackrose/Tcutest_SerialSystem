@@ -2,6 +2,7 @@
 #define CHARGING_MONITORING_H
 
 #include <QWidget>
+#include <QProgressBar>
 
 namespace Ui {
 class Charging_monitoring;
@@ -23,8 +24,11 @@ private:
      void set_soc();
      void change_moni();
      void change_equinf();
-     void change_carinf();
+     void change_batinf();
+     void change_billinf();
      void change_end();
+     void Charging_monitoring_hide();
+     void change_main();
 };
 
 #endif // CHARGING_MONITORING_H

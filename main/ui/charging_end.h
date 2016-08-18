@@ -17,6 +17,8 @@ public:
 
 private:
     Ui::charging_end *ui;
+public slots:
+
 };
 
 #endif // CHARGING_END_H

@@ -17,6 +17,10 @@ public:
 
 private:
     Ui::Billing_info *ui;
+public slots:
+    void change_moni();
+    void change_equinf();
+    void change_batinf();
 };
 
 #endif // BILLING_INFO_H
