@@ -43,10 +43,10 @@ void test_Manual::slot_emter()
 }
 void test_Manual::slot_canbus()
 {
-    //connect_charge *w_connect = new connect_charge(this);
-    //w_connect->show();
+    connect_charge *w_connect = new connect_charge(this);
+    w_connect->show();
 
-    equipment_testing *w_equ_testing = new equipment_testing(this);
-    w_equ_testing->show();
+    //equipment_testing *w_equ_testing = new equipment_testing(this);
+    //w_equ_testing->show();
 
 }

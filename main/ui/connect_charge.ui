@@ -28,6 +28,18 @@
      <height>480</height>
     </rect>
    </property>
+   <property name="cursor">
+    <cursorShape>IBeamCursor</cursorShape>
+   </property>
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::StrongFocus</enum>
+   </property>
+   <property name="acceptDrops">
+    <bool>true</bool>
+   </property>
    <property name="autoFillBackground">
     <bool>false</bool>
    </property>
@@ -73,55 +85,20 @@
      <bold>true</bold>
     </font>
    </property>
+   <property name="cursor">
+    <cursorShape>ArrowCursor</cursorShape>
+   </property>
+   <property name="mouseTracking">
+    <bool>false</bool>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="acceptDrops">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>12.10</string>
-   </property>
-  </widget>
-  <widget class="QDateTimeEdit" name="dateTimeEdit">
-   <property name="geometry">
-    <rect>
-     <x>220</x>
-     <y>430</y>
-     <width>194</width>
-     <height>27</height>
-    </rect>
-   </property>
-   <property name="dateTime">
-    <datetime>
-     <hour>16</hour>
-     <minute>0</minute>
-     <second>0</second>
-     <year>2016</year>
-     <month>8</month>
-     <day>17</day>
-    </datetime>
-   </property>
-   <property name="date">
-    <date>
-     <year>2016</year>
-     <month>8</month>
-     <day>17</day>
-    </date>
-   </property>
-   <property name="time">
-    <time>
-     <hour>16</hour>
-     <minute>0</minute>
-     <second>0</second>
-    </time>
-   </property>
-   <property name="minimumTime">
-    <time>
-     <hour>16</hour>
-     <minute>0</minute>
-     <second>0</second>
-    </time>
-   </property>
-   <property name="currentSection">
-    <enum>QDateTimeEdit::YearSection</enum>
-   </property>
-   <property name="timeSpec">
-    <enum>Qt::UTC</enum>
    </property>
   </widget>
   <widget class="QLabel" name="label_time">
@@ -143,11 +120,18 @@
   <widget class="QLabel" name="lblLocalTime">
    <property name="geometry">
     <rect>
-     <x>420</x>
+     <x>220</x>
      <y>430</y>
-     <width>151</width>
+     <width>401</width>
      <height>29</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(255, 255, 255);</string>
@@ -159,7 +143,7 @@
     <enum>QFrame::Plain</enum>
    </property>
    <property name="text">
-    <string>2015-8-10 10:24</string>
+    <string>00-0-00  星期:0 00:00:00:000</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

@@ -30,10 +30,10 @@ int main(int argc,char **argv)
     //QTextCodec::setCodecForTr( QTextCodec::codecForName("GB2312"));
 
     //支持中文设计
-//    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-//    QTextCodec::setCodecForLocale(codec);
-//    QTextCodec::setCodecForCStrings(codec);
-//    QTextCodec::setCodecForTr(codec);
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+    QTextCodec::setCodecForLocale(codec);
+    QTextCodec::setCodecForCStrings(codec);
+    QTextCodec::setCodecForTr(codec);
 	StartUp ma;
 	ma.show();
 	app.connect(my_event, SIGNAL(clearSignal()), &ma, SLOT(emitClear()));	
