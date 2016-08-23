@@ -1,6 +1,7 @@
 #include "equipment_testing.h"
 #include "ui_equipment_testing.h"
 #include "connect_charge.h"
+#include "mysigals_slots.h"
 
 equipment_testing::equipment_testing(QWidget *parent) :
     QWidget(parent),
@@ -19,33 +20,35 @@ void equipment_testing::slot_timer()
 {
     timer.stop();
     ui->progressBar->setValue(8);
-    usleep(100000);
+    usleep(200000);
     ui->progressBar->setValue(16);
-    usleep(100000);
+    usleep(200000);
     ui->progressBar->setValue(24);
-    usleep(100000);
+    usleep(200000);
     ui->progressBar->setValue(32);
-    usleep(100000);
+    usleep(200000);
     ui->progressBar->setValue(40);
-    usleep(100000);
+    usleep(200000);
     ui->progressBar->setValue(48);
-    usleep(100000);
+    usleep(200000);
     ui->progressBar->setValue(56);
-    usleep(100000);
+    usleep(200000);
     ui->progressBar->setValue(64);
-    usleep(100000);
+    usleep(200000);
     ui->progressBar->setValue(72);
-    usleep(100000);
+    usleep(200000);
     ui->progressBar->setValue(80);
-    usleep(100000);
+    usleep(200000);
     ui->progressBar->setValue(88);
-    usleep(100000);
+    usleep(200000);
     ui->progressBar->setValue(96);
-    usleep(100000);
+    usleep(200000);
     ui->progressBar->setValue(100);
-    usleep(100000);
+    usleep(200000);
     show();
     usleep(200000);
+
+    //mysigals_slots::SetValue(2);
     //connect_charge *w_connect_charge = new connect_charge;
     //w_connect_charge->show();
 

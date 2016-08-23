@@ -29,7 +29,7 @@
     </rect>
    </property>
    <property name="cursor">
-    <cursorShape>IBeamCursor</cursorShape>
+    <cursorShape>ArrowCursor</cursorShape>
    </property>
    <property name="mouseTracking">
     <bool>true</bool>
@@ -143,10 +143,10 @@
     <enum>QFrame::Plain</enum>
    </property>
    <property name="text">
-    <string>00-0-00  星期:0 00:00:00:000</string>
+    <string>00-00-00  星期:0 00:00:00:000</string>
    </property>
    <property name="alignment">
-    <set>Qt::AlignCenter</set>
+    <set>Qt::AlignJustify|Qt::AlignVCenter</set>
    </property>
   </widget>
   <widget class="QPushButton" name="back_but">

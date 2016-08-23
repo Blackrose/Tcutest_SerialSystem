@@ -6,7 +6,9 @@
 #include <unistd.h>
 #include "mythread.h"
 #include <QLabel>
+#include <QLineEdit>
 #include "global.h"
+#include "mysigals_slots.h"
 
 namespace Ui {
 class connect_charge;
@@ -22,8 +24,11 @@ public:
     QTimer timer;	//定时器
     QTimer timer1;	//定时器
     mythread mythread_can ;
-
+    int flag;
+    void check_ver(QLineEdit* lbl);
     void newTimeNoSec(QLabel* lbl);
+
+    mysigals_slots my_sigals;
 
 private:
     Ui::connect_charge *ui;

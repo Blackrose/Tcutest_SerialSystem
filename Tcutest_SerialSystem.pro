@@ -33,7 +33,8 @@ HEADERS +=  main/Card_window.h \
            main/ui/suspend_service.h \
            main/ui/tcu_help.h \
     mythread.h \
-    global.h
+    global.h \
+    mysigals_slots.h
 FORMS += startUp/startUpFrm.ui \
          main/ui/bat_information.ui \
          main/ui/billing_info.ui \
@@ -74,5 +75,6 @@ SOURCES +=  main/Card_window.cpp \
            main/ui/suspend_service.cpp \
            main/ui/tcu_help.cpp \
     mythread.cpp \
-    global.cpp
+    global.cpp \
+    mysigals_slots.cpp
 RESOURCES += img.qrc
