@@ -16,19 +16,22 @@ connect_charge::connect_charge(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
     setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存
-    connect(&timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//显示系统时间
-    timer.start(1000);
+    connect(&tcv_timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//版本校验下发参数
+    tcv_timer.start(100);
 
      flag = 0;
-    //connect(&timer1,SIGNAL(timeout()),this,SLOT(slot_timer1()));//显示系统时间
-    timer1.start(100);
+    connect(&nextscreen_timer,SIGNAL(timeout()),this,SLOT(slot_nextscreen_timer()));
+    nextscreen_timer.start(100);
 
     connect(ui->back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK   
+    show();
 }
 
 void connect_charge::slot_hide()
 {
     hide();
+    //equipment_testing *w_equ_testing = new equipment_testing;
+    //w_equ_testing->show();
 }
 void connect_charge::check_ver(QLineEdit* lbl)
 {
@@ -62,33 +65,28 @@ void connect_charge::newTimeNoSec(QLabel* lbl)
 
    //sprintf(ch,"%04d-%02d-%02d %02d:%02d:%02d:%ld", 1900+p->tm_year, 1+p->tm_mon, p->tm_mday, p->tm_hour, p->tm_min,p->tm_sec,tv.tv_usec/1000);
     lbl->setText(ch);
-    timer.start();
+    tcv_timer.start();
 }
 
 void connect_charge::slot_timer()
 {
-    timer.stop();
-    mythread_can.start(); //tcu_canbus();
+    tcv_timer.stop();
+    //mythread_can.start(); //tcu_canbus();
     check_ver(ui->tcu_version); //版本校验
     newTimeNoSec(ui->lblLocalTime); //下发参数
-    my_sigals.SetValue(3);
-
-    //equipment_testing *w_equ_testing = new equipment_testing;
-    //w_equ_testing->show();
 }
-void connect_charge::slot_timer1()
+void connect_charge::slot_nextscreen_timer()
 {   
-//    my_sigals.SetValue(3);
+    //my_sigals.SetValue(3);
     if(task->tcu_stage == TCU_STAGE_CONNECT)
     {
-//        equipment_testing *w_equ_testing = new equipment_testing;
-//        w_equ_testing->show();
         if(!flag)
         {
             printf("now enter\n");
-            my_sigals.SetValue(3);
+            QMessageBox::about(NULL, "Connect", "电动汽车已连接");
+            my_sigals.SetValue(TCU_STAGE_CONNECT);
             flag = 1;
-            timer1.stop();
+            nextscreen_timer.stop();
         }
     }
 }

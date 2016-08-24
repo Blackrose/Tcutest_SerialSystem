@@ -4,6 +4,9 @@
 #include <QWidget>
 #include <QTimer>
 #include <unistd.h>
+#include <QList>
+#include <QtGlobal>
+#include "mysigals_slots.h"
 
 namespace Ui {
 class equipment_testing;
@@ -17,11 +20,23 @@ public:
     explicit equipment_testing(QWidget *parent = 0);
     ~equipment_testing();
     QTimer timer;	//定时器
+    mysigals_slots my_sigals;
 
 private:
-    Ui::equipment_testing *ui;
+    Ui::equipment_testing *ui;    
+     QList<int > numbersList;//随机数列表
+     int elapseTime; //启动界面停留的时间
+     int num;//启动进度条计数1-100
+
+
+private:
+     void setProgress();
+     void generateAscendRandomNumber();
+
 public slots:
     void slot_timer();//定时器
+    void slot_hide();
+    void slotUpdateProgress();
 };
 
 #endif // EQUIPMENT_TESTING_H

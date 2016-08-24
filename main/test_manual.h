@@ -2,6 +2,7 @@
 #define TEST_MANUAL_H
 
 #include <QWidget>
+#include "mythread.h"
 
 namespace Ui {
 class test_Manual;
@@ -14,7 +15,7 @@ class test_Manual : public QWidget
 public:
     explicit test_Manual(QWidget *parent = 0);
     ~test_Manual();
-
+    mythread mythread_can ;
 private:
     Ui::test_Manual *ui;
 

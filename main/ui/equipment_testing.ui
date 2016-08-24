@@ -82,7 +82,26 @@ QProgressBar {
 }</string>
    </property>
    <property name="value">
-    <number>24</number>
+    <number>0</number>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="back_but">
+   <property name="geometry">
+    <rect>
+     <x>591</x>
+     <y>400</y>
+     <width>191</width>
+     <height>63</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-image:url()</string>
+   </property>
+   <property name="text">
+    <string>Back</string>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
    </property>
   </widget>
  </widget>
