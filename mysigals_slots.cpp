@@ -4,16 +4,20 @@
 #include "equipment_testing.h"
 #include "charging_monitoring.h"
 #include "bat_information.h"
+#include "settlement_inf.h"
 #include <QLabel>
+#include <QMessageBox>
 
 
 equipment_testing *w_equ_testing;
 Charging_monitoring *w_change_moni;
 bat_information *w_bat_information;
+settlement_inf *w_settlement_inf;
 
 mysigals_slots::mysigals_slots(QWidget *parent) : QWidget(parent)
 {   
     connect(this,SIGNAL(ValueChanged(int)),this,SLOT(ChangeValue(int)));
+    //QMessageBox::setGeometry(350,150,150,100);
 }
 
 void mysigals_slots::SetValue(int value)
@@ -42,18 +46,27 @@ void mysigals_slots::ChangeValue(int value)
         case TCU_STAGE_PARAMETER:
             break;
         case TCU_STAGE_CONNECT:
+            QMessageBox::about(NULL, "Connect", "电动汽车已连接");
             w_equ_testing = new equipment_testing;
             w_equ_testing->show();
             //w_bat_information = new bat_information;
             //w_bat_information->show();
             break;
         case TCU_STAGE_START:
+            QMessageBox::about(NULL, "Start", "电动汽车启动充电");
             w_change_moni = new Charging_monitoring;
             w_change_moni->show();
+            task->tcu_stage = TCU_STAGE_START;
+            task->tcu_tmp_stage = TCU_STAGE_START;
             break;
         case TCU_STAGE_STATUS:
             break;
         case TCU_STAGE_STOP:
+            QMessageBox::about(NULL, "Stop", "停止充电");
+            w_settlement_inf = new settlement_inf;
+            w_settlement_inf->show();
+            task->tcu_stage = TCU_STAGE_STOP;
+            task->tcu_tmp_stage = TCU_STAGE_STOP;
             break;
         case TCU_STAGE_STOP_STATUS:
             break;

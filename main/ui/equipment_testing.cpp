@@ -2,6 +2,8 @@
 #include "ui_equipment_testing.h"
 #include "connect_charge.h"
 #include "mysigals_slots.h"
+#include "tcu.h"
+
 #include <QTime>
 #include <QTimer>
 #include <stdio.h>
@@ -14,15 +16,12 @@ equipment_testing::equipment_testing(QWidget *parent) :
     setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
     setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存
 
-//    connect(&timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//显示系统时间
-//    timer.start(200);
     connect(ui->back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK
 
     elapseTime = 1000;
     num=0;
     generateAscendRandomNumber();
     setProgress();
-
 }
 
 void equipment_testing::setProgress()
@@ -33,7 +32,7 @@ void equipment_testing::setProgress()
        QTimer::singleShot(i*tempTime, this, SLOT(slotUpdateProgress()));
     }
     //QTimer::singleShot(elapseTime, this, SLOT(close()));
-    QTimer::singleShot(elapseTime, this, SLOT(slot_timer()));
+    QTimer::singleShot(elapseTime, this, SLOT(slot_nextscreen_timer()));
 }
 
 void equipment_testing::slotUpdateProgress()
@@ -60,10 +59,10 @@ void equipment_testing::generateAscendRandomNumber()
     qSort(numbersList.begin(),numbersList.end());
 }
 
-void equipment_testing::slot_timer()
-{
-    //timer.stop();
-    my_sigals.SetValue(4);
+void equipment_testing::slot_nextscreen_timer()
+{   
+    numbersList.clear();
+    my_sigals.SetValue(TCU_STAGE_START);
 }
 
 void equipment_testing::slot_hide()

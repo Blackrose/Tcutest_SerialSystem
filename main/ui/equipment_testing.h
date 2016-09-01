@@ -34,7 +34,7 @@ private:
      void generateAscendRandomNumber();
 
 public slots:
-    void slot_timer();//定时器
+    void slot_nextscreen_timer();
     void slot_hide();
     void slotUpdateProgress();
 };

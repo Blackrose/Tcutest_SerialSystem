@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QProgressBar>
+#include <QTimer>
+#include "mysigals_slots.h"
 
 namespace Ui {
 class Charging_monitoring;
@@ -15,6 +17,8 @@ class Charging_monitoring : public QWidget
 public:
     explicit Charging_monitoring(QWidget *parent = 0);
     ~Charging_monitoring();
+    QTimer tst_timer;	//
+    mysigals_slots my_sigals;
 
 private:
     Ui::Charging_monitoring *ui;
@@ -29,6 +33,7 @@ private:
      void change_end();
      void Charging_monitoring_hide();
      void change_main();
+     void slot_timer();
 };
 
 #endif // CHARGING_MONITORING_H

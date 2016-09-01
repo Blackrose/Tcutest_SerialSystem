@@ -9,6 +9,7 @@
 #include <QLineEdit>
 #include "global.h"
 #include "mysigals_slots.h"
+#include "myerr_sigals_slots.h"
 #include <QMessageBox>
 
 namespace Ui {
@@ -25,11 +26,12 @@ public:
     QTimer tcv_timer;	//
     QTimer nextscreen_timer;	//
     mythread mythread_can ;
-    int flag;
+
     void check_ver(QLineEdit* lbl);
     void newTimeNoSec(QLabel* lbl);
 
     mysigals_slots my_sigals;
+    myerr_sigals_slots myerr_sigals;
 
 private:
     Ui::connect_charge *ui;
@@ -37,7 +39,7 @@ private:
 public slots:
     void slot_hide();
     void slot_timer();//定时器
-        void slot_nextscreen_timer();//定时器
+    void slot_nextscreen_timer();//定时器
 };
 
 #endif // CONNECT_CHARGE_H

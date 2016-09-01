@@ -5,6 +5,7 @@
 #include "billing_info.h"
 #include "charging_end.h"
 #include "main.h"
+#include "tcu.h"
 #include <QLabel>
 #include <stdio.h>
 
@@ -32,6 +33,10 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
     //connect(ui->change_end_but,SIGNAL(clicked()),this,SLOT(change_end()));//
     //connect(ui->soc_stop,SIGNAL(clicked()),this,SLOT(Charging_monitoring_hide()));
     //connect(ui->soc_stop,SIGNAL(clicked()),this,SLOT(change_main()));
+
+    connect(&tst_timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//停止充电
+    tst_timer.start(100);
+
 #if 0
     if(bat_soc_int<100){//90
         ui->full_charge_but->setVisible(false);
@@ -58,6 +63,17 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
 #endif
     printf("successs!!!");
 }
+
+void Charging_monitoring::slot_timer()
+{
+    if(task->tcu_stage == TCU_STAGE_STOP || task->tcu_err_stage == TCU_ERR_STAGE_STOP)
+    {
+            //QMessageBox::about(NULL, "Stop", "停止充电");
+            my_sigals.SetValue(TCU_STAGE_STOP);
+            tst_timer.stop();
+    }
+}
+
 
 void Charging_monitoring::set_soc()
 {

@@ -1,6 +1,6 @@
 #include "test_manual.h"
 #include "ui_test_manual.h"
-#include "Card_window.h"
+#include "Emter_window.h"
 #include "connect_charge.h"
 #include "equipment_testing.h"
 
@@ -34,12 +34,12 @@ void test_Manual::slot_hide()
 
 void test_Manual::slot_card()
 {
-    CardWindow *w_card = new CardWindow(this);
-    w_card->show();
+//    CardWindow *w_card = new CardWindow(this);
+//    w_card->show();
 }
 void test_Manual::slot_emter()
 {
-    CardWindow *w_emter = new CardWindow(this);
+    EmterWindow *w_emter = new EmterWindow(this);
     w_emter->show();
     //equipment_testing *w_equ_testing = new equipment_testing(this);
     //w_equ_testing->show();
