@@ -24,6 +24,9 @@ public slots:
     void slot_card();
     void slot_emter();
     void slot_canbus();
+    void slot_gps();
+    void slot_gprs();
+    void slot_network();
 };
 
 #endif // TEST_MANUAL_H

@@ -1,9 +1,12 @@
 #include "test_manual.h"
 #include "ui_test_manual.h"
+#include "Card_window.h"
 #include "Emter_window.h"
 #include "connect_charge.h"
 #include "equipment_testing.h"
-
+#include "gps/gps.h"
+#include "gprs/gprs.h"
+#include "network/netwindow.h"
 
 test_Manual::test_Manual(QWidget *parent) :
     QWidget(parent),
@@ -20,6 +23,9 @@ test_Manual::test_Manual(QWidget *parent) :
     connect(ui->Card_but,SIGNAL(clicked()),this,SLOT(slot_card()));
     connect(ui->Emeter_but,SIGNAL(clicked()),this,SLOT(slot_emter()));
     connect(ui->Canbus_but,SIGNAL(clicked()),this,SLOT(slot_canbus()));
+    connect(ui->gprs_but,SIGNAL(clicked()),this,SLOT(slot_gprs()));
+    connect(ui->gps_but,SIGNAL(clicked()),this,SLOT(slot_gps()));
+    connect(ui->network_but,SIGNAL(clicked()),this,SLOT(slot_network()));
 }
 
 test_Manual::~test_Manual()
@@ -34,8 +40,8 @@ void test_Manual::slot_hide()
 
 void test_Manual::slot_card()
 {
-//    CardWindow *w_card = new CardWindow(this);
-//    w_card->show();
+    CardWindow *w_card = new CardWindow(this);
+    w_card->show();
 }
 void test_Manual::slot_emter()
 {
@@ -53,3 +59,24 @@ void test_Manual::slot_canbus()
 //    w_equ_testing->show();
 
 }
+
+void test_Manual::slot_gprs()
+{
+    Gprs *w_gprs = new Gprs;
+    w_gprs->show();
+}
+
+void test_Manual::slot_gps()
+{
+    gps *w_gps = new gps;
+    w_gps->show();
+}
+
+void test_Manual::slot_network()
+{
+    NetWindow *w_net = new NetWindow;
+    w_net->show();
+}
+
+
+
