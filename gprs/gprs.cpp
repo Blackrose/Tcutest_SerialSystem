@@ -15,10 +15,15 @@ Gprs::Gprs(QWidget *parent) :
     ui(new Ui::Gprs)
 {
     ui->setupUi(this);
-
+    setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
+    QPalette palette;
+    palette.setBrush(QPalette::Background, QBrush(QPixmap(":/img/images/Main.png")));
+    this->setPalette(palette);
+    setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存
     myprocess = NULL;
     m_startgprs = new QProcess;
     connect(m_startgprs, SIGNAL(readyRead()), this, SLOT(readOutput()));
+    connect(ui->back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK
 }
 
 Gprs::~Gprs()
@@ -305,4 +310,9 @@ void Gprs::on_ping_clicked()
     connect(myprocess, SIGNAL(readyReadStandardError()),this, SLOT(result()));
     myprocess->start(QString("ping -c 5 ")+ui->hostname->text());
     ui->Edit_info->append(QString("ping -c 5 ")+ui->hostname->text());
+}
+
+void Gprs::slot_hide()
+{
+    hide();
 }

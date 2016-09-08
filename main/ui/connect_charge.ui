@@ -44,7 +44,7 @@
     <bool>false</bool>
    </property>
    <property name="styleSheet">
-    <string notr="true">background:url(:/img/images/mmexport1464230812249.png)</string>
+    <string notr="true">background:url(:/img/images/Main.png)</string>
    </property>
    <property name="text">
     <string/>
@@ -152,26 +152,26 @@
   <widget class="QPushButton" name="back_but">
    <property name="geometry">
     <rect>
-     <x>625</x>
-     <y>405</y>
-     <width>162</width>
+     <x>0</x>
+     <y>0</y>
+     <width>201</width>
      <height>63</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-image:url()</string>
+    <string notr="true">background: transparent;</string>
    </property>
    <property name="text">
-    <string>Back</string>
+    <string/>
    </property>
    <property name="flat">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>610</x>
+     <x>590</x>
      <y>0</y>
      <width>191</width>
      <height>71</height>
@@ -185,6 +185,26 @@
    </property>
    <property name="text">
     <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>220</y>
+     <width>251</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>27</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>请连接电动汽车</string>
    </property>
   </widget>
  </widget>

@@ -46,9 +46,9 @@ protected:
 
 private slots:
     void on_pb_read_clicked();
-
     void on_pb_close_clicked();
     void read_sermios();
+        void slot_hide();
 
 private:
     Ui::gps *ui;
@@ -61,6 +61,7 @@ private:
     int Getbufnum(int num,char *str);
     double get_double_number(char *s);
     void BTC(date_time *gps_d);
+
 protected:
     void closeEvent(QCloseEvent *e);
     void moveEvent(QMoveEvent *);

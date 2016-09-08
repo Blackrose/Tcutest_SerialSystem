@@ -8,6 +8,7 @@
 #include "global.h"
 #include "tcu.h"
 #include "mysigals_slots.h"
+#include "test_manual.h"
 
 connect_charge::connect_charge(QWidget *parent) :
     QWidget(parent),
@@ -16,6 +17,10 @@ connect_charge::connect_charge(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
     setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存
+
+    connect(&can_timer,SIGNAL(timeout()),this,SLOT(slot_cantimer()));//版本校验下发参数
+    can_timer.start(100);
+
     connect(&tcv_timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//版本校验下发参数
     tcv_timer.start(100);
 
@@ -27,8 +32,10 @@ connect_charge::connect_charge(QWidget *parent) :
 }
 
 void connect_charge::slot_hide()
-{
-    hide();
+{   
+    tcv_timer.stop();
+     mythread_can.stop();
+     hide();
     //equipment_testing *w_equ_testing = new equipment_testing;
     //w_equ_testing->show();
 }
@@ -67,10 +74,16 @@ void connect_charge::newTimeNoSec(QLabel* lbl)
     tcv_timer.start();
 }
 
+void connect_charge::slot_cantimer()
+{
+    can_timer.stop();
+    mythread_can.start(); //tcu_canbus();
+}
+
 void connect_charge::slot_timer()
 {
     tcv_timer.stop();
-    //mythread_can.start(); //tcu_canbus();
+   // mythread_can.start(); //tcu_canbus();
     check_ver(ui->tcu_version); //版本校验
     newTimeNoSec(ui->lblLocalTime); //下发参数
 }

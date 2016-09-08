@@ -7,23 +7,43 @@
 #include "netwindow.h"
 #include "ui_netwindow.h"
 
+
+//SyszuxIM* NetWindow::imf_my;
+
 // ifconfig -a|grep -E "eth[0-9]|wlan[0-9]"|cut -d' ' -f 1
 NetWindow::NetWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::NetWindow)
 {
     ui->setupUi(this);
-    proc = NULL;
-    flag = false;
+    setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
+    setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存
+    proc = NULL; myprocess = NULL;
+    flag = false;   
+    ui->hostname->setText("192.168.122.23");
+
     connect(ui->cb_interface, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(sel_changed(QString)));
     connect(ui->ok, SIGNAL(clicked()), this, SLOT(on_ok_clicked()));
     connect(ui->radio_dhcp, SIGNAL(toggled(bool)), this, SLOT(toggled(bool)));
     connect(ui->radio_static, SIGNAL(toggled(bool)), this, SLOT(toggled(bool)));
+    connect(ui->back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK
 
     refreshInterfaces();
+   // refreship_inf();
     readConfigs();
     sel_changed(ui->cb_interface->currentText());
 
+    imf_my = new SyszuxIM();
+    QWSServer::setCurrentInputMethod(imf_my);
+        //imf_my->updateHandler(QWSInputMethod::FocusIn);
+         //imf_my->updateHandler(QWSInputMethod::FocusOut);
+    //QWSInputMethod* im = new SyszuxIM;
+    //QWSServer::setCurrentInputMethod(im);
+}
+
+void NetWindow::slot_hide()
+{
+    hide();
 }
 
 NetWindow::~NetWindow()
@@ -58,7 +78,7 @@ void NetWindow::state(bool dhcp)
 void NetWindow::refreshInterfaces()
 {
     QStringList sl;
-
+//ifconfig eth0 | grep "inet addr" | awk '{ print $2}' | awk -F: '{print $2}'
     /*过滤读eth[0-9] wlan[0-9]*/
     ::system("ifconfig -a|grep -E \"eth[0-9]\"|cut -d' ' -f 1 >/tmp/interfaces");
     QFile f("/tmp/interfaces");
@@ -78,7 +98,33 @@ void NetWindow::refreshInterfaces()
     }
     f.close();
 
-    ui->cb_interface->addItems(sl);
+    ui->cb_interface->addItems(sl);   
+}
+
+void NetWindow::refreship_inf()
+{
+    ui->ip_inf->setText(" ");
+    char* ch;
+    QString str = "ifconfig ";
+    str.append(ui->cb_interface->currentText());
+    str.append(" | grep addr >/tmp/tmp");
+   // ::system("ifconfig eth0  | grep addr >/tmp/tmp");
+    ch = str.toLatin1().data();
+    ::system(ch);
+    QFile ip("/tmp/tmp");
+    if(ip.open(QFile::ReadOnly))
+    {
+        QTextStream t_ip(&ip);
+        while(!t_ip.atEnd())
+        {
+            QString str=t_ip.readLine();
+            if(str.size()>0)
+            {
+                ui->ip_inf->setText(ui->ip_inf->document()->toPlainText() + str);
+            }
+        }
+    }
+    ip.close();
 }
 
 void NetWindow::readConfigs()
@@ -222,6 +268,8 @@ void NetWindow::toggled(bool b)
 
 void NetWindow::sel_changed(const QString &text)
 {
+   //imf_my->updateHandler(QWSInputMethod::FocusOut);
+    refreship_inf();
     Interface *i = NULL;
     foreach(i,ints)
     {
@@ -279,6 +327,45 @@ void NetWindow::on_ok_clicked()
 
     flag = true;
 }
+
+void NetWindow::on_ping_clicked()
+{
+    if(ui->hostname->text() == QString(""))
+    {
+        QMessageBox::about(this,"error","hostname cannot be empty!");
+        return;
+    }
+
+    if(myprocess)
+        delete myprocess;
+
+    myprocess = new QProcess(this);
+    connect(myprocess, SIGNAL(readyReadStandardOutput()),this, SLOT(result()));
+    connect(myprocess, SIGNAL(readyReadStandardError()),this, SLOT(result()));
+    myprocess->start(QString("ping ")+ui->hostname->text());
+    ui->result->append(QString("ping ")+ui->hostname->text());
+    //myprocess->waitForFinished();
+}
+
+void NetWindow::result()
+{
+    QString abc = myprocess->readAllStandardOutput();
+    ui->result->append(abc.trimmed());
+    QString efg = myprocess->readAllStandardError();
+    if(efg.length()>1)ui->result->append(efg.trimmed());
+}
+
+void NetWindow::on_stop_clicked()
+{
+    delete myprocess;
+    myprocess = NULL;
+}
+
+void NetWindow::on_clear_clicked()
+{
+    ui->result->clear();
+}
+
 
 void NetWindow::closeEvent(QCloseEvent * evt)
 {

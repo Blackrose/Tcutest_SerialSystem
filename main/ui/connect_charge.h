@@ -23,6 +23,7 @@ class connect_charge : public QWidget
 public:
     explicit connect_charge(QWidget *parent = 0);
     ~connect_charge();
+    QTimer can_timer;	//
     QTimer tcv_timer;	//
     QTimer nextscreen_timer;	//
     mythread mythread_can ;
@@ -38,6 +39,7 @@ private:
 
 public slots:
     void slot_hide();
+    void slot_cantimer();
     void slot_timer();//定时器
     void slot_nextscreen_timer();//定时器
 };

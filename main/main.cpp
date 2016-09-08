@@ -20,6 +20,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
     palette.setBrush(QPalette::Background, QBrush(QPixmap(":/img/images/Main.png")));
     this->setPalette(palette);
     setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存
+   dateTimeEdit->setDateTime(QDateTime::currentDateTime());
     //p_imf = new IMFrame();	//键盘
 #if 1
     //w_second = new Secondwindow;

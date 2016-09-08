@@ -10,8 +10,14 @@ gps::gps(QWidget *parent) :
     ui(new Ui::gps)
 {
     ui->setupUi(this);
+    setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
+    QPalette palette;
+    palette.setBrush(QPalette::Background, QBrush(QPixmap(":/img/images/Main.png")));
+    this->setPalette(palette);
+    setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存
     m_timer = new QTimer;
     connect(m_timer, SIGNAL(timeout()), this, SLOT(read_sermios()));
+    connect(ui->back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK
 }
 
 gps::~gps()
@@ -315,5 +321,10 @@ void gps::moveEvent(QMoveEvent *)
 void gps::resizeEvent(QResizeEvent *)
 {
     this->showMaximized();
+}
+
+void gps::slot_hide()
+{
+    hide();
 }
 

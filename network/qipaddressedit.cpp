@@ -12,10 +12,14 @@ QIpAddressEdit::QIpAddressEdit(QWidget *parent)
     item2 = new QIpAddressEditItem(this);
     item3 = new QIpAddressEditItem(this);
     item4 = new QIpAddressEditItem(this);
-    item1->setMaximumSize(30, 20);
-    item2->setMaximumSize(30, 20);
-    item3->setMaximumSize(30, 20);
-    item4->setMaximumSize(30, 20);
+    item1->setMinimumSize(30, 30);
+    item2->setMinimumSize(30, 30);
+    item3->setMinimumSize(30, 30);
+    item4->setMinimumSize(30, 30);
+    item1->setMaximumSize(30, 30);
+    item2->setMaximumSize(30, 30);
+    item3->setMaximumSize(30, 30);
+    item4->setMaximumSize(30, 30);
     item1->setNextItem(item2);
     item2->setNextItem(item3);
     item3->setNextItem(item4);

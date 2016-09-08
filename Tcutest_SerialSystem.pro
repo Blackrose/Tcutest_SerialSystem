@@ -81,7 +81,10 @@ HEADERS += global.h \
     network/qipaddressedit.h \
     network/qipaddressedititem.h \
     network/netwindow.h \
-    network/ping/pingwindow.h
+    keyboard/imframe.h \
+    keyboard/inputwidget.h \
+    SYSZUXpinyin/syszuxim.h \
+    SYSZUXpinyin/syszuxpinyin.h
 FORMS += qcom/Card_window.ui \
          qcom/Emter_window.ui \
          startUp/startUpFrm.ui \
@@ -102,7 +105,8 @@ FORMS += qcom/Card_window.ui \
     gprs/gprs.ui \
     gps/gps.ui \
     network/netwindow.ui \
-    network/ping/pingwindow.ui
+    keyboard/ui/keyboard.ui \
+    SYSZUXpinyin/syszuxpinyin.ui
 SOURCES += global.cpp \
            myerr_sigals_slots.cpp \
            mysigals_slots.cpp \
@@ -146,5 +150,14 @@ SOURCES += global.cpp \
     network/qipaddressedit.cpp \
     network/qipaddressedititem.cpp \
     network/netwindow.cpp \
-    network/ping/pingwindow.cpp
-RESOURCES += img.qrc qcom/images.qrc
+    keyboard/imframe.cpp \
+    keyboard/inputwidget.cpp \
+    SYSZUXpinyin/syszuxim.cpp \
+    SYSZUXpinyin/syszuxpinyin.cpp
+RESOURCES += img.qrc qcom/images.qrc \
+    syszuxpinyin.qrc
+
+OBJECTS_DIR =  ./obj
+MOC_DIR = ./moc
+UI_DIR = ./ui_forms
+

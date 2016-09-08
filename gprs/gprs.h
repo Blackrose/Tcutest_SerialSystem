@@ -25,20 +25,14 @@ private:
 
 private slots:
     void on_pbt_set_clicked();
-
     void on_pbt_call_clicked();
-
     void on_pbt_send_clicked();
-
     void on_pbt_gprs_clicked();
-
     void remoteDataIncoming();
-
     void readOutput();
-
     void on_ping_clicked();
-
     void result();
+    void slot_hide();
 
 protected:
     void closeEvent(QCloseEvent *);

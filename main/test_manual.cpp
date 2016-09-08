@@ -8,6 +8,8 @@
 #include "gprs/gprs.h"
 #include "network/netwindow.h"
 
+//mythread  test_Manual::mythread_can ;
+
 test_Manual::test_Manual(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::test_Manual)
@@ -25,7 +27,7 @@ test_Manual::test_Manual(QWidget *parent) :
     connect(ui->Canbus_but,SIGNAL(clicked()),this,SLOT(slot_canbus()));
     connect(ui->gprs_but,SIGNAL(clicked()),this,SLOT(slot_gprs()));
     connect(ui->gps_but,SIGNAL(clicked()),this,SLOT(slot_gps()));
-    connect(ui->network_but,SIGNAL(clicked()),this,SLOT(slot_network()));
+    connect(ui->network_but,SIGNAL(clicked()),this,SLOT(slot_network()));     
 }
 
 test_Manual::~test_Manual()
@@ -54,10 +56,7 @@ void test_Manual::slot_canbus()
 {
     connect_charge *w_connect = new connect_charge(this);
     w_connect->show();
-    mythread_can.start();
-//    equipment_testing *w_equ_testing = new equipment_testing(this);
-//    w_equ_testing->show();
-
+   // mythread_can.start();
 }
 
 void test_Manual::slot_gprs()
