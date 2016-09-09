@@ -28,6 +28,7 @@ test_Manual::test_Manual(QWidget *parent) :
     connect(ui->gprs_but,SIGNAL(clicked()),this,SLOT(slot_gprs()));
     connect(ui->gps_but,SIGNAL(clicked()),this,SLOT(slot_gps()));
     connect(ui->network_but,SIGNAL(clicked()),this,SLOT(slot_network()));     
+    connect(ui->touch_but,SIGNAL(clicked(),this,SLOT(slot_touch());
 }
 
 test_Manual::~test_Manual()
@@ -77,5 +78,10 @@ void test_Manual::slot_network()
     w_net->show();
 }
 
-
-
+void test_Manual::slot_touch()
+{
+//    NetWindow *w_toucht = new NetWindow;
+//    w_touch->show();
+    QProcess *pro = new QProcess;
+    pro->start("ts_calibrate -qws");
+}

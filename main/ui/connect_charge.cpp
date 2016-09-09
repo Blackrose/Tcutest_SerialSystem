@@ -85,7 +85,7 @@ void connect_charge::slot_timer()
     tcv_timer.stop();
    // mythread_can.start(); //tcu_canbus();
     check_ver(ui->tcu_version); //版本校验
-    newTimeNoSec(ui->lblLocalTime); //下发参数
+    newTimeNoSec(ui->lblLocalTime); //下发参数    
 }
 void connect_charge::slot_nextscreen_timer()
 {   
