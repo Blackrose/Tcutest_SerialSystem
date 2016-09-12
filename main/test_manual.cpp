@@ -28,7 +28,7 @@ test_Manual::test_Manual(QWidget *parent) :
     connect(ui->gprs_but,SIGNAL(clicked()),this,SLOT(slot_gprs()));
     connect(ui->gps_but,SIGNAL(clicked()),this,SLOT(slot_gps()));
     connect(ui->network_but,SIGNAL(clicked()),this,SLOT(slot_network()));     
-    connect(ui->touch_but,SIGNAL(clicked(),this,SLOT(slot_touch());
+    connect(ui->touch_but,SIGNAL(clicked()),this,SLOT(slot_touch()));
 }
 
 test_Manual::~test_Manual()
