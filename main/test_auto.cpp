@@ -1,5 +1,5 @@
 #include "test_auto.h"
-#include "ui_test_auto.h"
+#include "ui_forms/ui_test_auto.h"
 
 test_auto::test_auto(QWidget *parent) :
     QWidget(parent),

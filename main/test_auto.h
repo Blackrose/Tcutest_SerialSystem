@@ -1,7 +1,7 @@
 #ifndef TEST_AUTO_H
 #define TEST_AUTO_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 namespace Ui {
 class test_auto;

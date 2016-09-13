@@ -1,7 +1,7 @@
 #ifndef MYSIGALS_SLOTS_H
 #define MYSIGALS_SLOTS_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 //#include "equipment_testing.h"
 //#include "charging_monitoring.h"
 //#include "bat_information.h"

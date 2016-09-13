@@ -1,7 +1,8 @@
 #include "qipaddressedit.h"
 #include "qipaddressedititem.h"
 
-#include <QtGui>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
 #include <QStringList>
 
 QIpAddressEdit::QIpAddressEdit(QWidget *parent)

@@ -2,7 +2,7 @@
 #define QIPADDRESSEDITITEM_H
 
 #include <QString>
-#include <QLineEdit>
+#include <QtWidgets/QLineEdit>
 
 class QWidget;
 class QFocusEvent;

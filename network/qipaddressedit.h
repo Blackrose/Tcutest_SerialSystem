@@ -1,7 +1,7 @@
 #ifndef QIPADDRESSEDIT_H
 #define QIPADDRESSEDIT_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 class QIpAddressEditItem;
 

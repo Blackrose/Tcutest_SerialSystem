@@ -1,5 +1,5 @@
 #include "equipment_information.h"
-#include "ui_equipment_information.h"
+#include "ui_forms/ui_equipment_information.h"
 #include "charging_monitoring.h"
 #include "bat_information.h"
 #include "billing_info.h"

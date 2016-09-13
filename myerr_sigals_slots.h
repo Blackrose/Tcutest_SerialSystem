@@ -1,8 +1,8 @@
 #ifndef MYERR_SIGALS_SLOTS_H
 #define MYERR_SIGALS_SLOTS_H
 
-#include <QWidget>
-#include <QMessageBox>
+#include <QtWidgets/QtWidgets>
+#include <QtWidgets/QMessageBox>
 
 class myerr_sigals_slots : public QWidget
 {

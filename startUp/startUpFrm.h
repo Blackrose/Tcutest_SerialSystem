@@ -4,7 +4,7 @@
 #ifndef LINLONG_StartUp
 #define LINLONG_StartUp
 
-#include "ui_startUpFrm.h"
+#include "ui_forms/ui_startUpFrm.h"
 #include "main/main.h"
 
 #include <stdio.h>

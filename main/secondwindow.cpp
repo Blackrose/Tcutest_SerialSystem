@@ -1,6 +1,6 @@
 #include "secondwindow.h"
 #include "main.h"
-#include <QWidget>
+#include <QtWidgets/QWidget>
 #include <QMovie>
 
 //Check::Check(QWidget *parent): QWidget(parent),Ui_CheckForm()

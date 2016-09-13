@@ -1,7 +1,7 @@
 #ifndef SETTLEMENT_INF_H
 #define SETTLEMENT_INF_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 namespace Ui {
 class settlement_inf;

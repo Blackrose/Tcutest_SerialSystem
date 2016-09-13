@@ -1,18 +1,15 @@
 #ifndef NETWINDOW_H
 #define NETWINDOW_H
 
-#include <QMainWindow>
+#include <QtWidgets/QMainWindow>
 #include <QProcess>
-#include <QMessageBox>
+#include <QtWidgets/QMessageBox>
 #include <QFile>
 #include <QTextStream>
 #include "interface.h"
 #include <QList>
 #include <QProcess>
 #include <QCloseEvent>
-#include "SYSZUXpinyin/syszuxim.h"
-#include "SYSZUXpinyin/syszuxpinyin.h"
-
 
 namespace Ui {
 class NetWindow;
@@ -25,8 +22,6 @@ class NetWindow : public QMainWindow
 public:
     explicit NetWindow(QWidget *parent = 0);
     ~NetWindow();
-    //static SyszuxIM* imf_my;
-    QWSInputMethod* imf_my;
 
 private:
     Ui::NetWindow *ui;

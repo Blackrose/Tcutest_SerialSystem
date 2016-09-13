@@ -1,10 +1,10 @@
 
 #include "gprs.h"
-#include "ui_gprs.h"
+#include "ui_forms/ui_gprs.h"
 #include"stdio.h"
 #include <fcntl.h>
-#include <qmessagebox.h>
-#include <termio.h>
+#include <QtWidgets/QMessageBox>
+//#include <termio.h>
 #include <unistd.h>
 
 int m_fd=-1;

@@ -9,7 +9,7 @@
 #include "test_manual.h"
 #include "ui/charging_monitoring.h"
 #include "ui/equipment_information.h"
-#include <QLabel>
+#include <QtWidgets/QLabel>
 #include <QMovie>
 
 Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()

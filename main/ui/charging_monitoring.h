@@ -1,8 +1,8 @@
 #ifndef CHARGING_MONITORING_H
 #define CHARGING_MONITORING_H
 
-#include <QWidget>
-#include <QProgressBar>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QProgressBar>
 #include <QTimer>
 #include "mysigals_slots.h"
 

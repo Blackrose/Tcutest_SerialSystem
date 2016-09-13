@@ -1,12 +1,13 @@
 #ifndef SECONDWINDOW_H
 #define SECONDWINDOW_H
 
-#include "ui_secondwindow.h"
+#include "ui_forms/ui_secondwindow.h"
 #include "main/main.h"
 
 #include <stdio.h>
 #include <QString>
-#include <QWidget>
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QMainWindow>
 
 class  Secondwindow:public QMainWindow,public Ui_SecondWindow
 {

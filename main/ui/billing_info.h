@@ -1,7 +1,7 @@
 #ifndef BILLING_INFO_H
 #define BILLING_INFO_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 namespace Ui {
 class Billing_info;

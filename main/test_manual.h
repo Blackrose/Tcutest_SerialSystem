@@ -1,7 +1,7 @@
 #ifndef TEST_MANUAL_H
 #define TEST_MANUAL_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 #include "mythread.h"
 
 namespace Ui {

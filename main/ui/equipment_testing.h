@@ -1,7 +1,7 @@
 #ifndef EQUIPMENT_TESTING_H
 #define EQUIPMENT_TESTING_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 #include <QTimer>
 #include <unistd.h>
 #include <QList>

@@ -1,12 +1,12 @@
 #include "charging_monitoring.h"
-#include "ui_charging_monitoring.h"
+#include "ui_forms/ui_charging_monitoring.h"
 #include "equipment_information.h"
 #include "bat_information.h"
 #include "billing_info.h"
 #include "charging_end.h"
 #include "main.h"
 #include "tcu.h"
-#include <QLabel>
+#include <QtWidgets/QLabel>
 #include <stdio.h>
 
 Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(new Ui::Charging_monitoring)

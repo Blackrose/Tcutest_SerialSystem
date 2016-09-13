@@ -1,5 +1,5 @@
 #include "charging_end.h"
-#include "ui_charging_end.h"
+#include "ui_forms/ui_charging_end.h"
 
 charging_end::charging_end(QWidget *parent) :
     QWidget(parent),

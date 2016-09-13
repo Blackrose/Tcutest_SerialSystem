@@ -1,7 +1,7 @@
 #ifndef BAT_INFORMATION_H
 #define BAT_INFORMATION_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 namespace Ui {
 class bat_information;

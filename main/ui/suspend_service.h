@@ -1,7 +1,7 @@
 #ifndef SUSPEND_SERVICE_H
 #define SUSPEND_SERVICE_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 namespace Ui {
 class suspend_service;

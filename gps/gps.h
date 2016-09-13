@@ -1,11 +1,11 @@
 #ifndef GPS_H
 #define GPS_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 #include <QtCore>
 #include <fcntl.h>
-#include <termios.h>
-#include "qmessagebox.h"
+//#include <termios.h>
+#include <QtWidgets/QMessageBox>
 typedef struct
 {
         int year;

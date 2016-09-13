@@ -1,5 +1,5 @@
 #include "connect_charge.h"
-#include "ui_connect_charge.h"
+#include "ui_forms/ui_connect_charge.h"
 #include "equipment_testing.h"
 #include "tcu_canbus/serialsystem.h"
 #include <stdio.h>
@@ -9,7 +9,6 @@
 #include "tcu.h"
 #include "mysigals_slots.h"
 #include "test_manual.h"
-#include "file.h"
 #include <QTextCodec>
 
 connect_charge::connect_charge(QWidget *parent) :
@@ -48,7 +47,6 @@ void connect_charge::check_ver(QLineEdit* lbl)
             task->tcv_info.spn_tcu_version[0],
             task->tcv_info.spn_tcu_version[1]);
     lbl->setText(ch);
-    TDDebug("tcv_info.spn_tcu_version=%02x.%02x ",task->tcv_info.spn_tcu_version[0],task->tcv_info.spn_tcu_version[1]);
     //timer.start();
 }
 
@@ -74,17 +72,6 @@ void connect_charge::newTimeNoSec(QLabel* lbl)
 
    //sprintf(ch,"%04d-%02d-%02d %02d:%02d:%02d:%ld", 1900+p->tm_year, 1+p->tm_mon, p->tm_mday, p->tm_hour, p->tm_min,p->tm_sec,tv.tv_usec/1000);
     lbl->setText(ch);
-
-    sprintf(tmp,"%02d-%02d-%02d  Week:%01d %02d:%02d:%02d:%ld",
-             task->tts_info.spn1280_bcd_year,
-             task->tts_info.spn1280_bcd_mon,
-             (task->tts_info.spn1280_bcd_day) & 0x1f,
-            ((task->tts_info.spn1280_bcd_day) & 0xe0)>>5,
-             task->tts_info.spn1280_bcd_hour,
-             task->tts_info.spn1280_bcd_min,
-             ((task->tts_info.spn1280_bcd_sec_h)<<8 | (task->tts_info.spn1280_bcd_sec_l))/1000,
-             ((task->tts_info.spn1280_bcd_sec_h)<<8 | (task->tts_info.spn1280_bcd_sec_l))%1000);
-    TDDebug("tts_info=%s",tmp);
     tcv_timer.start();
 }
 

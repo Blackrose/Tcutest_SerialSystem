@@ -1,5 +1,5 @@
 #include "equipment_testing.h"
-#include "ui_equipment_testing.h"
+#include "ui_forms/ui_equipment_testing.h"
 #include "connect_charge.h"
 #include "mysigals_slots.h"
 #include "tcu.h"

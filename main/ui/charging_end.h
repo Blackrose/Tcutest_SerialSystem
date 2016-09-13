@@ -1,7 +1,7 @@
 #ifndef CHARGING_END_H
 #define CHARGING_END_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 namespace Ui {
 class charging_end;

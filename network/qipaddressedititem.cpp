@@ -1,5 +1,6 @@
 #include "qipaddressedititem.h"
-#include <QtGui>
+#include <QtGui/QKeyEvent>
+#include <QtWidgets/QMessageBox>
 #include <QIntValidator>
 
 QIpAddressEditItem::QIpAddressEditItem(QWidget *parent) :

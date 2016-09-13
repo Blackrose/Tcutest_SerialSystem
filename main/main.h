@@ -4,12 +4,12 @@
 #ifndef LINLONG_MAIN
 #define LINLONG_MAIN
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 #include <QString>
-#include <QInputDialog>
-#include <QMessageBox>
+#include <QtWidgets/QInputDialog>
+#include <QtWidgets/QMessageBox>
 //#include <QSqlDatabase>
-#include <QWidget>
+#include <QtWidgets/QWidget>
 #include <time.h>
 //#include <QWSInputMethod>
 //#include <QWSServer>
@@ -18,11 +18,11 @@
 #include <time.h>
 #include <sys/types.h>
 #include <string.h>
-#include <QProgressBar>
+#include <QtWidgets/QProgressBar>
 #include<QPixmap>
-#include <QDesktopWidget>
+#include <QtWidgets/QDesktopWidget>
 
-#include "ui_main.h"
+#include "ui_forms/ui_main.h"
 #include "secondwindow.h"
 
 #define NORMAL 	1

@@ -3,9 +3,9 @@
 =============================*/
 
 #include "startUpFrm.h"
-#include <QWidget>
+#include <QtWidgets/QWidget>
 #include <QMovie>
-#include <QLabel>
+#include <QtWidgets/QLabel>
 
 StartUp::StartUp(QWidget *parent): QWidget(parent),Ui_startUpFrm()
 {

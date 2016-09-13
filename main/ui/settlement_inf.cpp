@@ -1,5 +1,5 @@
 #include "settlement_inf.h"
-#include "ui_settlement_inf.h"
+#include "ui_forms/ui_settlement_inf.h"
 
 settlement_inf::settlement_inf(QWidget *parent) :
     QWidget(parent),

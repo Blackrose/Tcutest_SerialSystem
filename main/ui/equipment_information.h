@@ -1,9 +1,9 @@
 #ifndef EQUIPMENT_INFORMATION_H
 #define EQUIPMENT_INFORMATION_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 #include <QTimer>
-#include <QLineEdit>
+#include <QtWidgets/QLineEdit>
 
 namespace Ui {
 class Equipment_information;

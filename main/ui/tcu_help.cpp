@@ -1,5 +1,5 @@
 #include "tcu_help.h"
-#include "ui_tcu_help.h"
+#include "ui_forms/ui_tcu_help.h"
 
 tcu_help::tcu_help(QWidget *parent) :
     QWidget(parent),

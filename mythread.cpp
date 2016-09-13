@@ -7,9 +7,9 @@ mythread::mythread(QObject *parent) : QThread(parent)
 
 void mythread::run()
 {
-    tcu_canbus();
+    //tcu_canbus();
 }
 void mythread::stop()
 {
-    tcu_canstop();
+    //tcu_canstop();
 }

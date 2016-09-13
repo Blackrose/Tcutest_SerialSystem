@@ -1,16 +1,16 @@
 #ifndef CONNECT_CHARGE_H
 #define CONNECT_CHARGE_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 #include <QTimer>
 #include <unistd.h>
 #include "mythread.h"
-#include <QLabel>
-#include <QLineEdit>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include "global.h"
 #include "mysigals_slots.h"
 #include "myerr_sigals_slots.h"
-#include <QMessageBox>
+#include <QtWidgets/QMessageBox>
 
 namespace Ui {
 class connect_charge;

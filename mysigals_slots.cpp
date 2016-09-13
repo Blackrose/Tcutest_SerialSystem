@@ -5,8 +5,8 @@
 #include "charging_monitoring.h"
 #include "bat_information.h"
 #include "settlement_inf.h"
-#include <QLabel>
-#include <QMessageBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QMessageBox>
 
 
 equipment_testing *w_equ_testing;

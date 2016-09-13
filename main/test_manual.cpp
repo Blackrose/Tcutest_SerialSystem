@@ -1,5 +1,5 @@
 #include "test_manual.h"
-#include "ui_test_manual.h"
+#include "ui_forms/ui_test_manual.h"
 #include "Card_window.h"
 #include "Emter_window.h"
 #include "connect_charge.h"
@@ -62,14 +62,14 @@ void test_Manual::slot_canbus()
 
 void test_Manual::slot_gprs()
 {
-    Gprs *w_gprs = new Gprs;
-    w_gprs->show();
+    //Gprs *w_gprs = new Gprs;
+    //w_gprs->show();
 }
 
 void test_Manual::slot_gps()
 {
-    gps *w_gps = new gps;
-    w_gps->show();
+    //gps *w_gps = new gps;
+    //w_gps->show();
 }
 
 void test_Manual::slot_network()

@@ -5,10 +5,7 @@
  **/
 
 #include "netwindow.h"
-#include "ui_netwindow.h"
-
-
-//SyszuxIM* NetWindow::imf_my;
+#include "ui_forms/ui_netwindow.h"
 
 // ifconfig -a|grep -E "eth[0-9]|wlan[0-9]"|cut -d' ' -f 1
 NetWindow::NetWindow(QWidget *parent) :
@@ -33,12 +30,6 @@ NetWindow::NetWindow(QWidget *parent) :
     readConfigs();
     sel_changed(ui->cb_interface->currentText());
 
-    imf_my = new SyszuxIM();
-    QWSServer::setCurrentInputMethod(imf_my);
-        //imf_my->updateHandler(QWSInputMethod::FocusIn);
-         //imf_my->updateHandler(QWSInputMethod::FocusOut);
-    //QWSInputMethod* im = new SyszuxIM;
-    //QWSServer::setCurrentInputMethod(im);
 }
 
 void NetWindow::slot_hide()

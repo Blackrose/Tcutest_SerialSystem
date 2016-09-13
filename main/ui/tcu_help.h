@@ -1,7 +1,7 @@
 #ifndef TCU_HELP_H
 #define TCU_HELP_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 namespace Ui {
 class tcu_help;

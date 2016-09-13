@@ -1,7 +1,7 @@
 #ifndef GPRS_H
 #define GPRS_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 #include <qsocketnotifier.h>
 #include<QProcess>
 
