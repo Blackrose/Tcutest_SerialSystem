@@ -2,7 +2,7 @@
 #define TEST_MANUAL_H
 
 #include <QWidget>
-#include "mythread.h"
+//#include "mythread.h"
 
 namespace Ui {
 class test_Manual;

@@ -31,7 +31,7 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
     //connect(ui->change_carinf_but,SIGNAL(clicked()),this,SLOT(change_carinf()));//
     connect(ui->change_billinf_but,SIGNAL(clicked()),this,SLOT(change_billinf()));//
     //connect(ui->change_end_but,SIGNAL(clicked()),this,SLOT(change_end()));//
-    //connect(ui->soc_stop,SIGNAL(clicked()),this,SLOT(Charging_monitoring_hide()));
+    connect(ui->soc_stop,SIGNAL(clicked()),this,SLOT(Charging_monitoring_hide()));
     //connect(ui->soc_stop,SIGNAL(clicked()),this,SLOT(change_main()));
 
     connect(&tst_timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//停止充电
@@ -191,7 +191,8 @@ void Charging_monitoring::change_end()
 
 void Charging_monitoring::Charging_monitoring_hide()
 {
-    hide();
+    //hide();
+    my_sigals.SetValue(TCU_STAGE_STOP);
 }
 
 void Charging_monitoring::change_main()// error

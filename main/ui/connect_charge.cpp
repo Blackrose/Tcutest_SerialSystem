@@ -10,7 +10,10 @@
 #include "mysigals_slots.h"
 #include "test_manual.h"
 #include "file.h"
+//#include "mythread.h"
 #include <QTextCodec>
+
+//mythread connect_charge::mythread_can;
 
 connect_charge::connect_charge(QWidget *parent) :
     QWidget(parent),
@@ -43,7 +46,7 @@ void connect_charge::slot_hide()
 }
 void connect_charge::check_ver(QLineEdit* lbl)
 {
-    char ch[50],tmp[50];
+    char ch[50];
     sprintf(ch,"%02x.%02x",
             task->tcv_info.spn_tcu_version[0],
             task->tcv_info.spn_tcu_version[1]);
@@ -54,7 +57,7 @@ void connect_charge::check_ver(QLineEdit* lbl)
 
 void connect_charge::newTimeNoSec(QLabel* lbl)
 {
-    char ch[50];
+    char ch[50],tmp[50];
     struct tm *p;
     struct timeval    tv;
 

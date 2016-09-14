@@ -16,4 +16,6 @@ signals:
 public slots:
 };
 
+ //extern mythread mythread_can ;
+
 #endif // MYTHREAD_H

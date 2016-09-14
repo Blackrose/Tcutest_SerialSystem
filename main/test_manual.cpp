@@ -7,6 +7,7 @@
 #include "gps/gps.h"
 #include "gprs/gprs.h"
 #include "network/netwindow.h"
+#include "mythread.h"
 
 //mythread  test_Manual::mythread_can ;
 
