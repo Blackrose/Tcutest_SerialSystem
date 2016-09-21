@@ -3,6 +3,7 @@
 #include "test_manual.h"
 #include "mythread.h"
 #include "connect_charge.h"
+#include "message/message.h"
 
 settlement_inf::settlement_inf(QWidget *parent) :
     QWidget(parent),
@@ -12,6 +13,7 @@ settlement_inf::settlement_inf(QWidget *parent) :
     setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
     setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存
     connect(ui->back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK
+    Message::static_msg = new Message();
 }
 
 settlement_inf::~settlement_inf()

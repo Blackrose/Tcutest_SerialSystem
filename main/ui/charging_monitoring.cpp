@@ -37,6 +37,7 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
     connect(&tst_timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//停止充电
     tst_timer.start(100);
 
+    Message::static_msg = new Message();
 #if 0
     if(bat_soc_int<100){//90
         ui->full_charge_but->setVisible(false);

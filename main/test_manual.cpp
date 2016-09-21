@@ -8,6 +8,8 @@
 #include "gprs/gprs.h"
 #include "network/netwindow.h"
 #include "mythread.h"
+#include "qr_code.h"
+#include "first_interface.h"
 
 //mythread  test_Manual::mythread_can ;
 
@@ -30,6 +32,7 @@ test_Manual::test_Manual(QWidget *parent) :
     connect(ui->gps_but,SIGNAL(clicked()),this,SLOT(slot_gps()));
     connect(ui->network_but,SIGNAL(clicked()),this,SLOT(slot_network()));     
     connect(ui->touch_but,SIGNAL(clicked()),this,SLOT(slot_touch()));
+    connect(ui->pwm_but,SIGNAL(clicked()),this,SLOT(slot_pwm()));
 }
 
 test_Manual::~test_Manual()
@@ -83,6 +86,14 @@ void test_Manual::slot_touch()
 {
 //    NetWindow *w_toucht = new NetWindow;
 //    w_touch->show();
-    QProcess *pro = new QProcess;
-    pro->start("ts_calibrate -qws");
+    //QProcess *pro = new QProcess;
+    //pro->start("ts_calibrate -qws");
+    QR_code *w_qrcode = new QR_code;
+    w_qrcode->show();
+}
+
+void test_Manual::slot_pwm()
+{
+    First_interface *w_interface = new First_interface;
+    w_interface->show();
 }

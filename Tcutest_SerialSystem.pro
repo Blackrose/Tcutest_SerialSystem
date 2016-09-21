@@ -84,7 +84,28 @@ HEADERS += global.h \
     keyboard/imframe.h \
     keyboard/inputwidget.h \
     SYSZUXpinyin/syszuxim.h \
-    SYSZUXpinyin/syszuxpinyin.h
+    SYSZUXpinyin/syszuxpinyin.h \
+    message/message.h \
+    main/ui/first_interface.h \
+    main/ui/card_query.h \
+    main/ui/card_unlock.h \
+    main/ui/charging_mode.h \
+    main/ui/charge_card.h \
+    main/ui/swipe_card.h \
+    main/ui/qr_code.h \
+    main/ui/phone_code.h \
+    main/ui/account_code.h \
+    qrencode-3.4.4/bitstream.h \
+    qrencode-3.4.4/config.h \
+    qrencode-3.4.4/mask.h \
+    qrencode-3.4.4/mmask.h \
+    qrencode-3.4.4/mqrspec.h \
+    qrencode-3.4.4/qrencode_inner.h \
+    qrencode-3.4.4/qrencode.h \
+    qrencode-3.4.4/qrinput.h \
+    qrencode-3.4.4/qrspec.h \
+    qrencode-3.4.4/rscode.h \
+    qrencode-3.4.4/split.h
 FORMS += qcom/Card_window.ui \
          qcom/Emter_window.ui \
          startUp/startUpFrm.ui \
@@ -106,7 +127,17 @@ FORMS += qcom/Card_window.ui \
     gps/gps.ui \
     network/netwindow.ui \
     keyboard/ui/keyboard.ui \
-    SYSZUXpinyin/syszuxpinyin.ui
+    SYSZUXpinyin/syszuxpinyin.ui \
+    message/message.ui \
+    main/ui/first_interface.ui \
+    main/ui/card_query.ui \
+    main/ui/card_unlock.ui \
+    main/ui/charging_mode.ui \
+    main/ui/charge_card.ui \
+    main/ui/swipe_card.ui \
+    main/ui/qr_code.ui \
+    main/ui/phone_code.ui \
+    main/ui/account_code.ui
 SOURCES += global.cpp \
            myerr_sigals_slots.cpp \
            mysigals_slots.cpp \
@@ -153,9 +184,31 @@ SOURCES += global.cpp \
     keyboard/imframe.cpp \
     keyboard/inputwidget.cpp \
     SYSZUXpinyin/syszuxim.cpp \
-    SYSZUXpinyin/syszuxpinyin.cpp
+    SYSZUXpinyin/syszuxpinyin.cpp \
+    message/message.cpp \     
+    main/ui/first_interface.cpp \
+    main/ui/card_query.cpp \
+    main/ui/card_unlock.cpp \
+    main/ui/charging_mode.cpp \
+    main/ui/charge_card.cpp \
+    main/ui/swipe_card.cpp \
+    main/ui/qr_code.cpp \
+    main/ui/phone_code.cpp \
+    main/ui/account_code.cpp \
+    qrencode-3.4.4/bitstream.c \
+    qrencode-3.4.4/mask.c \
+    qrencode-3.4.4/mmask.c \
+    qrencode-3.4.4/mqrspec.c \
+    qrencode-3.4.4/qrenc.c \
+    qrencode-3.4.4/qrencode.c \
+    qrencode-3.4.4/qrinput.c \
+    qrencode-3.4.4/qrspec.c \
+    qrencode-3.4.4/rscode.c \
+    qrencode-3.4.4/split.c
 RESOURCES += img.qrc qcom/images.qrc \
     syszuxpinyin.qrc
+
+DEFINES += HAVE_CONFIG_H
 
 OBJECTS_DIR =  ./obj
 MOC_DIR = ./moc

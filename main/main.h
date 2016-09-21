@@ -24,6 +24,7 @@
 
 #include "ui_main.h"
 #include "secondwindow.h"
+#include "message/message.h"
 
 #define NORMAL 	1
 #define WARN	2

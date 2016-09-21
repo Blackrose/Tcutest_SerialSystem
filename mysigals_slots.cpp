@@ -7,6 +7,7 @@
 #include "settlement_inf.h"
 #include <QLabel>
 #include <QMessageBox>
+#include "message/message.h"
 
 
 equipment_testing *w_equ_testing;
@@ -36,7 +37,7 @@ void mysigals_slots::ChangeValue(int value)
     printf("now ChangeValue\n");
     //equipment_testing *w_equ_testing = new equipment_testing;
     //Charging_monitoring *w_change_moni = new Charging_monitoring;
-
+    QMessageBox *msg = new QMessageBox();
     switch(value)
     {
         case TCU_STAGE_INVALID:
@@ -46,25 +47,31 @@ void mysigals_slots::ChangeValue(int value)
         case TCU_STAGE_PARAMETER:
             break;
         case TCU_STAGE_CONNECT:
-            QMessageBox::about(NULL, "Connect", "电动汽车已连接");
+            //QMessageBox::about(NULL, "Connect", "电动汽车已连接");
             w_equ_testing = new equipment_testing;
             w_equ_testing->show();
+             Message::_show(tr("电动汽车已连接"));
+             Message::static_msg->setWindowTitle("Connect");
             //w_bat_information = new bat_information;
             //w_bat_information->show();
             break;
         case TCU_STAGE_START:
-            QMessageBox::about(NULL, "Start", "电动汽车启动充电");
+            //QMessageBox::about(NULL, "Start", "电动汽车启动充电");
             w_change_moni = new Charging_monitoring;
             w_change_moni->show();
+            Message::static_msg->setWindowTitle("Start");
+            Message::_show(tr("电动汽车启动充电"));
             task->tcu_stage = TCU_STAGE_START;
-            task->tcu_tmp_stage = TCU_STAGE_START;
+            task->tcu_tmp_stage = TCU_STAGE_START;           
             break;
         case TCU_STAGE_STATUS:
             break;
         case TCU_STAGE_STOP:
-            QMessageBox::about(NULL, "Stop", "停止充电");
+            //QMessageBox::about(NULL, "Stop", "停止充电");
             w_settlement_inf = new settlement_inf;
             w_settlement_inf->show();
+            Message::static_msg->setWindowTitle("Stop");
+            Message::_show(tr("电动汽车停止充电"));
             task->tcu_stage = TCU_STAGE_STOP;
             task->tcu_tmp_stage = TCU_STAGE_STOP;
             break;

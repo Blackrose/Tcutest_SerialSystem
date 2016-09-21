@@ -21,6 +21,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
     this->setPalette(palette);
     setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存
    dateTimeEdit->setDateTime(QDateTime::currentDateTime());
+    //Message::static_msg = new Message();
     //p_imf = new IMFrame();	//键盘
 #if 1
     //w_second = new Secondwindow;

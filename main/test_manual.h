@@ -28,6 +28,7 @@ public slots:
     void slot_gprs();
     void slot_network();
     void slot_touch();
+    void slot_pwm();
 };
 
 #endif // TEST_MANUAL_H

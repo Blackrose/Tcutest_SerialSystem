@@ -3,6 +3,7 @@
 #include "connect_charge.h"
 #include "mysigals_slots.h"
 #include "tcu.h"
+#include "message/message.h"
 
 #include <QTime>
 #include <QTimer>
@@ -22,6 +23,7 @@ equipment_testing::equipment_testing(QWidget *parent) :
     num=0;
     generateAscendRandomNumber();
     setProgress();
+    Message::static_msg = new Message();
 }
 
 void equipment_testing::setProgress()
