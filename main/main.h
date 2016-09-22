@@ -61,10 +61,13 @@ public :
         Main(QProgressBar *proBar,QWidget* parent = NULL);
         virtual ~Main();
         //Secondwindow  *w_second;
+        void timerEvent(QTimerEvent *);
+
 public slots:
         void secondwindow();
         void autotestwindow();
         void manualtestwindow();
+
 public:
 
 

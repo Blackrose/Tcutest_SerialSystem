@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QEvent>
+#include <QTimer>
 
 class MyEvent : public QObject
 {
@@ -13,9 +14,17 @@ private:
 
 signals:
 	void clearSignal();
+    void signal_have_dosth();
 
 public:
+    static QTimer have_dosthtimer;
+    static bool have_dosth;
 	virtual bool eventFilter( QObject *obj, QEvent *event);
+
+public slots:
+//    void slot_JodjeDosth();
+//     void slot_fullScreen();
+
 };
 
 #endif
