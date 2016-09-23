@@ -73,8 +73,7 @@ HEADERS += global.h \
            qcom/dlt645_2007/dlt645_api_07.h \
            qcom/qextserial/qextserialport.h \
            qcom/qextserial/qextserialport_global.h \
-           qcom/qextserial/qextserialport_p.h \
-           moc_qextserialport.cpp \
+           qcom/qextserial/qextserialport_p.h \           
     gprs/gprs.h \
     gps/gps.h \
     network/interface.h \
@@ -105,7 +104,8 @@ HEADERS += global.h \
     qrencode-3.4.4/qrinput.h \
     qrencode-3.4.4/qrspec.h \
     qrencode-3.4.4/rscode.h \
-    qrencode-3.4.4/split.h
+    qrencode-3.4.4/split.h \
+    main/ui/card_operation.h
 FORMS += qcom/Card_window.ui \
          qcom/Emter_window.ui \
          startUp/startUpFrm.ui \
@@ -137,7 +137,8 @@ FORMS += qcom/Card_window.ui \
     main/ui/swipe_card.ui \
     main/ui/qr_code.ui \
     main/ui/phone_code.ui \
-    main/ui/account_code.ui
+    main/ui/account_code.ui \
+    main/ui/card_operation.ui
 SOURCES += global.cpp \
            myerr_sigals_slots.cpp \
            mysigals_slots.cpp \
@@ -204,7 +205,8 @@ SOURCES += global.cpp \
     qrencode-3.4.4/qrinput.c \
     qrencode-3.4.4/qrspec.c \
     qrencode-3.4.4/rscode.c \
-    qrencode-3.4.4/split.c
+    qrencode-3.4.4/split.c \
+    main/ui/card_operation.cpp
 RESOURCES += img.qrc qcom/images.qrc \
     syszuxpinyin.qrc
 

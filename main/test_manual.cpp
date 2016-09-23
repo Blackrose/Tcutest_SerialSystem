@@ -10,6 +10,7 @@
 #include "mythread.h"
 #include "qr_code.h"
 #include "first_interface.h"
+#include "card_operation.h"
 
 //mythread  test_Manual::mythread_can ;
 
@@ -94,6 +95,9 @@ void test_Manual::slot_touch()
 
 void test_Manual::slot_pwm()
 {
-    First_interface *w_interface = new First_interface;
-    w_interface->show();
+    //First_interface *w_interface = new First_interface;
+    //w_interface->show();
+
+     card_operation *w_card_operation = new card_operation;
+     w_card_operation->show();
 }

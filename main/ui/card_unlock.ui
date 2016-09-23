@@ -121,7 +121,7 @@ QProgressBar {
     <string>与后台交互中，请取走卡片．．．</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_4">
+  <widget class="QLabel" name="label_success">
    <property name="geometry">
     <rect>
      <x>320</x>
@@ -146,7 +146,7 @@ QProgressBar {
   <zorder>progressBar</zorder>
   <zorder>logo</zorder>
   <zorder>label_3</zorder>
-  <zorder>label_4</zorder>
+  <zorder>label_success</zorder>
  </widget>
  <resources/>
  <connections/>

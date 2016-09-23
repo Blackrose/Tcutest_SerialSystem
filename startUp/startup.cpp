@@ -31,12 +31,12 @@ bool MyEvent::eventFilter(QObject *obj, QEvent *event)
                 if(have_dosthtimer.isActive())//have_dosthtimer很显然是个定时器，在这判断是否已经开启.
                 {
                    have_dosthtimer.stop();
-                   have_dosthtimer.start(1000*10);//如果已经开启，并且有鼠标移动事件就需要计时器重新计算(这里是10s)
+                   have_dosthtimer.start(1000*30);//如果已经开启，并且有鼠标移动事件就需要计时器重新计算(这里是30s)
                    qDebug()<<"have_dosthtimer restart";
                 }
                 else
                 {
-                    have_dosthtimer.start(1000*10);
+                    have_dosthtimer.start(1000*30);
                 }
             }
             else
@@ -45,7 +45,7 @@ bool MyEvent::eventFilter(QObject *obj, QEvent *event)
                 if(have_dosthtimer.isActive())//have_dosthtimer很显然是个定时器，在这判断是否已经开启.
                 {
                    have_dosthtimer.stop();
-                   have_dosthtimer.start(1000*10);//如果已经开启，并且有鼠标移动事件就需要计时器重新计算(这里是10s)
+                   have_dosthtimer.start(1000*30);//如果已经开启，并且有鼠标移动事件就需要计时器重新计算(这里是10s)
                    qDebug()<<"have_dosthtimer restart11111";
                 }
             }
@@ -89,7 +89,7 @@ int main(int argc,char **argv)
 	StartUp ma;
     ma.show();
     app.connect(&MyEvent::have_dosthtimer,SIGNAL(timeout()),&ma,SLOT(slot_JodjeDosth()));
-    //MyEvent::have_dosthtimer.start(1000*10);
+    //MyEvent::have_dosthtimer.start(1000*30);
     //app.connect(my_event, SIGNAL(clearSignal()), &ma, SLOT(emitClear()));
     app.connect(my_event, SIGNAL(signal_have_dosth()), &ma, SLOT(slot_fullScreen()));
 
