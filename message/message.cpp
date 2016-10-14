@@ -5,6 +5,8 @@
 #include "message.h"
 #include <QWidget>
 #include <QCloseEvent>
+#include <QMessageBox>
+#include "tcu.h"
 
 Message* Message::static_msg = NULL;
 
@@ -20,6 +22,11 @@ Message::Message(QWidget *parent): QWidget(parent),Ui_Message()
 }
 void Message::closeEvent ( QCloseEvent * event )
 {
+   // if(static_msg.exec() == QMessageBox::Retry)
+//    {    printf("closeEvent111111\n");
+//            QMessageBox::aboutQt(NULL, "About Qt");
+//    }
+
 	event->ignore(); 
 	lblMsg->setText(tr(""));
 	lblMsg_2->setText(tr(""));
@@ -51,4 +58,18 @@ void Message::_show(QString str)
     static_msg->setGeometry(300, 190, 200, 100);
 	static_msg->setText(str);
 	static_msg->show();
+}
+
+void Message::on_pbt_retry_clicked()
+{
+        printf("on_pbt_retry_clicked\n");
+        task->tcu_stage = TCU_STAGE_CHECKVER;
+        task->tcu_tmp_stage = TCU_STAGE_CHECKVER;
+        task->tcu_err_stage = TCU_ERR_STAGE_CHECKVER;
+        //statistics[I_TCV].can_silence = 0;
+}
+
+void Message::on_pbt_cancel_clicked()
+{
+        printf("on_pbt_cancel_clicked\n");
 }

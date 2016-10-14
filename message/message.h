@@ -21,6 +21,10 @@ public :
 	static void _show(QString str);
 	static Message* static_msg;
 	int i ; 
+
+private slots:
+    void on_pbt_retry_clicked();
+    void on_pbt_cancel_clicked();
 };
 
 #endif//MY_Message_H

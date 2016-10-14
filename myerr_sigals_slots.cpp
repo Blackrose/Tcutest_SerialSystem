@@ -1,6 +1,7 @@
 #include "myerr_sigals_slots.h"
 #include "stdio.h"
 #include "tcu.h"
+#include "message/message.h"
 
 myerr_sigals_slots::myerr_sigals_slots(QWidget *parent) : QWidget(parent)
 {
@@ -8,6 +9,9 @@ myerr_sigals_slots::myerr_sigals_slots(QWidget *parent) : QWidget(parent)
     msgBox.setGeometry(350,150,150,100);
     msgBox.resize(150,100);
     msgBox.setFixedSize(150,100);
+    msgBox.setMinimumSize(150,100);
+    msgBox.setMaximumSize(150,100);
+    //msgBox.eventFilter()
 }
 
 
@@ -33,7 +37,7 @@ void myerr_sigals_slots::ChangeValue(int value)
         case TCU_ERR_STAGE_INVALID:
             break;
         case TCU_ERR_STAGE_CHECKVER:
-             msgBox.critical(NULL, "Error", "版本校验失败");
+            msgBox.critical(NULL, "Error", "版本校验失败");
             break;
         case TCU_ERR_STAGE_PARAMETER:
             msgBox.critical(NULL, "Error", "充电参数不匹配");
@@ -53,6 +57,11 @@ void myerr_sigals_slots::ChangeValue(int value)
         case  TCU_ERR_STAGE_TIME:
             break;
         case  TCU_ERR_STAGE_ANY:
+            break;
+        case (TCU_ERR_STAGE_TIMEOUT | TCU_ERR_STAGE_CHECKVER):
+            Message::static_msg->setWindowTitle("Error");
+            Message::_show(tr("版本校验超时"));
+            //msgBox.critical(NULL, "Error", "版本校验超时",QMessageBox::Retry | QMessageBox::Cancel, QMessageBox::Retry);
             break;
     }
 }

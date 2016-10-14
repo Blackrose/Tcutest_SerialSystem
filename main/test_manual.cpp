@@ -85,12 +85,11 @@ void test_Manual::slot_network()
 
 void test_Manual::slot_touch()
 {
-//    NetWindow *w_toucht = new NetWindow;
-//    w_touch->show();
-    //QProcess *pro = new QProcess;
-    //pro->start("ts_calibrate -qws");
-    QR_code *w_qrcode = new QR_code;
-    w_qrcode->show();
+//    QProcess *pro = new QProcess;
+//    pro->start("ts_calibrate");
+    ::system("ts_calibrate");
+//    QR_code *w_qrcode = new QR_code;
+//    w_qrcode->show();
 }
 
 void test_Manual::slot_pwm()
@@ -98,6 +97,8 @@ void test_Manual::slot_pwm()
     //First_interface *w_interface = new First_interface;
     //w_interface->show();
 
-     card_operation *w_card_operation = new card_operation;
-     w_card_operation->show();
+     //card_operation *w_card_operation = new card_operation;
+     //w_card_operation->show();
+    //::system("aplay audio/wo.wav");
+    //::system("mplayer audio/test.mp3");
 }

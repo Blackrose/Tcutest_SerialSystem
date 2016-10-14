@@ -28,7 +28,7 @@ void mysigals_slots::SetValue(int value)
         //oldvalue=value;
         //value_tmp =value;
         emit ValueChanged(value);
-    }
+    }//注意这里的if判断,这是避免递归的方式!如果没有if,当出现了循环连接的时候就会产生无限递归
 }
 
 void mysigals_slots::ChangeValue(int value)

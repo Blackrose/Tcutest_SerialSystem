@@ -40,7 +40,7 @@ void equipment_testing::setProgress()
 void equipment_testing::slotUpdateProgress()
 {
     ui->progressBar->setValue(numbersList[num]);
-    printf("numbersList%d==%d\n",num,numbersList[num]);
+    //printf("numbersList%d==%d\n",num,numbersList[num]);
     num++;
     if(num == 100)
     {

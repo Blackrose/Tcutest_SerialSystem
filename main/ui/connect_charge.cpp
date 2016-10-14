@@ -12,6 +12,7 @@
 #include "file.h"
 //#include "mythread.h"
 #include <QTextCodec>
+#include "message/message.h"
 
 //mythread connect_charge::mythread_can;
 
@@ -33,6 +34,9 @@ connect_charge::connect_charge(QWidget *parent) :
     nextscreen_timer.start(100);
 
     connect(ui->back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK   
+
+    Message::static_msg = new Message();
+
     show();
 }
 
@@ -106,6 +110,13 @@ void connect_charge::slot_timer()
 }
 void connect_charge::slot_nextscreen_timer()
 {   
+    if(task->tcu_err_stage == (TCU_ERR_STAGE_TIMEOUT | TCU_ERR_STAGE_CHECKVER))
+    {
+        myerr_sigals.SetValue(task->tcu_err_stage);
+        //QMessageBox::critical(NULL, "Error", "版本校验超时");
+        nextscreen_timer.stop();
+    }
+
     if(task->tcu_err_stage == TCU_ERR_STAGE_CHECKVER)
     {
         myerr_sigals.SetValue(TCU_ERR_STAGE_CHECKVER);
