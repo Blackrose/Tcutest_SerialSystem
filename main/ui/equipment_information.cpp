@@ -47,7 +47,7 @@ void Equipment_information::charger_sn(QLineEdit* lbl)// 充电机编号
 void Equipment_information::spn_port(QLineEdit* lbl)
 {
     char ch[50];
-    sprintf(ch,"%d",task->ctf_info.spn8704_port);
+    sprintf(ch,"%d",task->crf_info.spn8448_port);
     lbl->setText(ch);
 }
 
@@ -64,7 +64,7 @@ void Equipment_information::equ_inf()
 //    ui->charge_power->setText(ch);
 
     int cc_status;
-    cc_status = atoi(task->crf_info.spn8448_status);
+    cc_status = task->crf_info.spn8448_status & 0x0F;
 
     if(cc_status == CC_WAIT)
     {

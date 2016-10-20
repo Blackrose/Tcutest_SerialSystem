@@ -36,6 +36,7 @@ private:
 public slots:
     void slot_nextscreen_timer();
     void slot_hide();
+    void slot_start();
     void slotUpdateProgress();
 };
 

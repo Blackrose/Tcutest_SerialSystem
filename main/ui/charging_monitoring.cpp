@@ -24,8 +24,8 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
     ui->charge_2but->setVisible(false);
     ui->charge_1but->setVisible(false);
 
-    connect(ui->soc_set,SIGNAL(clicked()),this,SLOT(set_soc()));//查询
-    //connect(ui->change_moni_but,SIGNAL(clicked()),this-,SLOT(change_moni());
+    //connect(ui->soc_set,SIGNAL(clicked()),this,SLOT(set_soc()));//查询
+    //connect(ui->change_moni_but,SIGNAL(clicked()),this,SLOT(change_moni());
     connect(ui->change_equ_but,SIGNAL(clicked()),this,SLOT(change_equinf()));//
     connect(ui->change_batinf_but,SIGNAL(clicked()),this,SLOT(change_batinf()));//
     //connect(ui->change_carinf_but,SIGNAL(clicked()),this,SLOT(change_carinf()));//
@@ -36,6 +36,9 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
 
     connect(&tst_timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//停止充电
     tst_timer.start(100);
+
+//    connect(&tmp_timer,SIGNAL(timeout()),this,SLOT(slot_tmptimer()));//充电
+//    tmp_timer.start(100);
 
     Message::static_msg = new Message();
 #if 0
@@ -67,12 +70,74 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
 
 void Charging_monitoring::slot_timer()
 {
+    if(task->tcu_err_stage == (TCU_ERR_STAGE_TIMEOUT | TCU_ERR_STAGE_START))
+    {
+        myerr_sigals.SetValue(task->tcu_err_stage);
+        ui->label_inf->setText("启动充电超时");
+        //QMessageBox::critical(NULL, "Error", "启动充电超时");
+        //tst_timer.stop();//注释掉可重试进行下一步，否则定时器停止，无法跳转界面到
+    }
+    if(task->tcu_err_stage == (TCU_ERR_STAGE_TIMEOUT | TCU_ERR_STAGE_STOP))
+    {
+        myerr_sigals.SetValue(task->tcu_err_stage);
+        ui->label_inf->setText("停止充电超时");
+        //QMessageBox::critical(NULL, "Error", "停止充电超时");
+        //tst_timer.stop();
+    }
+
+    if(task->tcu_stage == TCU_STAGE_START)
+    {
+        ui->label_inf->setText("启动充电");
+    }
+
+    if(task->tcu_stage == TCU_STAGE_STARTING)
+    {
+        ui->label_inf->setText("启动充电...");
+        my_sigals.SetValue(TCU_STAGE_STARTING);
+    }
+
+    if(task->tcu_stage == TCU_STAGE_STATUS)
+    {
+        ui->label_inf->setText("启动充电完成");
+    }
+
+    if(task->tcu_stage == TCU_STAGE_CHARGING)
+    {
+        ui->label_inf->setText("充电中...");
+    }
+
     if(task->tcu_stage == TCU_STAGE_STOP || task->tcu_err_stage == TCU_ERR_STAGE_STOP)
     {
             //QMessageBox::about(NULL, "Stop", "停止充电");
+            ui->label_inf->setText("停止充电");
             my_sigals.SetValue(TCU_STAGE_STOP);
             tst_timer.stop();
     }
+
+    if(task->tcu_stage == TCU_STAGE_STOP_END )
+    {
+            //QMessageBox::about(NULL, "Stop", "停止充电");
+            ui->label_inf->setText("停止充电");
+            my_sigals.SetValue(TCU_STAGE_STOP_END);
+            tst_timer.stop();
+    }
+
+    if(task->tcu_err_stage == TCU_ERR_STAGE_START)
+    {
+        myerr_sigals.SetValue(TCU_ERR_STAGE_START);
+        ui->label_inf->setText("启动充电失败");
+        //QMessageBox::critical(NULL, "Error", "启动充电失败");
+        tst_timer.stop();
+    }
+
+    if(task->tcu_err_stage == TCU_ERR_STAGE_STOP_STATUS)
+    {
+        myerr_sigals.SetValue(TCU_ERR_STAGE_STOP_STATUS);
+        ui->label_inf->setText("停止充电失败");
+        //QMessageBox::critical(NULL, "Error", "停止充电失败");
+        tst_timer.stop();
+    }
+
 }
 
 
@@ -158,6 +223,71 @@ void Charging_monitoring::set_soc()
        }
 #endif
        show();
+}
+
+void Charging_monitoring::charge_inf()
+{
+    char ch[50];
+//    sprintf(ch,"%d",task->ctf_info.spn8704_out_vol);
+//    ui->charge_vol->setText(ch);
+
+//    sprintf(ch,"%d",task->ctf_info.spn8704_out_cur);
+//    ui->charge_current->setText(ch);
+
+//    sprintf(ch,"%d",(task->ctf_info.spn8704_out_vol * task->ctf_info.spn8704_out_cur)/1000);
+//    ui->charge_power->setText(ch);
+
+    int cc_status;
+    cc_status = task->crf_info.spn8448_status & 0x0F;
+
+    if(cc_status == CC_WAIT)
+    {
+        sprintf(ch,"待机");
+    }else if(cc_status == CC_WORK)
+    {
+            sprintf(ch,"工作");
+    }else if(cc_status == CC_FULL)
+    {
+            sprintf(ch,"充满");
+    }else if(cc_status == CC_WARN)
+    {
+            sprintf(ch,"告警");
+    }else if(cc_status == CC_ERROR)
+    {
+            sprintf(ch,"故障");
+    }
+    ui->charge_status->setText(ch);
+
+    sprintf(ch,"%s",task->thb_info.spn12544_ele);
+    ui->charge_power->setText(ch);printf("charge_power==%s\n",ch);
+
+    sprintf(ch,"%s",task->ctf_info.spn8704_out_cur);
+    ui->charge_current->setText(ch);printf("charge_current==%s\n",ch);
+
+    sprintf(ch,"%s",task->ctf_info.spn8704_out_vol);
+    ui->charge_vol->setText(ch);printf("charge_vol==%s\n",ch);
+
+    sprintf(ch,"%s",task->thb_info.spn12544_time);
+    ui->charge_time->setText(ch);printf("charge_time==%s\n",ch);
+}
+
+void Charging_monitoring::set_data()
+{
+//    ui->charge_status();
+//    ui->bat_status();
+//    ui->charge_power();
+
+//    ui->charge_current();
+//    ui->charge_vol();
+//    ui->charge_time();
+    charge_inf();
+}
+
+void Charging_monitoring::slot_tmptimer()
+{
+    //set_soc();
+    set_data();
+
 }
 
 void Charging_monitoring::change_moni()

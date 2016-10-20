@@ -1,6 +1,7 @@
 #include "equipment_testing.h"
 #include "ui_equipment_testing.h"
 #include "connect_charge.h"
+#include "test_manual.h"
 #include "mysigals_slots.h"
 #include "tcu.h"
 #include "message/message.h"
@@ -18,11 +19,25 @@ equipment_testing::equipment_testing(QWidget *parent) :
     setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存
 
     connect(ui->back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK
+    connect(ui->start_but,SIGNAL(clicked()),this,SLOT(slot_start()));
+
 
     elapseTime = 1000;
     num=0;
     generateAscendRandomNumber();
-    setProgress();
+    if(task->tcu_stage == TCU_STAGE_CONNECT)
+    {
+        ui->start_but->setVisible(false);
+        ui->label_inf->setVisible(true);
+        ui->label_stop->setVisible(false);
+        setProgress();
+    }
+    else
+    {
+        ui->start_but->setVisible(true);
+        ui->label_inf->setVisible(false);
+        ui->label_stop->setVisible(true);
+    }
     Message::static_msg = new Message();
 }
 
@@ -46,6 +61,7 @@ void equipment_testing::slotUpdateProgress()
     {
          ui->progressBar->setValue(100);
     }
+    ui->label_inf_warn->setText("电动汽车已连接");
 }
 
 void equipment_testing::generateAscendRandomNumber()
@@ -69,8 +85,16 @@ void equipment_testing::slot_nextscreen_timer()
 
 void equipment_testing::slot_hide()
 {
-    hide();
+    //hide();
     numbersList.clear();
+    test_Manual *w_test = new test_Manual;
+    w_test->show();
+}
+
+void equipment_testing::slot_start()
+{
+    setProgress();
+    ui->label_stop->setText("启动充电中．．．");
 }
 
 equipment_testing::~equipment_testing()

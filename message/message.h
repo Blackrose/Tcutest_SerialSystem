@@ -17,6 +17,7 @@ public :
         virtual ~Message();
 	virtual void closeEvent ( QCloseEvent * event );
 	void setText(QString str);
+    void display();
     //void setWindowTitle(QString str);
 	static void _show(QString str);
 	static Message* static_msg;

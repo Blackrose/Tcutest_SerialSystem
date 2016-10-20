@@ -25,7 +25,7 @@ connect_charge::connect_charge(QWidget *parent) :
     setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存
 
     connect(&can_timer,SIGNAL(timeout()),this,SLOT(slot_cantimer()));//版本校验下发参数
-    can_timer.start(100);
+    can_timer.start(10);
 
     connect(&tcv_timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//版本校验下发参数
     tcv_timer.start(100);
@@ -109,18 +109,28 @@ void connect_charge::slot_timer()
     newTimeNoSec(ui->lblLocalTime); //下发参数    
 }
 void connect_charge::slot_nextscreen_timer()
-{   
+{
+#if 1
     if(task->tcu_err_stage == (TCU_ERR_STAGE_TIMEOUT | TCU_ERR_STAGE_CHECKVER))
     {
         myerr_sigals.SetValue(task->tcu_err_stage);
+        ui->label_inf->setText("版本校验超时");
         //QMessageBox::critical(NULL, "Error", "版本校验超时");
-        nextscreen_timer.stop();
+        //nextscreen_timer.stop();//注释掉可重试进行下一步，否则定时器停止，无法跳转界面到 TCU_STAGE_CONNECT
+    }
+    if(task->tcu_err_stage == (TCU_ERR_STAGE_TIMEOUT | TCU_ERR_STAGE_PARAMETER))
+    {
+        myerr_sigals.SetValue(task->tcu_err_stage);
+        ui->label_inf->setText("下发参数超时");
+        //QMessageBox::critical(NULL, "Error", "下发参数超时");
+        //nextscreen_timer.stop();
     }
 
     if(task->tcu_err_stage == TCU_ERR_STAGE_CHECKVER)
     {
         myerr_sigals.SetValue(TCU_ERR_STAGE_CHECKVER);
         //QMessageBox::critical(NULL, "Error", "版本校验失败");
+        ui->label_inf->setText("版本校验失败");
         nextscreen_timer.stop();
     }
 
@@ -128,12 +138,30 @@ void connect_charge::slot_nextscreen_timer()
     {
         myerr_sigals.SetValue(TCU_ERR_STAGE_PARAMETER);
         //QMessageBox::critical(NULL, "Error", "充电参数不匹配");
+        ui->label_inf->setText("充电参数不匹配");
         nextscreen_timer.stop();
+    }
+#else
+     myerr_sigals.SetValue(task->tcu_err_stage);
+
+#endif
+    if(task->tcu_stage == TCU_STAGE_CHECKVER)
+    {
+        ui->label_inf->setText("版本校验中．．．");
+    }
+    if(task->tcu_stage == TCU_STAGE_PARAMETER)
+    {
+        ui->label_inf->setText("下发参数中．．．");
+    }    
+    if(task->tcu_stage == TCU_STAGE_WAITCONNECT)
+    {
+        ui->label_inf->setText("等待连接．．．");
     }
 
     if(task->tcu_stage == TCU_STAGE_CONNECT)
     {          
             //QMessageBox::about(NULL, "Connect", "电动汽车已连接");
+            ui->label_inf->setText("电动汽车已连接");
             my_sigals.SetValue(TCU_STAGE_CONNECT);           
             nextscreen_timer.stop();       
     }

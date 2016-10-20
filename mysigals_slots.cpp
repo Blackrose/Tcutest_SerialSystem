@@ -64,6 +64,9 @@ void mysigals_slots::ChangeValue(int value)
             task->tcu_stage = TCU_STAGE_START;
             task->tcu_tmp_stage = TCU_STAGE_START;           
             break;
+        case TCU_STAGE_STARTING:
+            Message::static_msg->hide();
+            break;
         case TCU_STAGE_STATUS:
             break;
         case TCU_STAGE_STOP:
@@ -76,6 +79,15 @@ void mysigals_slots::ChangeValue(int value)
             task->tcu_tmp_stage = TCU_STAGE_STOP;
             break;
         case TCU_STAGE_STOP_STATUS:
+            //Message::static_msg->hide();
+            break;
+        case TCU_STAGE_STOP_END:
+            w_settlement_inf = new settlement_inf;
+            w_settlement_inf->show();
+            Message::static_msg->setWindowTitle("Stop");
+            Message::_show(tr("电动汽车停止充电"));
+            task->tcu_stage = TCU_STAGE_STOP_END;
+            task->tcu_tmp_stage = TCU_STAGE_STOP_END;
             break;
         case TCU_STAGE_HEAT:
             break;

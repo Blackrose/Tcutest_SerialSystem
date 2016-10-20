@@ -2,6 +2,10 @@
 #include "stdio.h"
 #include "tcu.h"
 #include "message/message.h"
+#include "settlement_inf.h"
+
+settlement_inf *err_settlement_inf;
+
 
 myerr_sigals_slots::myerr_sigals_slots(QWidget *parent) : QWidget(parent)
 {
@@ -28,7 +32,7 @@ void myerr_sigals_slots::SetValue(int value)
 void myerr_sigals_slots::ChangeValue(int value)
 {
     //FunctionForChangingTheValue(value);
-    printf("now ChangeValue\n");
+    //printf("now ChangeValue\n");
     //equipment_testing *w_equ_testing = new equipment_testing;
     //Charging_monitoring *w_change_moni = new Charging_monitoring;
 
@@ -44,13 +48,27 @@ void myerr_sigals_slots::ChangeValue(int value)
             break;
         case TCU_ERR_STAGE_CONNECT:
             break;
+        case TCU_ERR_STAGE_WAITSTART:
+            break;
         case TCU_ERR_STAGE_START:
+            msgBox.critical(NULL, "Error", "启动充电失败");
+            err_settlement_inf = new settlement_inf;
+            err_settlement_inf->show();
+            break;
+        case TCU_ERR_STAGE_STARTING:
             break;
         case TCU_ERR_STAGE_STATUS:
+            break;
+        case TCU_ERR_STAGE_CHARGING:
             break;
         case TCU_ERR_STAGE_STOP:
             break;
         case TCU_ERR_STAGE_STOP_STATUS:
+            msgBox.critical(NULL, "Error", "停止充电失败");
+            err_settlement_inf = new settlement_inf;
+            err_settlement_inf->show();
+            break;
+        case TCU_ERR_STAGE_STOP_END:
             break;
         case  TCU_ERR_STAGE_HEAT:
             break;
@@ -62,6 +80,21 @@ void myerr_sigals_slots::ChangeValue(int value)
             Message::static_msg->setWindowTitle("Error");
             Message::_show(tr("版本校验超时"));
             //msgBox.critical(NULL, "Error", "版本校验超时",QMessageBox::Retry | QMessageBox::Cancel, QMessageBox::Retry);
+            break;
+        case (TCU_ERR_STAGE_TIMEOUT | TCU_ERR_STAGE_PARAMETER):
+            Message::static_msg->setWindowTitle("Error");
+            Message::_show(tr("下发参数超时"));
+            //msgBox.critical(NULL, "Error", "下发参数超时",QMessageBox::Retry | QMessageBox::Cancel, QMessageBox::Retry);
+            break;
+        case (TCU_ERR_STAGE_TIMEOUT | TCU_ERR_STAGE_START):
+            Message::static_msg->setWindowTitle("Error");
+            Message::_show(tr("启动充电超时"));
+            //msgBox.critical(NULL, "Error", "启动充电超时",QMessageBox::Retry | QMessageBox::Cancel, QMessageBox::Retry);
+            break;
+        case (TCU_ERR_STAGE_TIMEOUT | TCU_ERR_STAGE_STOP):
+            Message::static_msg->setWindowTitle("Error");
+            Message::_show(tr("停止充电超时"));
+            //msgBox.critical(NULL, "Error", "停止充电超时",QMessageBox::Retry | QMessageBox::Cancel, QMessageBox::Retry);
             break;
     }
 }

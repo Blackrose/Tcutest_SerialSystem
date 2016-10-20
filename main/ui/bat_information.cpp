@@ -15,6 +15,8 @@ bat_information::bat_information(QWidget *parent) :
     connect(ui->change_moni_but,SIGNAL(clicked()),this,SLOT(change_moni()));//
     connect(ui->change_equ_but,SIGNAL(clicked()),this,SLOT(change_equinf()));//
     connect(ui->change_billinf_but,SIGNAL(clicked()),this,SLOT(change_billinf()));//
+    connect(&bat_timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//参数
+    bat_timer.start(100);
 }
 
 void bat_information::change_moni()
@@ -33,6 +35,11 @@ void bat_information::change_billinf()
 {
     Billing_info *w_billing_information = new Billing_info;
     w_billing_information->show();
+}
+
+void slot_timer()
+{
+    //获取信息
 }
 
 bat_information::~bat_information()
