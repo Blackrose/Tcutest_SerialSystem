@@ -68,7 +68,7 @@ void Message::setText(QString str)
 
 void Message::display()
 {
-    if(task->tcu_err_stage == TCU_ERR_STAGE_INVALID){
+    if(task->tcu_err_stage == TCU_ERR_STAGE_INVALID || task->tcu_err_stage == TCU_ERR_STAGE_TIMEOUT){
         pbt_retry->setVisible(false);
         pbt_cancel->setVisible(false);
     }else{
@@ -92,26 +92,48 @@ void Message::on_pbt_retry_clicked()
             case (TCU_ERR_STAGE_TIMEOUT | TCU_ERR_STAGE_CHECKVER):
                 task->tcu_stage = TCU_STAGE_CHECKVER;
                 task->tcu_tmp_stage = TCU_STAGE_CHECKVER;
-                task->tcu_err_stage = TCU_ERR_STAGE_CHECKVER;
+                task->tcu_err_stage = TCU_ERR_STAGE_TIMEOUT;
                 break;
             case (TCU_ERR_STAGE_TIMEOUT | TCU_ERR_STAGE_PARAMETER):
                 task->tcu_stage = TCU_STAGE_PARAMETER;
                 task->tcu_tmp_stage = TCU_STAGE_PARAMETER;
-                task->tcu_err_stage = TCU_ERR_STAGE_PARAMETER;
+                task->tcu_err_stage = TCU_ERR_STAGE_TIMEOUT;
                 break;
             case (TCU_ERR_STAGE_TIMEOUT | TCU_ERR_STAGE_START):
                 task->tcu_stage = TCU_STAGE_START;
                 task->tcu_tmp_stage = TCU_STAGE_START;
-                task->tcu_err_stage = TCU_ERR_STAGE_START;
+                task->tcu_err_stage = TCU_ERR_STAGE_TIMEOUT;
                 break;
             case (TCU_ERR_STAGE_TIMEOUT | TCU_ERR_STAGE_STOP):
                 task->tcu_stage = TCU_STAGE_STOP;
                 task->tcu_tmp_stage = TCU_STAGE_STOP;
-                task->tcu_err_stage = TCU_ERR_STAGE_STOP;
+                task->tcu_err_stage = TCU_ERR_STAGE_TIMEOUT;
+                break;
+
+            case (TCU_ERR_STAGE_CHECKVER):
+                task->tcu_stage = TCU_STAGE_CHECKVER;
+                task->tcu_tmp_stage = TCU_STAGE_CHECKVER;
+                task->tcu_err_stage = TCU_ERR_STAGE_TIMEOUT;
+                break;
+            case (TCU_ERR_STAGE_PARAMETER):
+                task->tcu_stage = TCU_STAGE_PARAMETER;
+                task->tcu_tmp_stage = TCU_STAGE_PARAMETER;
+                task->tcu_err_stage = TCU_ERR_STAGE_TIMEOUT;
+                break;
+            case (TCU_ERR_STAGE_START):
+                task->tcu_stage = TCU_STAGE_START;
+                task->tcu_tmp_stage = TCU_STAGE_START;
+                task->tcu_err_stage = TCU_ERR_STAGE_TIMEOUT;
+                break;
+            case (TCU_ERR_STAGE_STOP):
+                task->tcu_stage = TCU_STAGE_STOP;
+                task->tcu_tmp_stage = TCU_STAGE_STOP;
+                task->tcu_err_stage = TCU_ERR_STAGE_TIMEOUT;
                 break;
         }
+
         hide();
-        //statistics[I_TCV].can_silence = 0;
+        //generator[I_TCV].can_silence = 0;
 }
 
 void Message::on_pbt_cancel_clicked()
@@ -119,6 +141,6 @@ void Message::on_pbt_cancel_clicked()
         printf("on_pbt_cancel_clicked\n");
         task->tcu_stage = TCU_STAGE_INVALID;
         task->tcu_tmp_stage = TCU_STAGE_INVALID;
-        task->tcu_err_stage = TCU_ERR_STAGE_INVALID;
+        task->tcu_err_stage = TCU_ERR_STAGE_TIMEOUT;
         hide();
 }

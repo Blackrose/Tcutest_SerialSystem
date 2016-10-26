@@ -28,10 +28,10 @@ connect_charge::connect_charge(QWidget *parent) :
     can_timer.start(10);
 
     connect(&tcv_timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//版本校验下发参数
-    tcv_timer.start(100);
+    //tcv_timer.start(100);
 
     connect(&nextscreen_timer,SIGNAL(timeout()),this,SLOT(slot_nextscreen_timer()));
-    nextscreen_timer.start(100);
+    nextscreen_timer.start(200);
 
     connect(ui->back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK   
 
@@ -99,6 +99,7 @@ void connect_charge::slot_cantimer()
 {
     can_timer.stop();
     mythread_can.start(); //tcu_canbus();
+    tcv_timer.start(200);
 }
 
 void connect_charge::slot_timer()
@@ -131,7 +132,7 @@ void connect_charge::slot_nextscreen_timer()
         myerr_sigals.SetValue(TCU_ERR_STAGE_CHECKVER);
         //QMessageBox::critical(NULL, "Error", "版本校验失败");
         ui->label_inf->setText("版本校验失败");
-        nextscreen_timer.stop();
+        //nextscreen_timer.stop();
     }
 
     if(task->tcu_err_stage == TCU_ERR_STAGE_PARAMETER)
@@ -139,7 +140,7 @@ void connect_charge::slot_nextscreen_timer()
         myerr_sigals.SetValue(TCU_ERR_STAGE_PARAMETER);
         //QMessageBox::critical(NULL, "Error", "充电参数不匹配");
         ui->label_inf->setText("充电参数不匹配");
-        nextscreen_timer.stop();
+        //nextscreen_timer.stop();
     }
 #else
      myerr_sigals.SetValue(task->tcu_err_stage);
@@ -158,11 +159,11 @@ void connect_charge::slot_nextscreen_timer()
         ui->label_inf->setText("等待连接．．．");
     }
 
-    if(task->tcu_stage == TCU_STAGE_CONNECT)
+    if(task->tcu_stage == TCU_STAGE_CONNECT || task->tcu_stage == TCU_STAGE_WAITSTART)
     {          
             //QMessageBox::about(NULL, "Connect", "电动汽车已连接");
             ui->label_inf->setText("电动汽车已连接");
-            my_sigals.SetValue(TCU_STAGE_CONNECT);           
+            my_sigals.SetValue(task->tcu_stage);
             nextscreen_timer.stop();       
     }
 }

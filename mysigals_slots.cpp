@@ -47,6 +47,7 @@ void mysigals_slots::ChangeValue(int value)
         case TCU_STAGE_PARAMETER:
             break;
         case TCU_STAGE_CONNECT:
+        case TCU_STAGE_WAITSTART:
             //QMessageBox::about(NULL, "Connect", "电动汽车已连接");
             w_equ_testing = new equipment_testing;
             w_equ_testing->show();
@@ -79,7 +80,7 @@ void mysigals_slots::ChangeValue(int value)
             task->tcu_tmp_stage = TCU_STAGE_STOP;
             break;
         case TCU_STAGE_STOP_STATUS:
-            //Message::static_msg->hide();
+            Message::static_msg->hide();
             break;
         case TCU_STAGE_STOP_END:
             w_settlement_inf = new settlement_inf;

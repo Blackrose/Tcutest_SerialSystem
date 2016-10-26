@@ -5,6 +5,7 @@
 #include "mythread.h"
 #include <QTimer>
 #include "myerr_sigals_slots.h"
+#include "mysigals_slots.h"
 
 namespace Ui {
 class settlement_inf;
@@ -20,6 +21,8 @@ public:
     mythread mythread_can;
     QTimer tst_timer;
     myerr_sigals_slots myerr_sigals;
+    mysigals_slots my_sigals;
+
 
 private:
     Ui::settlement_inf *ui;

@@ -37,7 +37,7 @@ void bat_information::change_billinf()
     w_billing_information->show();
 }
 
-void slot_timer()
+void bat_information::slot_timer()
 {
     //获取信息
 }

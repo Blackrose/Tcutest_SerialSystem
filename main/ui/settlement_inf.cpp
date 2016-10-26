@@ -45,9 +45,19 @@ void settlement_inf::slot_timer()
         //tst_timer.stop();
     }
 
+    if(task->tcu_stage == TCU_STAGE_STOP)
+    {
+        ui->label_inf->setText("停止充电");
+    }
+    if(task->tcu_stage == TCU_STAGE_STOP_STATUS)
+    {
+        ui->label_inf->setText("停止充电...");
+        my_sigals.SetValue(TCU_STAGE_STOP_STATUS);
+    }
     if(task->tcu_stage == TCU_STAGE_STOP_END)
     {
         ui->label_inf->setText("停止充电完成");
+
     }
 
 

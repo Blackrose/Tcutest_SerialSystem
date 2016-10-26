@@ -25,7 +25,7 @@ equipment_testing::equipment_testing(QWidget *parent) :
     elapseTime = 1000;
     num=0;
     generateAscendRandomNumber();
-    if(task->tcu_stage == TCU_STAGE_CONNECT)
+    if(task->tcu_stage == TCU_STAGE_CONNECT || (task->tcu_stage == TCU_STAGE_WAITSTART))
     {
         ui->start_but->setVisible(false);
         ui->label_inf->setVisible(true);
