@@ -146,7 +146,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>01010101</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLineEdit" name="charger_interface_ID">
@@ -204,7 +204,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>待机</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLineEdit" name="charge_power">
@@ -233,7 +233,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>60</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLineEdit" name="charge_current">
@@ -262,7 +262,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>120</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLineEdit" name="charge_vol">
@@ -291,7 +291,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>500</string>
+    <string/>
    </property>
   </widget>
  </widget>

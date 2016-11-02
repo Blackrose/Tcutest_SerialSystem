@@ -44,6 +44,21 @@ void settlement_inf::slot_timer()
         //QMessageBox::critical(NULL, "Error", "停止充电超时");
         //tst_timer.stop();
     }
+    if(task->tcu_err_stage == TCU_ERR_STAGE_STARTING)
+    {
+        myerr_sigals.SetValue(TCU_ERR_STAGE_STOP_END);
+        ui->label_inf->setText("启动充电失败");
+        //QMessageBox::critical(NULL, "Error", "启动充电失败");
+        tst_timer.stop();
+    }
+    if(task->tcu_err_stage == TCU_ERR_STAGE_STOP_STATUS)
+    {
+        myerr_sigals.SetValue(TCU_ERR_STAGE_STOP_END);
+        ui->label_inf->setText("停止充电失败");
+        //QMessageBox::critical(NULL, "Error", "停止充电失败");
+        tst_timer.stop();
+    }
+
 
     if(task->tcu_stage == TCU_STAGE_STOP)
     {

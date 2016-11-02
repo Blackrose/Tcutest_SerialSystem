@@ -69,6 +69,7 @@ void mysigals_slots::ChangeValue(int value)
             Message::static_msg->hide();
             break;
         case TCU_STAGE_STATUS:
+            //gettimeofday(&Charging_Time.start,NULL);
             break;
         case TCU_STAGE_STOP:
             //QMessageBox::about(NULL, "Stop", "停止充电");

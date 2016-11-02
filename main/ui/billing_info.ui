@@ -325,7 +325,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>1.0</string>
+    <string>0.3946</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="flat_price">
@@ -351,7 +351,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>1.2</string>
+    <string>0.695</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="peak_price">
@@ -377,7 +377,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>1.5</string>
+    <string>1.0044</string>
    </property>
   </widget>
  </widget>

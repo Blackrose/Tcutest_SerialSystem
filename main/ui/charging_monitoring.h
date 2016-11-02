@@ -3,9 +3,17 @@
 
 #include <QWidget>
 #include <QProgressBar>
+#include <QPushButton>
 #include <QTimer>
 #include "mysigals_slots.h"
 #include "myerr_sigals_slots.h"
+#include "Emter_window.h"
+
+#undef  EMTER
+#define  EMTER
+//#undef  EMTER
+
+#define BtnNodeNUm   1
 
 namespace Ui {
 class Charging_monitoring;
@@ -20,12 +28,28 @@ public:
     ~Charging_monitoring();
     QTimer tst_timer;	//
     QTimer tmp_timer;	//
+    QTimer charging_timer;
     mysigals_slots my_sigals;
     myerr_sigals_slots myerr_sigals;
+#ifdef EMTER
+        EmterWindow *p_emter;
+#endif
+        int flag;
+        int tmp;
 
     void set_soc();
     void set_data();
     void charge_inf();
+    int   mytime_substract(struct timeval *result, struct timeval *begin,struct timeval *end);
+    void initBtnNode();
+    void setBtnFlag(int flag, QWidget &qw);
+    void showBtn(int flag);
+
+    struct BtnNode{
+        QPushButton btn;
+        int flag;
+    };
+    struct BtnNode 	*btn_node;
 
 private:
     Ui::Charging_monitoring *ui;
@@ -42,6 +66,7 @@ private:
      void change_main();
      void slot_timer();
      void slot_tmptimer();
+     void slot_chargingtimer();
 };
 
 #endif // CHARGING_MONITORING_H

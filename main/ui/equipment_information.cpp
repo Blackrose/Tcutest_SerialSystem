@@ -54,14 +54,15 @@ void Equipment_information::spn_port(QLineEdit* lbl)
 void Equipment_information::equ_inf()
 {
     char ch[50];
-//    sprintf(ch,"%d",task->ctf_info.spn8704_out_vol);
-//    ui->charge_vol->setText(ch);
 
-//    sprintf(ch,"%d",task->ctf_info.spn8704_out_cur);
-//    ui->charge_current->setText(ch);
+    sprintf(ch,"%5.1f",(float)(task->ctf_info.spn8704_out_vol[1] + task->ctf_info.spn8704_out_vol[0]*256)/10);
+    ui->charge_vol->setText(ch);
 
-//    sprintf(ch,"%d",(task->ctf_info.spn8704_out_vol * task->ctf_info.spn8704_out_cur)/1000);
-//    ui->charge_power->setText(ch);
+    sprintf(ch,"%4.2f",(float)(task->ctf_info.spn8704_out_cur[1] + task->ctf_info.spn8704_out_cur[0]*256)/100);
+    ui->charge_current->setText(ch);
+
+    sprintf(ch,"%7.3f",(float)(task->ctf_info.spn8704_out_vol[1] + task->ctf_info.spn8704_out_vol[0]*256)*(task->ctf_info.spn8704_out_cur[1] + task->ctf_info.spn8704_out_cur[0]*256)/1000000);
+    ui->charge_power->setText(ch);
 
     int cc_status;
     cc_status = task->crf_info.spn8448_status & 0x0F;

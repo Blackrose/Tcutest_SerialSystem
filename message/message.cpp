@@ -68,7 +68,8 @@ void Message::setText(QString str)
 
 void Message::display()
 {
-    if(task->tcu_err_stage == TCU_ERR_STAGE_INVALID || task->tcu_err_stage == TCU_ERR_STAGE_TIMEOUT){
+    if(task->tcu_err_stage == TCU_ERR_STAGE_INVALID || task->tcu_err_stage == TCU_ERR_STAGE_TIMEOUT || task->tcu_err_stage == TCU_ERR_STAGE_ANY
+            || task->tcu_err_stage == TCU_ERR_STAGE_START || task->tcu_err_stage == TCU_ERR_STAGE_STOP || task->tcu_err_stage == TCU_ERR_STAGE_STOP_STATUS){
         pbt_retry->setVisible(false);
         pbt_cancel->setVisible(false);
     }else{
@@ -78,7 +79,7 @@ void Message::display()
 }
 void Message::_show(QString str)
 {
-    static_msg->setGeometry(350, 100, 250, 150);
+    static_msg->setGeometry(550, 50, 250, 150);//800-250
 	static_msg->setText(str);
     static_msg->display();
 
@@ -130,6 +131,11 @@ void Message::on_pbt_retry_clicked()
                 task->tcu_tmp_stage = TCU_STAGE_STOP;
                 task->tcu_err_stage = TCU_ERR_STAGE_TIMEOUT;
                 break;
+        case (TCU_ERR_STAGE_STOP_STATUS):
+            task->tcu_stage = TCU_STAGE_STOP;
+            task->tcu_tmp_stage = TCU_STAGE_STOP;
+            task->tcu_err_stage = TCU_ERR_STAGE_TIMEOUT;
+            break;
         }
 
         hide();

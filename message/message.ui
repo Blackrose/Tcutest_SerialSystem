@@ -14,7 +14,7 @@
    <string>提示信息</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">font: 12pt &quot;Sans Serif&quot;;background-color: rgb(85, 170, 255);-color:rgba(255, 255, 255, 55%);</string>
+   <string notr="true">font: 12pt &quot;Sans Serif&quot;;background-color:rgba(85, 85, 255, 100);</string>
   </property>
   <widget class="QLabel" name="lblMsg">
    <property name="geometry">

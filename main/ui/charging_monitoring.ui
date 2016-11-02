@@ -45,8 +45,8 @@
   <widget class="QLabel" name="full_charge">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>130</y>
+     <x>570</x>
+     <y>60</y>
      <width>171</width>
      <height>61</height>
     </rect>
@@ -351,7 +351,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>120</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLineEdit" name="charge_power">
@@ -377,7 +377,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>60</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLineEdit" name="charge_vol">
@@ -403,7 +403,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>500</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLineEdit" name="bat_status">
@@ -455,7 +455,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>60</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLineEdit" name="charge_status">
@@ -484,7 +484,7 @@
     <enum>Qt::NoFocus</enum>
    </property>
    <property name="text">
-    <string>待机</string>
+    <string/>
    </property>
   </widget>
   <widget class="QPushButton" name="soc_stop">
@@ -536,7 +536,7 @@
     <rect>
      <x>140</x>
      <y>100</y>
-     <width>261</width>
+     <width>251</width>
      <height>91</height>
     </rect>
    </property>
@@ -643,6 +643,123 @@
    </property>
    <property name="text">
     <string/>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="emter_power">
+   <property name="geometry">
+    <rect>
+     <x>680</x>
+     <y>20</y>
+     <width>96</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>ArrowCursor</cursorShape>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>610</x>
+     <y>30</y>
+     <width>67</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>电量</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>30</y>
+     <width>67</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>电压</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>30</y>
+     <width>67</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>电流</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="emter_vol">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>20</y>
+     <width>96</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>ArrowCursor</cursorShape>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="emter_current">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>20</y>
+     <width>96</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>20</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>ArrowCursor</cursorShape>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="text">
+    <string>0</string>
    </property>
   </widget>
  </widget>

@@ -3,6 +3,7 @@
 #include "charging_monitoring.h"
 #include "equipment_information.h"
 #include "bat_information.h"
+#include "tcu.h"
 
 Billing_info::Billing_info(QWidget *parent) :
     QWidget(parent),
@@ -56,6 +57,8 @@ void Billing_info::slot_timer()
     ui->valley_power->setText("");
     ui->valley_price->setText("");
 #endif
+    ui->total_power->setText(task->emter_info.emter_power);
+    //ui->total_cost->setText("");
 }
 
 Billing_info::~Billing_info()

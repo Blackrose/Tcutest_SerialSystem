@@ -12,6 +12,8 @@
 #include <QLabel>
 #include <QMovie>
 
+#undef EMTER
+
 Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 {
     setupUi(this);
@@ -28,7 +30,10 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
     //w_second = new Secondwindow;
 
     proBar->setValue(8);
-    usleep(100000);
+    usleep(100000);    
+#ifdef EMTER
+    p_emter = new EmterWindow();
+#endif
     proBar->setValue(16);
     usleep(100000);
     proBar->setValue(24);
@@ -59,6 +64,13 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
     //connect(auto_but,SIGNAL(clicked()),this,SLOT(autotestwindow()));//自动测试
     connect(manual_but,SIGNAL(clicked()),this,SLOT(manualtestwindow()));//手动测试
     //connect(back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK
+
+#ifdef EMTER
+    p_emter->ComInit();
+    p_emter->SendData("02010100");
+    p_emter->StartInit();
+    //p_emter->sendEmterMsg();
+#endif
 #endif
 
 #if 1
