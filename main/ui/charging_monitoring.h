@@ -8,10 +8,13 @@
 #include "mysigals_slots.h"
 #include "myerr_sigals_slots.h"
 #include "Emter_window.h"
+#include "equipment_information.h"
+#include "bat_information.h"
+#include "billing_info.h"
 
 #undef  EMTER
 #define  EMTER
-//#undef  EMTER
+#undef  EMTER
 
 #define BtnNodeNUm   1
 
@@ -31,10 +34,14 @@ public:
     QTimer charging_timer;
     mysigals_slots my_sigals;
     myerr_sigals_slots myerr_sigals;
+    //Charging_monitoring *w_change_moni;
+//    Equipment_information *w_equipment_information;
+//    bat_information *w_bat_information;
+//    Billing_info *w_billing_information;
 #ifdef EMTER
         EmterWindow *p_emter;
+         int flag;
 #endif
-        int flag;
         int tmp;
 
     void set_soc();
@@ -64,7 +71,7 @@ private:
      void change_end();
      void Charging_monitoring_hide();
      void change_main();
-     void slot_timer();
+     void slot_statustimer();
      void slot_tmptimer();
      void slot_chargingtimer();
 };

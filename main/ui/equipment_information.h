@@ -4,6 +4,9 @@
 #include <QWidget>
 #include <QTimer>
 #include <QLineEdit>
+#include "mysigals_slots.h"
+#include "myerr_sigals_slots.h"
+#include "charging_monitoring.h"
 
 namespace Ui {
 class Equipment_information;
@@ -17,6 +20,10 @@ public:
     explicit Equipment_information(QWidget *parent = 0);
     ~Equipment_information();
      QTimer tcp_timer;	//
+     QTimer tstatus_timer;
+     mysigals_slots my_sigals;
+     myerr_sigals_slots myerr_sigals;
+     //Charging_monitoring *w_change_moni1;
 
      void charger_sn(QLineEdit* lbl);
      void spn_port(QLineEdit* lbl);
@@ -30,6 +37,7 @@ public slots:
     void change_moni();
     void change_batinf();
     void change_billinf();
+    void slot_statustimer();
 };
 
 #endif // EQUIPMENT_INFORMATION_H

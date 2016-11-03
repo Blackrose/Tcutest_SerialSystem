@@ -1,17 +1,15 @@
 #include "charging_monitoring.h"
 #include "ui_charging_monitoring.h"
-#include "equipment_information.h"
-#include "bat_information.h"
-#include "billing_info.h"
 #include "charging_end.h"
 #include "main.h"
 #include "tcu.h"
 #include <QLabel>
 #include <stdio.h>
 //#include <sys/time.h>
+#include <QtCore/QIODevice>
 
 #define  EMTER
-//#undef  EMTER
+#undef  EMTER
 
 Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(new Ui::Charging_monitoring)
 {
@@ -44,6 +42,10 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
     slot_chargingtimer();
     initBtnNode();
 
+//    w_equipment_information = new Equipment_information(this);
+//    w_bat_information = new bat_information(this);
+//    w_billing_information = new Billing_info(this);
+
     //connect(ui->soc_set,SIGNAL(clicked()),this,SLOT(set_soc()));//查询
     //connect(ui->change_moni_but,SIGNAL(clicked()),this,SLOT(change_moni());
     connect(ui->change_equ_but,SIGNAL(clicked()),this,SLOT(change_equinf()));//
@@ -54,15 +56,25 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
     connect(ui->soc_stop,SIGNAL(clicked()),this,SLOT(Charging_monitoring_hide()));
     //connect(ui->soc_stop,SIGNAL(clicked()),this,SLOT(change_main()));
 
-    connect(&tst_timer,SIGNAL(timeout()),this,SLOT(slot_timer()));//停止充电
+    connect(&tst_timer,SIGNAL(timeout()),this,SLOT(slot_statustimer()));//充电状态
     tst_timer.start(100);
-
+#ifdef EMTER
     flag = 1;
-    connect(&tmp_timer,SIGNAL(timeout()),this,SLOT(slot_tmptimer()));//充电信息
+#endif
+    //connect(&tmp_timer,SIGNAL(timeout()),this,SLOT(slot_tmptimer()));//充电信息
     if(tmp_timer.isActive()){
-        tmp_timer.stop();
+        //tmp_timer.stop();//防止重新创建
+    }else{
+#ifdef EMTER
+        p_emter = new EmterWindow();
+        p_emter->ComInit();
+    //p_emter->SendData("02010100");
+    //p_emter->StartInit();
+    //p_emter->sendEmterMsg();
+#endif
+        connect(&tmp_timer,SIGNAL(timeout()),this,SLOT(slot_tmptimer()));//充电信息
+        tmp_timer.start(1000);
     }
-    tmp_timer.start(500);
 
     tmp = 0;
     connect(&charging_timer,SIGNAL(timeout()),this,SLOT(slot_chargingtimer()));//充电计时
@@ -72,15 +84,6 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
     charging_timer.start(1000);
 
     Message::static_msg = new Message();
-
-
-#ifdef EMTER
-    p_emter = new EmterWindow();
-    p_emter->ComInit();
-    //p_emter->SendData("02010100");
-    //p_emter->StartInit();
-    //p_emter->sendEmterMsg();
-#endif
 
 #if 0
     if(bat_soc_int<100){//90
@@ -109,11 +112,8 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
     printf("successs!!!");
 }
 
-void Charging_monitoring::slot_timer()
+void Charging_monitoring::slot_statustimer()
 {
-
-
-
     if(task->tcu_err_stage == (TCU_ERR_STAGE_TIMEOUT | TCU_ERR_STAGE_START))
     {
         myerr_sigals.SetValue(task->tcu_err_stage);
@@ -433,7 +433,6 @@ void Charging_monitoring::slot_tmptimer()
 //        p_emter->printf_data(flag);
         flag = 1;
     }
-
     p_emter->sendEmterMsg();
     //p_emter->readEmterCom();
 
@@ -487,8 +486,8 @@ void Charging_monitoring::slot_chargingtimer()
 
 void Charging_monitoring::change_moni()
 {
-    Charging_monitoring *w_change_moni = new Charging_monitoring;
-    w_change_moni->show();
+    //Charging_monitoring *w_change_moni = new Charging_monitoring;
+    //w_change_moni->show();
 }
 
 void Charging_monitoring::change_equinf()

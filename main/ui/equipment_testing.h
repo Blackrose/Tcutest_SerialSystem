@@ -7,6 +7,11 @@
 #include <QList>
 #include <QtGlobal>
 #include "mysigals_slots.h"
+#include "Emter_window.h"
+
+#undef  EMTER
+#define  EMTER
+//#undef  EMTER
 
 namespace Ui {
 class equipment_testing;
@@ -21,6 +26,11 @@ public:
     ~equipment_testing();
     QTimer timer;	//定时器
     mysigals_slots my_sigals;
+#ifdef EMTER
+        EmterWindow *p_emter;
+         int flag;
+         QTimer emter_timer;
+#endif
 
 private:
     Ui::equipment_testing *ui;    
@@ -38,6 +48,7 @@ public slots:
     void slot_hide();
     void slot_start();
     void slotUpdateProgress();
+    void slot_emtertimer();
 };
 
 #endif // EQUIPMENT_TESTING_H
