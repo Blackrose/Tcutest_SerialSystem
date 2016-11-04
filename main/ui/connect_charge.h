@@ -11,6 +11,10 @@
 #include "mysigals_slots.h"
 #include "myerr_sigals_slots.h"
 #include <QMessageBox>
+#include "Emter_window.h"
+
+#define EMTER_1
+#undef EMTER_1
 
 namespace Ui {
 class connect_charge;
@@ -34,6 +38,12 @@ public:
     mysigals_slots my_sigals;
     myerr_sigals_slots myerr_sigals;
 
+#ifndef EMTER_1
+         EmterWindow *p_emter;
+         int flag;
+         QTimer emter_timer;
+#endif
+
 private:
     Ui::connect_charge *ui;
 
@@ -42,6 +52,9 @@ public slots:
     void slot_cantimer();
     void slot_timer();//定时器
     void slot_nextscreen_timer();//定时器
+#ifndef EMTER_1
+    void slot_emtertimer();
+#endif
 };
 
 #endif // CONNECT_CHARGE_H

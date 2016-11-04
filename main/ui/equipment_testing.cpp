@@ -9,6 +9,11 @@
 #include <QTime>
 #include <QTimer>
 #include <stdio.h>
+#include "main.h"
+
+#define  EMTER_1
+//#undef  EMTER_1
+//EmterWindow *p_emter;
 
 equipment_testing::equipment_testing(QWidget *parent) :
     QWidget(parent),
@@ -39,16 +44,13 @@ equipment_testing::equipment_testing(QWidget *parent) :
         ui->label_stop->setVisible(true);
     }
 
-#ifdef EMTER
+#ifdef EMTER_1
     flag = 1;
     if(emter_timer.isActive()){
         //emter_timer.stop();//防止重新创建
     }else{
         p_emter = new EmterWindow();
         p_emter->ComInit();
-    //p_emter->SendData("02010100");
-    //p_emter->StartInit();
-    //p_emter->sendEmterMsg();
         connect(&emter_timer,SIGNAL(timeout()),this,SLOT(slot_emtertimer()));//充电信息
         emter_timer.start(500);
     }
@@ -59,25 +61,18 @@ equipment_testing::equipment_testing(QWidget *parent) :
 
 void equipment_testing::slot_emtertimer()
 {
-#ifdef EMTER
+#ifdef EMTER_1
     if(flag == 1){
         p_emter->SendData("02010100");//A项电压 //0201FF00
-//        p_emter->sendEmterMsg();
-//        p_emter->readEmterCom();
         flag = 0;
     }else if(flag == 0){
         p_emter->SendData("02020100");//A项电流
-//        p_emter->sendEmterMsg();
-//        p_emter->readEmterCom();
         flag = 2;
     }else if(flag == 2){
         p_emter->SendData("00000000");//02030100Ａ相瞬时功率
-//        p_emter->sendEmterMsg();
-//        p_emter->readEmterCom();
         flag = 1;
     }
     p_emter->sendEmterMsg();
-    //p_emter->readEmterCom();
 #endif
 }
 

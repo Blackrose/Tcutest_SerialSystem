@@ -9,9 +9,9 @@
 #include "mysigals_slots.h"
 #include "Emter_window.h"
 
-#undef  EMTER
-#define  EMTER
-//#undef  EMTER
+//#undef  EMTER_1
+#define  EMTER_1
+//#undef  EMTER_1
 
 namespace Ui {
 class equipment_testing;
@@ -26,8 +26,8 @@ public:
     ~equipment_testing();
     QTimer timer;	//定时器
     mysigals_slots my_sigals;
-#ifdef EMTER
-        EmterWindow *p_emter;
+#ifdef EMTER_1
+         EmterWindow *p_emter;
          int flag;
          QTimer emter_timer;
 #endif
@@ -48,7 +48,9 @@ public slots:
     void slot_hide();
     void slot_start();
     void slotUpdateProgress();
+#ifdef EMTER_1
     void slot_emtertimer();
+#endif
 };
 
 #endif // EQUIPMENT_TESTING_H

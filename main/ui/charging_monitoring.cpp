@@ -6,7 +6,6 @@
 #include <QLabel>
 #include <stdio.h>
 //#include <sys/time.h>
-#include <QtCore/QIODevice>
 
 #define  EMTER
 #undef  EMTER
@@ -63,7 +62,7 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
 #endif
     //connect(&tmp_timer,SIGNAL(timeout()),this,SLOT(slot_tmptimer()));//充电信息
     if(tmp_timer.isActive()){
-        //tmp_timer.stop();//防止重新创建
+        tmp_timer.stop();//防止重新创建
     }else{
 #ifdef EMTER
         p_emter = new EmterWindow();
@@ -73,7 +72,7 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
     //p_emter->sendEmterMsg();
 #endif
         connect(&tmp_timer,SIGNAL(timeout()),this,SLOT(slot_tmptimer()));//充电信息
-        tmp_timer.start(1000);
+        tmp_timer.start(500);
     }
 
     tmp = 0;
@@ -157,6 +156,7 @@ void Charging_monitoring::slot_statustimer()
             ui->label_inf->setText("停止充电");
             my_sigals.SetValue(TCU_STAGE_STOP);
             tst_timer.stop();
+            tmp_timer.stop();
     }
 
     if(task->tcu_stage == TCU_STAGE_STOP_END )
@@ -165,6 +165,7 @@ void Charging_monitoring::slot_statustimer()
             ui->label_inf->setText("停止充电");
             my_sigals.SetValue(TCU_STAGE_STOP_END);
             tst_timer.stop();
+            tmp_timer.stop();
     }
 
     if(task->tcu_err_stage == TCU_ERR_STAGE_START)
@@ -173,6 +174,7 @@ void Charging_monitoring::slot_statustimer()
         ui->label_inf->setText("启动充电失败");
         //QMessageBox::critical(NULL, "Error", "启动充电失败");
         tst_timer.stop();
+        tmp_timer.stop();
     }
 
     if(task->tcu_err_stage == TCU_ERR_STAGE_STARTING)
@@ -181,6 +183,7 @@ void Charging_monitoring::slot_statustimer()
         ui->label_inf->setText("启动充电失败");
         //QMessageBox::critical(NULL, "Error", "启动充电失败");
         tst_timer.stop();
+        tmp_timer.stop();
     }
 
     if(task->tcu_err_stage == TCU_ERR_STAGE_STOP_STATUS)
@@ -189,6 +192,7 @@ void Charging_monitoring::slot_statustimer()
         ui->label_inf->setText("停止充电失败");
         //QMessageBox::critical(NULL, "Error", "停止充电失败");
         tst_timer.stop();
+        tmp_timer.stop();
     }
 
 }
@@ -439,11 +443,11 @@ void Charging_monitoring::slot_tmptimer()
 //    ui->emter_vol->setText(task->emter_info.emter_vol);
 //    ui->emter_current->setText(task->emter_info.emter_current);
 //    ui->emter_power->setText(task->emter_info.emter_power);
-
+#endif
     ui->charge_vol->setText(task->emter_info.emter_vol);
     ui->charge_current->setText(task->emter_info.emter_current);
     ui->charge_power->setText(task->emter_info.emter_power);
-#endif
+
 }
 
 int   Charging_monitoring::mytime_substract(struct timeval *result, struct timeval *begin,struct timeval *end)

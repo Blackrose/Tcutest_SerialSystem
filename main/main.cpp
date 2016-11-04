@@ -12,7 +12,7 @@
 #include <QLabel>
 #include <QMovie>
 
-#undef EMTER
+#undef EMTER_MAIN
 
 Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 {
@@ -31,9 +31,9 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
 
     proBar->setValue(8);
     usleep(100000);    
-#ifdef EMTER
+#ifdef EMTER_MAIN
     p_emter = new EmterWindow();
-#endif
+#endif    
     proBar->setValue(16);
     usleep(100000);
     proBar->setValue(24);
@@ -65,7 +65,7 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
     connect(manual_but,SIGNAL(clicked()),this,SLOT(manualtestwindow()));//手动测试
     //connect(back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK
 
-#ifdef EMTER
+#ifdef EMTER_MAIN
     p_emter->ComInit();
     p_emter->SendData("02010100");
     p_emter->StartInit();

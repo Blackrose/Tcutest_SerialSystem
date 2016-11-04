@@ -1,6 +1,6 @@
 #include "connect_charge.h"
 #include "ui_connect_charge.h"
-#include "equipment_testing.h"
+//#include "equipment_testing.h"
 #include "tcu_canbus/serialsystem.h"
 #include <stdio.h>
 #include <sys/time.h>
@@ -13,6 +13,9 @@
 //#include "mythread.h"
 #include <QTextCodec>
 #include "message/message.h"
+
+#define EMTER_1
+#undef EMTER_1
 
 //mythread connect_charge::mythread_can;
 
@@ -38,6 +41,35 @@ connect_charge::connect_charge(QWidget *parent) :
     Message::static_msg = new Message();
 
     show();
+
+#ifndef EMTER_1
+    flag = 1;
+    if(emter_timer.isActive()){
+        //emter_timer.stop();//防止重新创建
+    }else{
+        p_emter = new EmterWindow();
+        p_emter->ComInit();
+        connect(&emter_timer,SIGNAL(timeout()),this,SLOT(slot_emtertimer()));//充电信息
+        emter_timer.start(500);
+    }
+#endif
+}
+
+void connect_charge::slot_emtertimer()
+{
+#ifndef EMTER_1
+    if(flag == 1){
+        p_emter->SendData("02010100");//A项电压 //0201FF00
+        flag = 0;
+    }else if(flag == 0){
+        p_emter->SendData("02020100");//A项电流
+        flag = 2;
+    }else if(flag == 2){
+        p_emter->SendData("00000000");//02030100Ａ相瞬时功率
+        flag = 1;
+    }
+    p_emter->sendEmterMsg();
+#endif
 }
 
 void connect_charge::slot_hide()

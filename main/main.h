@@ -27,8 +27,8 @@
 #include "message/message.h"
 #include "Emter_window.h"
 
-#define  EMTER
-#undef  EMTER
+#define  EMTER_MAIN
+#undef  EMTER_MAIN
 
 class  Main:public QWidget,public Ui_MainForm
 {
@@ -38,10 +38,9 @@ public :
         virtual ~Main();
         //Secondwindow  *w_second;
         void timerEvent(QTimerEvent *);
-#ifdef EMTER
+#ifdef EMTER_MAIN
         EmterWindow *p_emter;
-#endif
-
+#endif       
 public slots:
         void secondwindow();
         void autotestwindow();
