@@ -19,6 +19,8 @@ private:
     Ui::charging_end *ui;
 public slots:
 
+signals:
+    void display(int number);
 };
 
 #endif // CHARGING_END_H

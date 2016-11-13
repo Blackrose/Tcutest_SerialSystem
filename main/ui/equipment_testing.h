@@ -11,7 +11,7 @@
 
 //#undef  EMTER_1
 #define  EMTER_1
-//#undef  EMTER_1
+#undef  EMTER_1
 
 namespace Ui {
 class equipment_testing;
@@ -40,6 +40,7 @@ private:
 
 
 private:
+     void setdisplay();
      void setProgress();
      void generateAscendRandomNumber();
 
@@ -51,6 +52,9 @@ public slots:
 #ifdef EMTER_1
     void slot_emtertimer();
 #endif
+
+signals:
+    void display(int number);
 };
 
 #endif // EQUIPMENT_TESTING_H

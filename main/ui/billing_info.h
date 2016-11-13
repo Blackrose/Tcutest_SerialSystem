@@ -30,6 +30,9 @@ public slots:
     void change_batinf();
     void slot_timer();
     void slot_statustimer();
+
+signals:
+    void display(int number);
 };
 
 #endif // BILLING_INFO_H

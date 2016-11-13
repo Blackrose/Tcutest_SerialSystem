@@ -12,8 +12,7 @@
 #include "main.h"
 
 #define  EMTER_1
-//#undef  EMTER_1
-//EmterWindow *p_emter;
+#undef  EMTER_1
 
 equipment_testing::equipment_testing(QWidget *parent) :
     QWidget(parent),
@@ -30,19 +29,10 @@ equipment_testing::equipment_testing(QWidget *parent) :
     elapseTime = 1000;
     num=0;
     generateAscendRandomNumber();
-    if(task->tcu_stage == TCU_STAGE_CONNECT || (task->tcu_stage == TCU_STAGE_WAITSTART))
-    {
-        ui->start_but->setVisible(false);
-        ui->label_inf->setVisible(true);
-        ui->label_stop->setVisible(false);
-        setProgress();
-    }
-    else
-    {
-        ui->start_but->setVisible(true);
-        ui->label_inf->setVisible(false);
-        ui->label_stop->setVisible(true);
-    }
+    ui->start_but->setVisible(false);
+    ui->label_inf->setVisible(true);
+    ui->label_stop->setVisible(false);
+    setdisplay();
 
 #ifdef EMTER_1
     flag = 1;
@@ -59,9 +49,10 @@ equipment_testing::equipment_testing(QWidget *parent) :
     Message::static_msg = new Message();
 }
 
+
+#ifdef EMTER_1
 void equipment_testing::slot_emtertimer()
 {
-#ifdef EMTER_1
     if(flag == 1){
         p_emter->SendData("02010100");//A项电压 //0201FF00
         flag = 0;
@@ -73,7 +64,24 @@ void equipment_testing::slot_emtertimer()
         flag = 1;
     }
     p_emter->sendEmterMsg();
+}
 #endif
+
+void equipment_testing::setdisplay()
+{
+    if(task->tcu_stage == TCU_STAGE_CONNECT || (task->tcu_stage == TCU_STAGE_WAITSTART))
+    {
+        ui->start_but->setVisible(false);
+        ui->label_inf->setVisible(true);
+        ui->label_stop->setVisible(false);
+        setProgress();
+    }
+    else
+    {
+        ui->start_but->setVisible(true);
+        ui->label_inf->setVisible(false);
+        ui->label_stop->setVisible(true);
+    }
 }
 
 void equipment_testing::setProgress()
@@ -115,6 +123,8 @@ void equipment_testing::generateAscendRandomNumber()
 void equipment_testing::slot_nextscreen_timer()
 {   
     numbersList.clear();
+    //emit display(2);
+    //setdisplay();
     my_sigals.SetValue(TCU_STAGE_START);
 }
 
@@ -122,8 +132,11 @@ void equipment_testing::slot_hide()
 {
     //hide();
     numbersList.clear();
-    test_Manual *w_test = new test_Manual;
-    w_test->show();
+//    test_Manual *w_test = new test_Manual;
+//    w_test->show();
+//    connect_charge *w_connect = new connect_charge;
+//    w_connect->show();
+    //emit display(0);
 }
 
 void equipment_testing::slot_start()

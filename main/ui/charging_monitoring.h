@@ -74,6 +74,9 @@ private:
      void slot_statustimer();
      void slot_tmptimer();
      void slot_chargingtimer();
+
+signals:
+    void display(int number);
 };
 
 #endif // CHARGING_MONITORING_H

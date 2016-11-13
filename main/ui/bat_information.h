@@ -24,12 +24,16 @@ public:
 
 private:
     Ui::bat_information *ui;
+
 public slots:
     void change_moni();
     void change_equinf();
     void change_billinf();
     void slot_timer();
     void slot_statustimer();
+
+signals:
+    void display(int number);
 };
 
 #endif // BAT_INFORMATION_H

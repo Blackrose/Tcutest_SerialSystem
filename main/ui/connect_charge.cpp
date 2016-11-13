@@ -17,6 +17,9 @@
 #define EMTER_1
 #undef EMTER_1
 
+#define MYTHREAD
+//#undef  MYTHREAD
+
 //mythread connect_charge::mythread_can;
 
 connect_charge::connect_charge(QWidget *parent) :
@@ -26,6 +29,7 @@ connect_charge::connect_charge(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
     setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存
+
 
     connect(&can_timer,SIGNAL(timeout()),this,SLOT(slot_cantimer()));//版本校验下发参数
     can_timer.start(10);
@@ -40,18 +44,20 @@ connect_charge::connect_charge(QWidget *parent) :
 
     Message::static_msg = new Message();
 
-    show();
+    //show();
 
 #ifndef EMTER_1
     flag = 1;
     if(emter_timer.isActive()){
         //emter_timer.stop();//防止重新创建
     }else{
-        p_emter = new EmterWindow();
+        log_printf(WRN,RED("EmterWindow"));
+        p_emter = new EmterWindow;
         p_emter->ComInit();
         connect(&emter_timer,SIGNAL(timeout()),this,SLOT(slot_emtertimer()));//充电信息
-        emter_timer.start(500);
+        emter_timer.start(1000);
     }
+     log_printf(WRN, "TCU: "RED("connect_charge connect_charge"));
 #endif
 }
 
@@ -75,10 +81,28 @@ void connect_charge::slot_emtertimer()
 void connect_charge::slot_hide()
 {   
     tcv_timer.stop();
+#ifdef MYTHREAD
      mythread_can.stop();
+#endif
+#ifndef EMTER_1
+     log_printf(WRN,RED("slot_hide slot_hide"));
+     emter_timer.stop();
+     p_emter->on_Close();
+//     if(p_emter->myCom != NULL){
+//         if(p_emter->myCom->isOpen()){
+//             p_emter->myCom->close();
+//         }
+//         delete p_emter->myCom;
+//     }
+#endif
+     task->tcu_wait_stage =TCU_STAGE_ANY;
+     task->tcu_stage = TCU_STAGE_CHECKVER;
+     task->tcu_tmp_stage = TCU_STAGE_CHECKVER;
      hide();
+     test_Manual *w_test = new test_Manual;
+     w_test->show();
     //equipment_testing *w_equ_testing = new equipment_testing;
-    //w_equ_testing->show();
+    //w_equ_testing->show();      
 }
 void connect_charge::check_ver(QLineEdit* lbl)
 {
@@ -129,8 +153,10 @@ void connect_charge::newTimeNoSec(QLabel* lbl)
 
 void connect_charge::slot_cantimer()
 {
-    can_timer.stop();
+    can_timer.stop();    
+#ifdef MYTHREAD
     mythread_can.start(); //tcu_canbus();
+#endif
     tcv_timer.start(200);
 }
 
@@ -195,6 +221,7 @@ void connect_charge::slot_nextscreen_timer()
     {          
             //QMessageBox::about(NULL, "Connect", "电动汽车已连接");
             ui->label_inf->setText("电动汽车已连接");
+            //emit display(1);
             my_sigals.SetValue(task->tcu_stage);
             nextscreen_timer.stop();       
     }

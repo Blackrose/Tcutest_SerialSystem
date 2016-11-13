@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::tcu_help *ui;
+
+signals:
+    void display(int number);
 };
 
 #endif // TCU_HELP_H

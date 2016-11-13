@@ -26,9 +26,13 @@ public:
 
 private:
     Ui::settlement_inf *ui;
+
 public slots:
     void slot_hide();
     void slot_timer();
+
+signals:
+    void display(int number);
 };
 
 #endif // SETTLEMENT_INF_H

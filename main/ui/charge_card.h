@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::Charge_card *ui;
+
+signals:
+    void display(int number);
 };
 
 #endif // CHARGE_CARD_H

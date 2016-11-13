@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::phone_code *ui;
+
+signals:
+    void display(int number);
 };
 
 #endif // PHONE_CODE_H

@@ -17,6 +17,12 @@ public:
 
 private:
     Ui::Charging_mode *ui;
+
+public slots:
+    void slot_charge_card();
+
+signals:
+    void display(int number);
 };
 
 #endif // CHARGING_MODE_H

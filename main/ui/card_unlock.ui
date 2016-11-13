@@ -101,7 +101,7 @@ QProgressBar {
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label_3">
+  <widget class="QLabel" name="label_inf">
    <property name="geometry">
     <rect>
      <x>150</x>
@@ -145,7 +145,7 @@ QProgressBar {
   <zorder>back_but</zorder>
   <zorder>progressBar</zorder>
   <zorder>logo</zorder>
-  <zorder>label_3</zorder>
+  <zorder>label_inf</zorder>
   <zorder>label_success</zorder>
  </widget>
  <resources/>

@@ -21,6 +21,9 @@ private:
 
 public slots:
     void slot_hide();
+
+signals:
+    void display(int number);
 };
 
 #endif // QR_CODE_H

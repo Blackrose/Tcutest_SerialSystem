@@ -4,9 +4,9 @@
 #include "main.h"
 #include "startUpFrm.h"
 #include "secondwindow.h"
-#include "test_manual.h"
 #include "test_auto.h"
 #include "test_manual.h"
+#include "first_interface.h"
 #include "ui/charging_monitoring.h"
 #include "ui/equipment_information.h"
 #include <QLabel>
@@ -60,8 +60,8 @@ Main::Main(QProgressBar *proBar,QWidget *parent): QWidget(parent),Ui_MainForm()
     usleep(100000);
     show();
 
-    connect(auto_but,SIGNAL(clicked()),this,SLOT(secondwindow()));//
-    //connect(auto_but,SIGNAL(clicked()),this,SLOT(autotestwindow()));//自动测试
+    //connect(auto_but,SIGNAL(clicked()),this,SLOT(secondwindow()));//
+    connect(auto_but,SIGNAL(clicked()),this,SLOT(autotestwindow()));//自动测试
     connect(manual_but,SIGNAL(clicked()),this,SLOT(manualtestwindow()));//手动测试
     //connect(back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK
 
@@ -110,8 +110,12 @@ void Main::secondwindow()
 }
 void Main::autotestwindow()
 {
-    test_auto *w_autotest = new test_auto;
-    w_autotest->show();
+//    test_auto *w_autotest = new test_auto;
+//    w_autotest->show();
+//    First_interface *w_first = new First_interface;
+//    w_first->show();
+    connect_charge *w_connect = new connect_charge(this);
+    w_connect->show();
 }
 
 void Main::manualtestwindow()

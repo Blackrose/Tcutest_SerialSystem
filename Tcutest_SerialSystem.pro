@@ -105,7 +105,8 @@ HEADERS += global.h \
     qrencode-3.4.4/qrspec.h \
     qrencode-3.4.4/rscode.h \
     qrencode-3.4.4/split.h \
-    main/ui/card_operation.h
+    main/ui/card_operation.h \
+    my_only/widget.h
 FORMS += qcom/Card_window.ui \
          qcom/Emter_window.ui \
          startUp/startUpFrm.ui \
@@ -206,7 +207,8 @@ SOURCES += global.cpp \
     qrencode-3.4.4/qrspec.c \
     qrencode-3.4.4/rscode.c \
     qrencode-3.4.4/split.c \
-    main/ui/card_operation.cpp
+    main/ui/card_operation.cpp \
+    my_only/widget.cpp
 RESOURCES += img.qrc qcom/images.qrc \
     syszuxpinyin.qrc
 

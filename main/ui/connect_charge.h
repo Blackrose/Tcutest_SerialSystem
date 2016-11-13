@@ -16,6 +16,9 @@
 #define EMTER_1
 #undef EMTER_1
 
+#define MYTHREAD
+//#undef  MYTHREAD
+
 namespace Ui {
 class connect_charge;
 }
@@ -30,7 +33,10 @@ public:
     QTimer can_timer;	//
     QTimer tcv_timer;	//
     QTimer nextscreen_timer;	//
+
+#ifdef MYTHREAD
     mythread mythread_can ;
+#endif
 
     void check_ver(QLineEdit* lbl);
     void newTimeNoSec(QLabel* lbl);
@@ -55,6 +61,9 @@ public slots:
 #ifndef EMTER_1
     void slot_emtertimer();
 #endif
+
+signals:
+    void display(int number);
 };
 
 #endif // CONNECT_CHARGE_H

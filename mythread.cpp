@@ -6,16 +6,20 @@
 
 mythread::mythread(QObject *parent) : QThread(parent)
 {
-    //stop = false;
+    stopstatus = false;
 }
 
 void mythread::run()
 {
     printf("tcu_canbus\n");
     tcu_canbus();
+    stopstatus = true;
 }
 void mythread::stop()
 {
     printf("tcu_canstop\n");
-    tcu_canstop();
+    //if(stopstatus == true)
+    {
+        tcu_canstop();
+    }
 }

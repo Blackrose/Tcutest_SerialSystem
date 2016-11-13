@@ -2,6 +2,7 @@
 #include "ui_first_interface.h"
 #include "qrencode-3.4.4/qrencode.h"
 #include <QPainter>
+#include "charging_mode.h"
 
 First_interface::First_interface(QWidget *parent) :
     QWidget(parent),
@@ -11,7 +12,7 @@ First_interface::First_interface(QWidget *parent) :
     setWindowFlags(Qt::FramelessWindowHint);//窗口没有没有边
     setAttribute(Qt::WA_DeleteOnClose); //关闭时自动的释放内存
     connect(ui->back_but,SIGNAL(clicked()),this,SLOT(slot_hide()));//BACK
-
+    connect(ui->charging_mode_but,SIGNAL(clicked()),this,SLOT(slot_charging_mod()));
     GenerateQRcode("新晔电子");
 }
 
@@ -58,6 +59,12 @@ void First_interface::GenerateQRcode(QString tempstr)
     QPixmap mainmap=QPixmap::fromImage(mainimg);
     ui->label_QR->setPixmap(mainmap);
     ui->label_QR->setVisible(true);
+}
+
+void First_interface::slot_charging_mod()
+{
+    Charging_mode *w_charging_mode = new Charging_mode;
+    w_charging_mode->show();
 }
 
 void First_interface::slot_hide()

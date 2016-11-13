@@ -70,53 +70,89 @@
   <widget class="QPushButton" name="charge_card_but">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>180</x>
      <y>60</y>
      <width>161</width>
      <height>161</height>
     </rect>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: transparent;</string>
+   </property>
    <property name="text">
     <string>充电卡</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="phone_code_but">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>180</x>
      <y>270</y>
      <width>161</width>
      <height>161</height>
     </rect>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: transparent;</string>
+   </property>
    <property name="text">
     <string>手机验证码</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="qr_code_but">
    <property name="geometry">
     <rect>
-     <x>360</x>
+     <x>440</x>
      <y>60</y>
-     <width>81</width>
-     <height>71</height>
+     <width>161</width>
+     <height>161</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: transparent;</string>
    </property>
    <property name="text">
     <string>二维码</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <widget class="QPushButton" name="account_code_but">
    <property name="geometry">
     <rect>
-     <x>360</x>
+     <x>440</x>
      <y>270</y>
-     <width>81</width>
-     <height>71</height>
+     <width>161</width>
+     <height>161</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: transparent;</string>
    </property>
    <property name="text">
     <string>账号和密码</string>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
    </property>
   </widget>
   <zorder>label</zorder>

@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::account_code *ui;
+
+signals:
+    void display(int number);
 };
 
 #endif // ACCOUNT_CODE_H

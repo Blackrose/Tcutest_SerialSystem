@@ -21,6 +21,10 @@ private:
 
 public slots:
     void slot_hide();
+    void slot_charging_mod();
+
+signals:
+    void display(int number);
 };
 
 #endif // FIRST_INTERFACE_H

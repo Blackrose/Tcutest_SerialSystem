@@ -38,6 +38,9 @@ public slots:
     void change_batinf();
     void change_billinf();
     void slot_statustimer();
+
+signals:
+    void display(int number);
 };
 
 #endif // EQUIPMENT_INFORMATION_H

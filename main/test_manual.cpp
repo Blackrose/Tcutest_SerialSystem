@@ -7,12 +7,15 @@
 #include "gps/gps.h"
 #include "gprs/gprs.h"
 #include "network/netwindow.h"
-#include "mythread.h"
+//#include "mythread.h"
 #include "qr_code.h"
 #include "first_interface.h"
 #include "card_operation.h"
 
 //mythread  test_Manual::mythread_can ;
+
+#define MYTHREAD
+#undef  MYTHREAD
 
 test_Manual::test_Manual(QWidget *parent) :
     QWidget(parent),
@@ -34,6 +37,15 @@ test_Manual::test_Manual(QWidget *parent) :
     connect(ui->network_but,SIGNAL(clicked()),this,SLOT(slot_network()));     
     connect(ui->touch_but,SIGNAL(clicked()),this,SLOT(slot_touch()));
     connect(ui->pwm_but,SIGNAL(clicked()),this,SLOT(slot_pwm()));
+
+//    w_connect = new connect_charge;
+//    stackLayout = new QStackedLayout;
+//    stackLayout->addWidget(w_connect);
+//    connect(w_connect, SIGNAL(display(int)), stackLayout, SLOT(setCurrentIndex(int)));
+//    mainLayout = new QVBoxLayout;
+//    mainLayout->addLayout(stackLayout);
+//    setLayout(mainLayout);
+
 }
 
 test_Manual::~test_Manual()
@@ -44,25 +56,38 @@ test_Manual::~test_Manual()
 void test_Manual::slot_hide()
 {
     hide();
+#ifdef MYTHREAD
+    mythread_can.stop();
+#endif
 }
 
 void test_Manual::slot_card()
 {
-    CardWindow *w_card = new CardWindow(this);
+    CardWindow *w_card = new CardWindow;
     w_card->show();
 }
 void test_Manual::slot_emter()
 {
-    EmterWindow *w_emter = new EmterWindow(this);
+    EmterWindow *w_emter = new EmterWindow;
     w_emter->show();
     //equipment_testing *w_equ_testing = new equipment_testing(this);
     //w_equ_testing->show();
 }
 void test_Manual::slot_canbus()
 {
+#ifdef MYTHREAD
+    if(mythread_can.stopstatus == true){
+        mythread_can.stop();
+    }
+    mythread_can.start();
+#endif
     connect_charge *w_connect = new connect_charge(this);
     w_connect->show();
-   // mythread_can.start();
+
+//    widget_tmp = new Widget;
+//    widget_tmp->show();
+    //widget_tmp->showFullScreen();   
+    //widget_tmp->showMaximized();
 }
 
 void test_Manual::slot_gprs()

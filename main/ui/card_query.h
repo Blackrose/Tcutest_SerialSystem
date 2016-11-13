@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::Card_query *ui;
+
+signals:
+    void display(int number);
 };
 
 #endif // CARD_QUERY_H

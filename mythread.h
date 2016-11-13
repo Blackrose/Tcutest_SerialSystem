@@ -8,7 +8,7 @@ class mythread : public QThread
     Q_OBJECT
 public:
     explicit mythread(QObject *parent = 0);
-    //bool stop ;
+    bool stopstatus ;
     void stop();
     void run();
 signals:

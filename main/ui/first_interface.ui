@@ -108,6 +108,9 @@
      <height>121</height>
     </rect>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="styleSheet">
     <string notr="true">background: transparent;</string>
    </property>
@@ -127,6 +130,9 @@
      <height>161</height>
     </rect>
    </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
    <property name="styleSheet">
     <string notr="true">background: transparent;</string>
    </property>
@@ -145,6 +151,9 @@
      <width>121</width>
      <height>121</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">background: transparent;</string>

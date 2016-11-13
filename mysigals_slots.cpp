@@ -8,12 +8,14 @@
 #include <QLabel>
 #include <QMessageBox>
 #include "message/message.h"
+#include "first_interface.h"
 
 
 equipment_testing *w_equ_testing;
 Charging_monitoring *w_change_moni;
 bat_information *w_bat_information;
 settlement_inf *w_settlement_inf;
+First_interface *w_first;
 
 mysigals_slots::mysigals_slots(QWidget *parent) : QWidget(parent)
 {   
@@ -49,8 +51,10 @@ void mysigals_slots::ChangeValue(int value)
         case TCU_STAGE_CONNECT:
         case TCU_STAGE_WAITSTART:
             //QMessageBox::about(NULL, "Connect", "电动汽车已连接");
-            w_equ_testing = new equipment_testing;
-            w_equ_testing->show();
+            w_first = new First_interface;
+            w_first->show();
+//            w_equ_testing = new equipment_testing;
+//            w_equ_testing->show();
              Message::_show(tr("电动汽车已连接"));
              Message::static_msg->setWindowTitle("Connect");
             //w_bat_information = new bat_information;
