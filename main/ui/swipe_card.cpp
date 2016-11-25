@@ -42,7 +42,7 @@ void  Swipe_card::slot_cardtimer()
 //        p_card->SendData("3114");//
 //        flag = 1;
 //    }
-    p_card->SendData("3111");
+    p_card->SendData("3224");
     p_card->sendCardMsg();
     p_card->readCardCom();
     printf("length ===%d\n",strlen(p_card->recvBuf));

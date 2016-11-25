@@ -14,6 +14,8 @@
 
 //mythread  test_Manual::mythread_can ;
 
+#include "serialsystem.h"
+
 #define MYTHREAD
 #undef  MYTHREAD
 
@@ -126,4 +128,6 @@ void test_Manual::slot_pwm()
      //w_card_operation->show();
     //::system("aplay audio/wo.wav");
     //::system("mplayer audio/test.mp3");
+
+    tcu_canbus();
 }

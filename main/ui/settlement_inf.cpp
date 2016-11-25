@@ -6,6 +6,7 @@
 #include "connect_charge.h"
 #include "message/message.h"
 #include "tcu.h"
+#include "first_interface.h"
 
 settlement_inf::settlement_inf(QWidget *parent) :
     QWidget(parent),
@@ -31,8 +32,10 @@ settlement_inf::~settlement_inf()
 void settlement_inf::slot_hide()
 {
      //mythread_can.stop();
-    equipment_testing *w_equ = new equipment_testing;
-    w_equ->show();
+//    equipment_testing *w_equ = new equipment_testing;
+//    w_equ->show();
+    First_interface *w_first = new First_interface;
+    w_first->show();
 }
 
 void settlement_inf::slot_timer()
