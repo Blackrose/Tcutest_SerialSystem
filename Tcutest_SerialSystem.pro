@@ -32,6 +32,10 @@ INCLUDEPATH += . \
                my_debug/platabs \
                my_debug/tdevice
 
+INCLUDEPATH += $$PWD/openssl/include/openssl
+DEPENDPATH += $$PWD/openssl/include/openssl
+
+
 # Input
 HEADERS += global.h \
            myerr_sigals_slots.h \
@@ -107,7 +111,9 @@ HEADERS += global.h \
     qrencode-3.4.4/split.h \
     main/ui/card_operation.h \
     my_only/widget.h \
-    echongwang/echong_api.h
+    echongwang/echong_api.h \
+    echongwang/WXBizMsgCrypt.h \
+    tinyxml2/tinyxml2.h
 FORMS += qcom/Card_window.ui \
          qcom/Emter_window.ui \
          startUp/startUpFrm.ui \
@@ -210,7 +216,9 @@ SOURCES += global.cpp \
     qrencode-3.4.4/split.c \
     main/ui/card_operation.cpp \
     my_only/widget.cpp \
-    echongwang/echong_api.c
+    echongwang/echong_api.c \
+    echongwang/WXBizMsgCrypt.cpp \
+    tinyxml2/tinyxml2.cpp
 RESOURCES += img.qrc qcom/images.qrc \
     syszuxpinyin.qrc
 
@@ -219,4 +227,9 @@ DEFINES += HAVE_CONFIG_H
 OBJECTS_DIR =  ./obj
 MOC_DIR = ./moc
 UI_DIR = ./ui_forms
+
+
+LIBS += -L$$PWD/openssl/lib/ -lcrypto
+LIBS += -lrt
+
 

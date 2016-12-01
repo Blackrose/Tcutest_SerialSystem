@@ -27,10 +27,71 @@
 
 #include "echong_api.h"
 #include "error.h"
+#include "hmac.h"
+#include "sha.h"
+#include "aes.h"
 
+
+
+#define IPDST "192.168.122.22"
 #define IPSTR "192.168.122.146"
 #define PORT 8080
 #define BUFSIZE 1024
+
+
+#define APP_ID "1111111111"
+#define INFO "aaaa"
+
+#define TOKEN_LEN  33
+#define SIG_LEN  20
+#define EncodingAESKey_LEN 44  //43
+#define kAesKeySize 32
+#define kAesIVSize 16
+
+int sig_len = 20;
+int aes_key_len = 32;
+
+char token[TOKEN_LEN] = "228bf094169a40a3bd188ba37ebe8723&";
+char sig[SIG_LEN] = " ";
+char base64_sig[100] =" ";
+char encoding_aes_key[EncodingAESKey_LEN] = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG=";
+char aes_key[32] = " ";
+char sNeedEncrypt_info[100] = "aaaa";
+char sAesData[200] = " ";
+char sBase64Data[200] = " ";
+
+
+
+static char *pt(unsigned char *md, unsigned int len)
+{
+    unsigned int i;
+    static char buf[80];
+
+    for (i = 0; i < len; i++)
+        sprintf(&(buf[i * 2]), "%02X", md[i]);
+    printf("buf==%s\n",buf);
+    return (buf);
+}
+
+//=====c++(openssl):
+//    HMAC(  EVP_sha1(),
+//                     /*key data*/ strKey.data(),
+//                     /*key len*/  strKey.size(),
+//                     /*data  */(unsigned char*) strRandom.data(),
+//                     /*data len*/ strRandom.size(), digest, &digest_len))
+
+
+//1.开放平台为每一个接入者分配唯一的 EncodingAESKey。长度固定为 43个字符，从 a-z,A-Z,0-9 共 62 个字符中选取。
+
+//2. AES 密钥：AESKey=Base64_Decode(EncodingAESKey + “=”)，EncodingAESKey尾部填充一 个字符的“=”, 用 Base64_Decode 生成 32 个字节的 AESKey；
+
+//3. AES 采用 CBC 模式，秘钥长度为 32 个字节，数据采用 PKCS#7 填充；PKCS#7：K 为秘钥字节 数（采用 32），buf 为待加密的内容，N 为其字节数。Buf 需要被填充为 K 的整数倍。在 buf 的尾部 填充(K-N%K)个字节，每个字节的内容是(K- N%K)；具体参考：http://tools.ietf.org/html/rfc2315
+
+//4.所有接口中的 info 字段均需要进行加密
+
+//#define EncodingAESKey  //消息加密
+
+
 
 //获取当前时间
 int getcurrenttime(struct command_c_time *thiz)
@@ -67,6 +128,126 @@ int getcurrenttime(struct command_c_time *thiz)
 int aes_128_cbc()
 {
 
+}
+
+int DecodeBase64(const char *sSrc, char *sTarget)
+{
+
+    //计算末尾=号个数
+    int iEqualNum = 0;
+    int n =0;
+    printf("len===%d\n", strlen(sSrc));
+    for(n= strlen(sSrc) - 2; n>=0; --n)
+    {
+        if(sSrc[n] == '=')
+        {
+            iEqualNum++;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    int iOutBufSize = strlen(sSrc)-1;
+    char * pcOutBuf = (char*)malloc( iOutBufSize);
+    if(NULL == pcOutBuf)
+    {
+        return -1;
+    }
+
+    int iRet = 0;
+    int iTargetSize = 0;
+    iTargetSize =  EVP_DecodeBlock((unsigned char*)pcOutBuf, (const unsigned char*)sSrc, iOutBufSize);
+    printf("pcOutBuf===%s\n",pcOutBuf);
+    if(iTargetSize > iEqualNum && iTargetSize < iOutBufSize)
+    {
+        printf("iTargetSize==%d  iEqualNum==%d\n",iTargetSize,iEqualNum);
+        memcpy(sTarget,pcOutBuf, iTargetSize - iEqualNum);
+        printf("target==%s  len===%d\n",sTarget,strlen(sTarget));
+        iRet = iTargetSize - iEqualNum;
+    }
+    else
+    {
+        iRet = -1;
+    }
+
+    free(pcOutBuf);
+    return iRet;
+}
+
+int EncodeBase64(const char * sSrc, char * sTarget)
+{
+    printf("len===%d\n",strlen(sSrc));
+    uint32_t iBlockNum = strlen(sSrc) / 3;
+    if (iBlockNum * 3 != strlen(sSrc))
+    {
+        iBlockNum++;
+    }
+    uint32_t iOutBufSize = iBlockNum * 4 + 1;
+
+    char * pcOutBuf = (char*)malloc( iOutBufSize);
+    if(NULL == pcOutBuf)
+    {
+        return -1;
+    }
+    int iReturn = 0;
+    int ret = EVP_EncodeBlock((unsigned char*)pcOutBuf, (const unsigned char*)sSrc, strlen(sSrc));
+    if (ret > 0 && ret < (int)iOutBufSize)
+    {
+        printf("ret==%d\n",ret);
+        memcpy(sTarget,pcOutBuf,ret);
+    }
+    else
+    {
+        iReturn = -1;
+    }
+
+    free(pcOutBuf);
+    return iReturn;
+}
+
+int AES_CBCEncrypt( const char * sSource, const uint32_t iSize,
+        const char * sKey,  uint32_t iKeySize, char * poResult )
+{
+    if ( !sSource || !sKey || !poResult || iSize <= 0)
+    {
+        return -1;
+    }
+
+    //poResult->clear();
+
+    int padding = kAesKeySize - iSize % kAesKeySize;
+
+    char * tmp = (char*)malloc( iSize + padding );
+    if(NULL == tmp)
+    {
+        return -1;
+    }
+    memcpy( tmp, sSource, iSize );
+    memset( tmp + iSize, padding, padding );
+
+    unsigned char * out = (unsigned char*)malloc( iSize + padding );
+    if(NULL == out)
+    {
+        free(tmp);
+        return -1;
+    }
+
+    unsigned char key[ kAesKeySize ] = { 0 };
+    unsigned char iv[ kAesIVSize ] = { 0 };
+    memcpy( key, sKey, iKeySize > kAesKeySize ? kAesKeySize : iKeySize );
+    memcpy(iv, key, sizeof(iv) < sizeof(key) ? sizeof(iv) : sizeof(key));
+
+    AES_KEY aesKey;
+    AES_set_encrypt_key( key, 8 * kAesKeySize, &aesKey );
+    AES_cbc_encrypt((unsigned char *)tmp, out,iSize + padding,  &aesKey, iv, AES_ENCRYPT);
+
+    memcpy(poResult,out,iSize + padding);
+
+    free(tmp);
+    free(out);
+    return 0;
 }
 //=====设置参数 确认/否认========================================================================
 
@@ -436,6 +617,48 @@ int unpack_echong_frame_by_data(char *inBuffer, int inLength,struct echong_pack 
     //get_echong_ruler_info();
 }
 
+void encryptmsg()
+{
+    aes_key_len = DecodeBase64(encoding_aes_key, &aes_key);
+    //printf("aes_key==%s  len==%d\n",aes_key,strlen(aes_key));
+    pt(&aes_key,32);
+    AES_CBCEncrypt(sNeedEncrypt_info, strlen(sNeedEncrypt_info),aes_key,aes_key_len/*strlen(aes_key)*/, &sAesData);//aes_key_len != strlen(aes_key)
+    //printf("sAesData==%s len==%d\n",sAesData,strlen(sAesData));
+    pt(&sAesData,32);
+    EncodeBase64(sAesData,sBase64Data);
+    printf("sBase64Data==%s\n",sBase64Data);
+}
+
+void http_post_data()
+{
+    char *p;
+    char  data[100] = " ";
+
+    printf("http_post_data\n");
+    //appid
+    sprintf(data,"app_id=%s",APP_ID);
+    sprintf(data,"%s&info=%s",data,INFO);
+    //info  EncodingAESKey
+    //sig  HMAC openssl
+    //appid&info
+
+    p = pt(HMAC(  EVP_sha1(),
+           /*key data*/ token,
+           /*key len*/  TOKEN_LEN,
+           /*data  */data,
+           /*data len*/strlen(data),
+           /*digest*/sig,
+           &sig_len),SHA_DIGEST_LENGTH);
+  printf("HMAC\n");
+  EVP_EncodeBlock(base64_sig,sig,sig_len);
+  printf("base64_sig==%s\n",base64_sig);
+
+
+  encryptmsg();
+}
+
+
+
 void *thread_echong_send_service(void *arg) ___THREAD_ENTRY___
 {
 //    int *done = (int *)arg;
@@ -452,6 +675,8 @@ void *thread_echong_send_service(void *arg) ___THREAD_ENTRY___
     socklen_t len;
     fd_set   t_set1;
     struct timeval  tv;
+
+    http_post_data();
 
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) {
             printf("创建网络连接失败,本线程即将终止---socket error!\n");
@@ -474,14 +699,16 @@ void *thread_echong_send_service(void *arg) ___THREAD_ENTRY___
 
     //发送数据
     memset(str2, 0, 4096);
-    strcat(str2, "qqCode=474497857");
+    strcat(str2, "app_id=1111111111&");
+    strcat(str2, "info=1111111111&");
+    strcat(str2, "sig=1111111111");
     str=(char *)malloc(128);
     len = strlen(str2);
     sprintf(str, "%d", len);
 
     memset(str1, 0, 4096);
     strcat(str1, "POST /mytest.html HTTP/1.1\n");
-    strcat(str1, "Host: 192.168.122.23\n");
+    strcat(str1, "Host: 192.168.122.146\n");
     strcat(str1, "Content-Type: application/x-www-form-urlencoded\n");
     strcat(str1, "Content-Length: ");
     strcat(str1, str);

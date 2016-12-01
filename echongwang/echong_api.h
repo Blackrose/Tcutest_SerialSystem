@@ -386,6 +386,9 @@ int unpack_echong_frame_by_data(char *inpBuffer, int inBufferLength, struct echo
 int packet_echong_command_c_thb(struct command_c_time * thiz);
 int packet_echong_command_c_ver(struct command_ver * thiz);
 
+void http_post_data();
+
+
 #ifdef __cplusplus
 }
 #endif
