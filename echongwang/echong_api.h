@@ -19,6 +19,19 @@ extern "C" {
 #define     HEAD_VER    0x01
 #define     END     0x16
 
+#define     START_LEN             1
+#define     HEAD_VER_LEN    1
+#define     PILE_CODE_LEN    16
+#define     COMMAND_LEN    1
+#define     LEN123_LEN            6
+#define     AES_DATA_LEN       0 //()
+#define     CHECK_LEN              1
+#define     END_LEN                   1
+
+#define     FRAME_LEN      (START_LEN + HEAD_VER_LEN + PILE_CODE_LEN + COMMAND_LEN + LEN123_LEN + AES_DATA_LEN + CHECK_LEN + END_LEN)
+
+#define     LENL1  (FRAME_LEN)
+
 
 struct echong_AES_pack {
     // 起始字符
@@ -76,38 +89,38 @@ typedef enum {//platform平台  //charger
     COMMAND_P_REBOOT = 0x07,//平台下发重启充电桩
     COMMAND_C_REBOOT = 0x08,//充电桩返回重启电桩命令
     COMMAND_C_LOGIN = 0x09,//充电桩发送登录指令
-    COMMAND_P_LOGIN = 0x10,//平台回复充电桩登录
-    COMMAND_P_ELEPRICE = 0x11,//设置电费价格信息
-    COMMAND_P_SERVICE = 0x12,//设置服务费价格信息
-    COMMAND_C_SETINTERVAL = 0x13,//设置充电桩上报状态时间间隔
-    COMMAND_C_SETMETERRATE = 0x14,//设置充电桩电表倍率
-    COMMAND_C_KEY = 0x15,//设置充电桩加密密钥
-    COMMAND_P_CLOCK = 0x21,//查询充电桩时钟及当前执行电价
-    COMMAND_C_CLOCK = 0x22,//返回充电桩时钟及当前执行电价
-    COMMAND_P_CLOCK_SERVICE = 0x23,//查询充电桩时钟及当前执行服务费
-    COMMAND_C_CLOCK_SERVICE = 0x24,//返回充电桩时钟及当前执行服务费
-    COMMAND_P_CLOCK_PRICE = 0x25,//查询充电桩时钟及最终执行电价
-    COMMAND_C_CLOCK_PRICE = 0x26,//返回充电桩时钟及最终执行电价
-    COMMAND_P_END_SERVICE = 0x27,//查询充电桩时钟及最终执行服务费价格
-    COMMAND_C_END_SERVICE = 0x28,//充电桩返回时钟及最终执行服务费价格
-    COMMAND_P_INTERVAL = 0x29,//查询充电桩自动上报时间间隔
-    COMMAND_C_INTERVAL = 0x30,//充电桩返回上报时间间隔
-    COMMAND_P_METERRATE = 0x31,//查询充电桩电表倍率
-    COMMAND_C_METERRATE = 0x32,//充电桩返回电表倍率
-    COMMAND_C_STATUS = 0x41,//充电桩上报实时状态
-    COMMAND_P_STATUS = 0x42,//查询充电桩实时状态
-    COMMAND_C_S_T = 0x43,//充电桩启停操作(无卡)
-    COMMAND_P_S_T = 0x44,//充电桩启停操作回调(无卡)  桩返回启停操作结果
-    COMMAND_C_UPCHARGINGDATA = 0x45,//充电桩上报实时充电数据(无卡)
-    COMMAND_C_UPTRANSACTIONDATA = 0x46,//充电桩上报交易记录(无卡／有卡)
-    COMMAND_P_DOWNTRANSACTIONDATA = 0x47,//平台返回充电桩交易记录应答
-    COMMAND_P_NOCARD_TRANSACTIONDATA = 0x48,//查询充电桩无卡交易记录
-    COMMAND_P_CARD_TRANSACTIONDATA = 0x49,//查询用户卡消费记录(预留)
-    COMMAND_P_UPDATE = 0x50,//平台发下发升级命令
-    COMMAND_P_UPDATEPROGRESS = 0x51,//平台查询充电桩升级进度
-    COMMAND_C_UPDATEPROGRESS = 0x52,//充电桩升级进度应答
-    COMMAND_C_INFSYNC = 0x53,//设备信息同步指令
-    COMMAND_P_INFSYNC = 0x54,//平台召唤信息同步
+    COMMAND_P_LOGIN = 0x0A,//平台回复充电桩登录
+    COMMAND_P_ELEPRICE = 0x0B,//设置电费价格信息
+    COMMAND_P_SERVICE = 0x0C,//设置服务费价格信息
+    COMMAND_C_SETINTERVAL = 0x0D,//设置充电桩上报状态时间间隔
+    COMMAND_C_SETMETERRATE = 0x0E,//设置充电桩电表倍率
+    COMMAND_C_KEY = 0x0F,//设置充电桩加密密钥
+    COMMAND_P_CLOCK = 0x10,//查询充电桩时钟及当前执行电价
+    COMMAND_C_CLOCK = 0x11,//返回充电桩时钟及当前执行电价
+    COMMAND_P_CLOCK_SERVICE = 0x12,//查询充电桩时钟及当前执行服务费
+    COMMAND_C_CLOCK_SERVICE = 0x13,//返回充电桩时钟及当前执行服务费
+    COMMAND_P_CLOCK_PRICE = 0x14,//查询充电桩时钟及最终执行电价
+    COMMAND_C_CLOCK_PRICE = 0x15,//返回充电桩时钟及最终执行电价
+    COMMAND_P_END_SERVICE = 0x16,//查询充电桩时钟及最终执行服务费价格
+    COMMAND_C_END_SERVICE = 0x17,//充电桩返回时钟及最终执行服务费价格
+    COMMAND_P_INTERVAL = 0x18,//查询充电桩自动上报时间间隔
+    COMMAND_C_INTERVAL = 0x19,//充电桩返回上报时间间隔
+    COMMAND_P_METERRATE = 0x1A,//查询充电桩电表倍率
+    COMMAND_C_METERRATE = 0x1B,//充电桩返回电表倍率
+    COMMAND_C_STATUS = 0x1C,//充电桩上报实时状态
+    COMMAND_P_STATUS = 0x1D,//查询充电桩实时状态
+    COMMAND_C_S_T = 0x1E,//充电桩启停操作(无卡)
+    COMMAND_P_S_T = 0x1F,//充电桩启停操作回调(无卡)  桩返回启停操作结果
+    COMMAND_C_UPCHARGINGDATA = 0x20,//充电桩上报实时充电数据(无卡)
+    COMMAND_C_UPTRANSACTIONDATA = 0x21,//充电桩上报交易记录(无卡／有卡)
+    COMMAND_P_DOWNTRANSACTIONDATA = 0x22,//平台返回充电桩交易记录应答
+    COMMAND_P_NOCARD_TRANSACTIONDATA = 0x23,//查询充电桩无卡交易记录
+    COMMAND_P_CARD_TRANSACTIONDATA = 0x24,//查询用户卡消费记录(预留)
+    COMMAND_P_UPDATE = 0x25,//平台发下发升级命令
+    COMMAND_P_UPDATEPROGRESS = 0x26,//平台查询充电桩升级进度
+    COMMAND_C_UPDATEPROGRESS = 0x27,//充电桩升级进度应答
+    COMMAND_C_INFSYNC = 0x28,//设备信息同步指令
+    COMMAND_P_INFSYNC = 0x29,//平台召唤信息同步
 }COMMAND_ID;
 
 
@@ -368,12 +381,12 @@ struct command_p_infsync    command_p_infsync_inf;//平台召唤信息同步
 
 
 //获取当前时间
-int getcurrenttime(struct command_c_time *thiz);
+int getcurrenttime(char *thiz, char *LengthL2);
 
 /* 根据指令ID 获取对应的数据类型信息 */
 int get_echong_ruler_info(int CommandID, struct echong_pack *outRulerInfo);
 /* 通过桩编码 指令ID 数据域数据及长度 封帧 */
-int pack_echong_frame_by_data(struct echong_pack *inPara, char *outBuffer, int *outLength);
+int pack_echong_frame_by_data(struct echong_AES_pack *in_aes_data, struct echong_pack *in_data, char *outBuffer, int *outLength);
 
 int send_echong_frame();
 int receive_echong_frame();
@@ -383,7 +396,9 @@ int analysis_echong_frame();
 /* 通过桩编码 指令ID 数据域数据及长度 解析帧 */
 int unpack_echong_frame_by_data(char *inpBuffer, int inBufferLength, struct echong_pack *outpFrame);
 
-int packet_echong_command_c_thb(struct command_c_time * thiz);
+//int packet_echong_command_c_thb(char *thiz, char *LengthL1, char *LengthL2, char *LengthL3);
+int packet_echong_command_c_thb(struct echong_pack *outRulerInfo);
+
 int packet_echong_command_c_ver(struct command_ver * thiz);
 
 void http_post_data();

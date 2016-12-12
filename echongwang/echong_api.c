@@ -30,7 +30,9 @@
 #include "hmac.h"
 #include "sha.h"
 #include "aes.h"
+#include "mongoose/mongoose.h"
 
+#include "tcu.h"
 
 
 #define IPDST "192.168.122.22"
@@ -56,7 +58,7 @@ char sig[SIG_LEN] = " ";
 char base64_sig[100] =" ";
 char encoding_aes_key[EncodingAESKey_LEN] = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG=";
 char aes_key[32] = " ";
-char sNeedEncrypt_info[100] = "";
+char sNeedEncrypt_info[100] = "aaaa";
 char sAesData[200] = " ";
 char sBase64Data[200] = " ";
 char sEncryptMsg[EncodingAESKey_LEN]="QGUlgqDyIh6AlRvofZDcqzWgCURll+qcgPW4czwghqo=";
@@ -91,13 +93,24 @@ static char *pt(unsigned char *md, unsigned int len)
 
 //#define EncodingAESKey  //消息加密
 
-
+int length_data(int tmp_Len,char *Length)
+{
+    printf("tmp_Len==%d\n",tmp_Len);
+    if(tmp_Len<256){
+        Length[0] = 0;
+        Length[1] = tmp_Len;
+    }else{
+        Length[0] = tmp_Len/256;
+        Length[1] = tmp_Len%256;
+    }//长度为两个字节
+}
 
 //获取当前时间
-int getcurrenttime(struct command_c_time *thiz)
+int getcurrenttime(char *thiz,char *LengthL2)
 {
     time_t timep;
     struct tm *p;
+    char tmptime[14] = {0};
 
     time(&timep);
     p =localtime(&timep);
@@ -108,21 +121,44 @@ int getcurrenttime(struct command_c_time *thiz)
     printf("Local time is: %s\n",asctime(p));
     printf("%4d年%02d月%02d日 %02d:%02d:%02d\n",p->tm_year+1900,p->tm_mon+1,p->tm_mday,p->tm_hour,p->tm_min,p->tm_sec);
 
-    thiz->Current_time_bcd_sec = (((p->tm_sec / 10 ) & 0x0F ) << 4) |
-            ((p->tm_sec % 10) & 0x0F);
-    thiz->Current_time_bcd_min = (((p->tm_min / 10 ) & 0x0F ) << 4) |
-            ((p->tm_min % 10) & 0x0F);
-    thiz->Current_time_bcd_hour = (((p->tm_hour / 10 ) & 0x0F ) << 4) |
-            ((p->tm_hour % 10) & 0x0F);
-    thiz->Current_time_bcd_day = (((p->tm_mday / 10 ) & 0x0F ) << 4) |
-            ((p->tm_mday % 10) & 0x0F);
-    thiz->Current_time_bcd_mon = (((p->tm_mon / 10 ) & 0x0F ) << 4) |
-            ((p->tm_mon % 10) & 0x0F);
-    thiz->Current_time_bcd_year_h = (((p->tm_year / 100 ) & 0x0F ) << 4) |
-            ((p->tm_year % 100) & 0x0F);
-    thiz->Current_time_bcd_year_l = (((p->tm_year / 10 ) & 0x0F ) << 4) |
-            ((p->tm_year % 10) & 0x0F);
+//    tmptime.Current_time_bcd_sec = (((p->tm_sec / 10 ) & 0x0F ) << 4) |
+//            ((p->tm_sec % 10) & 0x0F);
+//    tmptime.Current_time_bcd_min = (((p->tm_min / 10 ) & 0x0F ) << 4) |
+//            ((p->tm_min % 10) & 0x0F);
+//    tmptime.Current_time_bcd_hour = (((p->tm_hour / 10 ) & 0x0F ) << 4) |
+//            ((p->tm_hour % 10) & 0x0F);
+//    tmptime.Current_time_bcd_day = (((p->tm_mday / 10 ) & 0x0F ) << 4) |
+//            ((p->tm_mday % 10) & 0x0F);
+//    tmptime.Current_time_bcd_mon = (((p->tm_mon / 10 ) & 0x0F ) << 4) |
+//            ((p->tm_mon % 10) & 0x0F);
+//    tmptime.Current_time_bcd_year_h = (((p->tm_year / 100 ) & 0x0F ) << 4) |
+//            ((p->tm_year % 100) & 0x0F);
+//    tmptime.Current_time_bcd_year_l = (((p->tm_year / 10 ) & 0x0F ) << 4) |
+//            ((p->tm_year % 10) & 0x0F);
+    sprintf(tmptime,"%4d",p->tm_year+1900);
+    sprintf(tmptime,"%s%02d",tmptime,p->tm_mon+1);
+    sprintf(tmptime,"%s%02d",tmptime,p->tm_mday);
+    sprintf(tmptime,"%s%02d",tmptime,p->tm_hour);
+    sprintf(tmptime,"%s%02d",tmptime,p->tm_min);
+    sprintf(tmptime,"%s%02d",tmptime,p->tm_sec);
 
+    str2bcd(tmptime,thiz,7);
+
+#if 0
+    if(strlen(thiz)<256){
+        LengthL2[0] = 0;
+        LengthL2[1] = strlen(thiz);
+    }else{
+        LengthL2[0] = strlen(thiz)/256;
+        LengthL2[1] = strlen(thiz)%256;
+    }//长度为两个字节
+#endif
+    length_data(strlen(thiz),LengthL2);//长度为两个字节
+
+
+    printf("time===%s LengthL2==%s\ngetcurrenttime end\n",tmptime,LengthL2);
+
+    return strlen(thiz);
 }
 
 int aes_128_cbc()
@@ -304,23 +340,37 @@ int packet_echong_command_deny(struct command_osn * thiz)//否认帧
 
 
 
-int packet_echong_command_c_thb(struct command_c_time * thiz)//充电桩心跳指令数据
+//int packet_echong_command_c_thb(char *thiz,char *LengthL1,char  *LengthL2,char *LengthL3)//充电桩心跳指令数据
+int packet_echong_command_c_thb(struct echong_pack *outRulerInfo)//充电桩心跳指令数据
 {
 //获取当前时间
-    getcurrenttime(thiz);
-    aes_128_cbc();//加密数据
-}
+    int tmpLenL1 = 0;
+    int tmpLenL2 = 0;
+    int tmpLenL3 = 0;
+
+    tmpLenL2 = getcurrenttime(outRulerInfo->data_pack,outRulerInfo->LengthL2);//未加密数据长度
+    tmpLenL3 = aes_128_cbc();//加密数据长度
+    encryptmsg();
+
+
+
+    tmpLenL1 = tmpLenL3 + FRAME_LEN;//未补齐
+    length_data(tmpLenL1,outRulerInfo->LengthL1);//长度为两个字节
+
+    return tmpLenL3;
+}//返回加密数据长度
 
 int packet_echong_command_c_ver(struct command_ver * thiz)//充电桩返回软件版本号
 {
 //打包版本号
+
     aes_128_cbc();//加密数据
 }
 
 int packet_echong_command_c_login(struct command_c_time * thiz)//充电桩发送登录指令
 {
 //获取当前时间
-    getcurrenttime(thiz);
+    //getcurrenttime(thiz);
     aes_128_cbc();//加密数据
 }
 
@@ -472,6 +522,20 @@ int analysis_echong_frame()
     //数据归类   get_echong_ruler_info();
 }
 
+void show_frame(int buflen, char* buf)
+{
+
+    int j = buflen;
+    int i;
+    printf("packet length :%d\n packet content : ",j);
+    for(i = 0; i < j;i++)
+    {
+        printf("%02X ", (unsigned char)buf[i]);
+    }
+}
+
+
+
 int split_receive_data()//拆分接收数据 https   POST
 {
 //拆分出报文
@@ -483,8 +547,9 @@ int conn_send_data()//连接发送数据 https   POST
 }
 
 
-int get_echong_ruler_info(int CommandID, struct echong_pack *outRulerInfo)//根据ID获取当前数据
+int get_echong_ruler_info(int CommandID, struct echong_pack *outRulerInfo)//根据CommandID获取当前数据
 {
+
     switch (CommandID) {
     case COMMAND_ACK:
 
@@ -493,9 +558,8 @@ int get_echong_ruler_info(int CommandID, struct echong_pack *outRulerInfo)//根�
 
         break;
     case COMMAND_C_THB://充电桩心跳请求
-//        packet_echong_command_c_thb(command_c_thb);
-//        memcpy(outRulerInfo->data_pack,command_c_thb,sizeof(struct command_c_time));
-        packet_echong_command_c_thb(outRulerInfo->data_pack);
+        //packet_echong_command_c_thb(outRulerInfo->data_pack,outRulerInfo->LengthL1,outRulerInfo->LengthL2,outRulerInfo->LengthL3);
+        packet_echong_command_c_thb(outRulerInfo);
 
         break;
     case COMMAND_P_THB://平台发送心跳包到充电桩
@@ -586,22 +650,20 @@ int get_echong_ruler_info(int CommandID, struct echong_pack *outRulerInfo)//根�
 }
 
 
-int pack_echong_frame_by_data(struct echong_pack *inPara, char *outBuffer, int *outLength)
+int pack_echong_frame_by_data(struct echong_AES_pack *in_aes_data,struct echong_pack *in_data, char *outBuffer, int *outLength)
 {
+    printf("pack_echong_frame_by_data\n");
     int i;
     int len = 0; /* 计算包的总字节长 */
-    int ucCheckSum = 0;
-    int ucDi0,ucDi1,ucDi2,ucDi3;
-    unsigned char  aucAddrTmp[6];
-    char    pile_code[16];
+    unsigned char ucCheckSum = 0;
+    char    pile_code[16]="0000000000000000";
 
-    if(NULL == outBuffer || NULL == inPara ||  NULL == outLength)
+    if(NULL == outBuffer || NULL == in_data ||  NULL == outLength)
     {
+        printf("pack_echong_frame_by_data----exit\n");
         return 0;//E_D07_ERRO_NULL;
     }
     // 准备数据
-
-    //d07_str2bcd(inPara->address, aucAddrTmp, 6);
 
     /* 开始封帧 */
     // 1 帧起始符
@@ -617,28 +679,47 @@ int pack_echong_frame_by_data(struct echong_pack *inPara, char *outBuffer, int *
     }
 
     // 4 帧指令 ID
-    outBuffer[len++] = inPara->Command_ID;
+    outBuffer[len++] = in_data->Command_ID;
 
     // 5 帧总长度 L1
-    //outBuffer[len++] = 21;
+    for(i = 0; i < 2; i++)
+    {
+        outBuffer[len++] = in_data->LengthL1[i];
+    }
+    printf("in_data->LengthL1==%02x %02x\n",in_data->LengthL1[0],in_data->LengthL1[1]);
 
     // 6 帧应用数据加密前长度 L2
-    outBuffer[len++] = strlen(inPara->data_pack);
+    for(i = 0; i < 2; i++)
+    {
+        outBuffer[len++] = in_data->LengthL2[i];
+    }
+    printf("in_data->LengthL2==%02x %02x\n",in_data->LengthL2[0],in_data->LengthL2[1]);
 
 
-    // 7 帧应用层数据加 密后长度 L3
-    //outBuffer[len++] = 2;
-
+    // 7 帧应用层数据加 密后长度 L3    
+    for(i = 0; i < 2; i++)
+    {
+        outBuffer[len++] = in_data->LengthL3[i];
+    }
+    printf("in_data->LengthL3==%02x %02x\n",in_data->LengthL3[0],in_data->LengthL3[1]);
 
     // 8 帧应用层数据 (AES128加密)
-    //utBuffer[len++] = 2;
+//    memcpy(outBuffer+len,in_data->data_pack,strlen(in_data->data_pack));
+//    len+=strlen(in_data->data_pack);
 
-    // 9 帧计数检验和
-    for(i = 18; i < 7; i++)//change by andy i = 0
+    for(i = 0; i < strlen(in_data->data_pack); i++)
     {
-        ucCheckSum += outBuffer[i];
+       outBuffer[len++] = in_data->data_pack[i];
     }
 
+
+    // 9 帧计数检验和
+    for(i = 0; i < COMMAND_LEN + LEN123_LEN/*7*/; i++)
+    {
+        ucCheckSum += outBuffer[i + START_LEN + HEAD_VER_LEN + PILE_CODE_LEN/*18*/];
+    }
+
+    printf("ucCheckSum==%02X\n",ucCheckSum);
     // 9 帧检验和
     outBuffer[len++] = ucCheckSum;
 
@@ -648,6 +729,7 @@ int pack_echong_frame_by_data(struct echong_pack *inPara, char *outBuffer, int *
     /* 输出参数 */
     *outLength = len;
 
+    printf("pack_echong_frame_by_data----end  len==%d\n",len);
     return 1;//E_OK;
 }
 
@@ -666,6 +748,8 @@ void encryptmsg()
     pt(&sAesData,32);
     EncodeBase64(sAesData,sBase64Data);
     printf("sBase64Data==%s\n",sBase64Data);
+
+    return strlen(sBase64Data);
 }
 
 void decryptmsg()
@@ -680,6 +764,82 @@ void decryptmsg()
     printf("sNeedEncrypt_info==%s\n",sNeedEncrypt_info);
 
 }
+
+
+static int s_exit_flag = 0;
+static int s_show_headers = 1;
+static const char *s_show_headers_opt = "--show-headers";
+
+static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
+  struct http_message *hm = (struct http_message *) ev_data;
+  struct echong_pack  frame_data = {0};
+  struct echong_AES_pack  frame_aes_data = {0};
+  char outbuffer[256] = {0};
+  int length = 0;
+
+  printf("111ev==%d\n",ev);
+  switch (ev) {
+    case MG_EV_CONNECT:
+      if (*(int *) ev_data != 0) {
+        fprintf(stderr, "connect() failed: %s\n", strerror(*(int *) ev_data));
+        s_exit_flag = 1;
+      }
+      break;
+    case MG_EV_RECV:
+      fwrite(nc->recv_mbuf.buf,1,nc->recv_mbuf.len,stdout);
+      mbuf_remove(&nc->recv_mbuf,nc->recv_mbuf.len);
+      putchar('\n');
+
+      mbuf_append(&nc->send_mbuf, "buftest", 7);
+      fwrite(nc->send_mbuf.buf,1,nc->send_mbuf.len,stdout);
+      putchar('\n');
+
+
+      get_echong_ruler_info(0x03,&frame_data);
+      frame_data.Command_ID = 0x03;
+      pack_echong_frame_by_data(&frame_aes_data,&frame_data,outbuffer,&length);
+      show_frame(length,outbuffer);
+
+
+
+      break;
+    case MG_EV_SEND:
+        printf("111111111111111111111111nc->send_mbuf.buf==%s\n",nc->send_mbuf.buf);
+        break;
+    case MG_EV_HTTP_REPLY:
+      nc->flags |= MG_F_CLOSE_IMMEDIATELY;
+      if (s_show_headers) {
+        fwrite(hm->message.p, 1, hm->message.len, stdout);
+      } else {
+        fwrite(hm->body.p, 1, hm->body.len, stdout);
+      }
+      putchar('\n');
+      s_exit_flag = 1;
+      break;
+    default:
+      break;
+  }
+}
+
+void mongoose_data()
+{
+    struct mg_mgr mgr;
+      int i;
+
+      mg_mgr_init(&mgr, NULL);
+
+      /* Process command line arguments */
+   do{
+        mg_connect_http(&mgr, ev_handler, "http://192.168.122.38:8080", "Content-Type: application/x-www-form-urlencoded\r\n", "appid=111111111&info=aaaa&sig=P8B2OK/f/HK6WIcb3cSpsP7kfO8=");
+    }while(0);
+
+      while (s_exit_flag == 0) {
+        mg_mgr_poll(&mgr, 1000);
+      }
+      mg_mgr_free(&mgr);
+
+}
+
 
 void http_post_data()
 {
@@ -736,9 +896,10 @@ void *thread_echong_send_service(void *arg) ___THREAD_ENTRY___
     strcpy(url, "http://192.168.122.38");
     strcpy(post_str,"22222222222222");
 
+    mongoose_data();
     //http_post(url,post_str);
     //http_post_data();
-#if 1
+#if 0
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) {
             printf("创建网络连接失败,本线程即将终止---socket error!\n");
             exit(0);
