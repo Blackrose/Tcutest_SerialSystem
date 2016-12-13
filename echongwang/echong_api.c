@@ -105,6 +105,26 @@ int length_data(int tmp_Len,char *Length)
     }//长度为两个字节
 }
 
+int lengthL1_data(int tmp_Len,char *Length)
+{
+    printf("lengthL1_data  tmp_Len==%d\n",tmp_Len);
+    char tmp_len[2] = " ";
+    if(tmp_Len<256){
+        tmp_len[0] = 0;
+        tmp_len[1] = tmp_Len;
+    }else{
+        tmp_len[0] = tmp_Len/256;
+        tmp_len[1] = tmp_Len%256;
+    }//长度为两个字节
+
+    Length[0] = (tmp_len[0] << 2) | ((tmp_len[1] >> 6) & 0x03);
+    printf("Length0===%02X\n",Length[0]);
+
+    Length[1] = (tmp_len[1] << 2 ) | 0x02;
+    printf("Length1===%02X\n",Length[1]);
+}
+
+
 //获取当前时间
 int getcurrenttime(char *thiz,char *LengthL2)
 {
@@ -324,6 +344,72 @@ int AES_CBCDecrypt( const char * sSource, const uint32_t iSize,
 }
 
 
+#if 0
+void encryptmsg()
+{
+    aes_key_len = DecodeBase64(encoding_aes_key, &aes_key);
+    //printf("aes_key==%s  len==%d\n",aes_key,strlen(aes_key));
+    pt(&aes_key,32);
+    AES_CBCEncrypt(sNeedEncrypt_info, strlen(sNeedEncrypt_info),aes_key,aes_key_len/*strlen(aes_key)*/, &sAesData);//aes_key_len != strlen(aes_key)
+    //printf("sAesData==%s len==%d\n",sAesData,strlen(sAesData));
+    pt(&sAesData,32);
+    EncodeBase64(sAesData,sBase64Data);
+    printf("sBase64Data==%s\n",sBase64Data);
+
+    return strlen(sBase64Data);
+}
+
+void decryptmsg()
+{
+    DecodeBase64(sEncryptMsg,&sAesData);
+    pt(&sAesData,32);
+
+    aes_key_len = DecodeBase64(encoding_aes_key, &aes_key);
+    pt(&aes_key,32);
+
+    AES_CBCDecrypt(sAesData, strlen(sAesData),aes_key,aes_key_len, &sNeedEncrypt_info);//aes_key_len != strlen(aes_key)
+    printf("sNeedEncrypt_info==%s\n",sNeedEncrypt_info);
+
+}
+#else
+int encryptmsg(char *sNeedEncrypt_info,char *sBase64Data)
+{
+    char tmpbase64[200] =" ";
+    aes_key_len = DecodeBase64(encoding_aes_key, &aes_key);
+    //printf("aes_key==%s  len==%d\n",aes_key,strlen(aes_key));
+    pt(&aes_key,32);
+    AES_CBCEncrypt(sNeedEncrypt_info, strlen(sNeedEncrypt_info),aes_key,aes_key_len/*strlen(aes_key)*/, &sAesData);//aes_key_len != strlen(aes_key)
+    //printf("sAesData==%s len==%d\n",sAesData,strlen(sAesData));
+    pt(&sAesData,32);
+    EncodeBase64(sAesData,tmpbase64);
+    memcpy(sBase64Data,tmpbase64,strlen(tmpbase64));
+    printf("sBase64Data==%s\n",sBase64Data);
+
+    return strlen(sBase64Data);
+}
+
+int decryptmsg(char *sEncryptMsg,char *sNeedEncrypt_info )
+{
+    printf("decryptmsg\n");
+    char tmpEncrypt_info[200] =" ";
+    DecodeBase64(sEncryptMsg,&sAesData);
+    pt(&sAesData,32);
+printf("decryptmsg11111111\n");
+    aes_key_len = DecodeBase64(encoding_aes_key, &aes_key);
+    pt(&aes_key,32);
+
+    AES_CBCDecrypt(sAesData, strlen(sAesData),aes_key,aes_key_len, &tmpEncrypt_info);//aes_key_len != strlen(aes_key)
+    memcpy(sNeedEncrypt_info,tmpEncrypt_info,strlen(tmpEncrypt_info));
+    printf("tmpEncrypt_info==%s\n",tmpEncrypt_info);
+    printf("sNeedEncrypt_info==%s\n",sNeedEncrypt_info);
+
+    return strlen(sNeedEncrypt_info);
+}
+
+#endif
+
+
+
 //=====设置参数 确认/否认========================================================================
 
 int packet_echong_command_ack(struct command_osn * thiz)//确认帧
@@ -349,13 +435,17 @@ int packet_echong_command_c_thb(struct echong_pack *outRulerInfo)//充电桩心�
     int tmpLenL3 = 0;
 
     tmpLenL2 = getcurrenttime(outRulerInfo->data_pack,outRulerInfo->LengthL2);//未加密数据长度
-    tmpLenL3 = aes_128_cbc();//加密数据长度
-    encryptmsg();
-
-
+    //tmpLenL3 = aes_128_cbc();//加密数据长度
+    //tmpLenL3 = encryptmsg(sNeedEncrypt_info,sBase64Data);
+    tmpLenL3 = encryptmsg(outRulerInfo->data_pack,outRulerInfo->data_aes_pack);
+    length_data(tmpLenL3,outRulerInfo->LengthL3);//长度为两个字节
 
     tmpLenL1 = tmpLenL3 + FRAME_LEN;//未补齐
-    length_data(tmpLenL1,outRulerInfo->LengthL1);//长度为两个字节
+    lengthL1_data(tmpLenL1,outRulerInfo->LengthL1);//长度为两个字节
+
+
+    decryptmsg(sEncryptMsg,outRulerInfo->data_pack);
+   // decryptmsg(outRulerInfo->data_aes_pack,outRulerInfo->data_pack);
 
     return tmpLenL3;
 }//返回加密数据长度
@@ -546,6 +636,18 @@ int conn_send_data()//连接发送数据 https   POST
 //增加发送https + 报文
 }
 
+int get_echong_command_ID(char *receive_buffer)
+{
+    if(NULL == receive_buffer){
+           return 0;
+    }
+    if(receive_buffer[0] == START && receive_buffer[0 + START_LEN] == HEAD_VER){
+        return  receive_buffer[0 + START_LEN + HEAD_VER_LEN + PILE_CODE_LEN];
+    }else{
+        return 0;
+    }
+
+}
 
 int get_echong_ruler_info(int CommandID, struct echong_pack *outRulerInfo)//根据CommandID获取当前数据
 {
@@ -707,11 +809,17 @@ int pack_echong_frame_by_data(struct echong_AES_pack *in_aes_data,struct echong_
 //    memcpy(outBuffer+len,in_data->data_pack,strlen(in_data->data_pack));
 //    len+=strlen(in_data->data_pack);
 
+#if 0
     for(i = 0; i < strlen(in_data->data_pack); i++)
     {
        outBuffer[len++] = in_data->data_pack[i];
     }
-
+#else
+    for(i = 0; i < strlen(in_data->data_aes_pack); i++)
+    {
+       outBuffer[len++] = in_data->data_aes_pack[i];
+    }
+#endif
 
     // 9 帧计数检验和
     for(i = 0; i < COMMAND_LEN + LEN123_LEN/*7*/; i++)
@@ -738,32 +846,6 @@ int unpack_echong_frame_by_data(char *inBuffer, int inLength,struct echong_pack 
     //get_echong_ruler_info();
 }
 
-void encryptmsg()
-{
-    aes_key_len = DecodeBase64(encoding_aes_key, &aes_key);
-    //printf("aes_key==%s  len==%d\n",aes_key,strlen(aes_key));
-    pt(&aes_key,32);
-    AES_CBCEncrypt(sNeedEncrypt_info, strlen(sNeedEncrypt_info),aes_key,aes_key_len/*strlen(aes_key)*/, &sAesData);//aes_key_len != strlen(aes_key)
-    //printf("sAesData==%s len==%d\n",sAesData,strlen(sAesData));
-    pt(&sAesData,32);
-    EncodeBase64(sAesData,sBase64Data);
-    printf("sBase64Data==%s\n",sBase64Data);
-
-    return strlen(sBase64Data);
-}
-
-void decryptmsg()
-{
-    DecodeBase64(sEncryptMsg,&sAesData);
-    pt(&sAesData,32);
-
-    DecodeBase64(encoding_aes_key, &aes_key);
-    pt(&aes_key,32);
-
-    AES_CBCDecrypt(sAesData, strlen(sAesData),aes_key,aes_key_len, &sNeedEncrypt_info);//aes_key_len != strlen(aes_key)
-    printf("sNeedEncrypt_info==%s\n",sNeedEncrypt_info);
-
-}
 
 
 static int s_exit_flag = 0;
@@ -794,12 +876,12 @@ static void ev_handler(struct mg_connection *nc, int ev, void *ev_data) {
       fwrite(nc->send_mbuf.buf,1,nc->send_mbuf.len,stdout);
       putchar('\n');
 
-
-      get_echong_ruler_info(0x03,&frame_data);
+      //frame_data.Command_ID = get_echong_command_ID(nc->send_mbuf.buf);
       frame_data.Command_ID = 0x03;
+
+      get_echong_ruler_info(frame_data.Command_ID,&frame_data);
       pack_echong_frame_by_data(&frame_aes_data,&frame_data,outbuffer,&length);
       show_frame(length,outbuffer);
-
 
 
       break;
@@ -868,7 +950,7 @@ void http_post_data()
 #endif
 
   //encryptmsg();
-  decryptmsg();
+  //decryptmsg();
 }
 
 char * http_get(const char *url);

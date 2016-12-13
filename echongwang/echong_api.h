@@ -73,6 +73,8 @@ struct echong_pack {
     unsigned char    LengthL3[2];
     // 应用层数据
     unsigned char   data_pack[200];
+     // 应用层加 密后数据
+    unsigned char   data_aes_pack[200];
     // 校验和
     unsigned int    Checksum;
     // 结束字符
