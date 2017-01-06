@@ -25,7 +25,7 @@ extern "C" {
 #define     COMMAND_LEN    1
 #define     LEN123_LEN            6
 #define     AES_DATA_LEN       0 //()
-#define     CHECK_LEN              1
+#define     CHECK_LEN              2
 #define     END_LEN                   1
 
 #define     FRAME_LEN      (START_LEN + HEAD_VER_LEN + PILE_CODE_LEN + COMMAND_LEN + LEN123_LEN + AES_DATA_LEN + CHECK_LEN + END_LEN)
@@ -401,7 +401,9 @@ int unpack_echong_frame_by_data(char *inpBuffer, int inBufferLength, struct echo
 //int packet_echong_command_c_thb(char *thiz, char *LengthL1, char *LengthL2, char *LengthL3);
 int packet_echong_command_c_thb(struct echong_pack *outRulerInfo);
 
-int packet_echong_command_c_ver(struct command_ver * thiz);
+int packet_echong_command_c_ver(struct echong_pack *outRulerInfo);
+
+int packet_echong_command_c_login(struct echong_pack *outRulerInfo);//充电桩发送登录指令
 
 void http_post_data();
 

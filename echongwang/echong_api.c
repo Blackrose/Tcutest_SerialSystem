@@ -35,14 +35,19 @@
 #include "tcu.h"
 
 
-#define IPDST "192.168.122.22"
-#define IPSTR "192.168.122.38"
+#define IPDST "192.168.122.204"
+#define IPSTR "192.168.122.204"
 #define PORT 8080
 #define BUFSIZE 1024
 
 
 #define APP_ID "1111111111"
 #define INFO "aaaa"
+
+#define MAC "04a316e03aee"//"20112233ef00"//"04A316E03AEE"
+#define TYPE "normal"
+#define TIMESTAMP 1410349438
+
 
 #define TOKEN_LEN  33
 #define SIG_LEN  20
@@ -56,12 +61,24 @@ int aes_key_len = 32;
 char token[TOKEN_LEN] = "228bf094169a40a3bd188ba37ebe8723&";
 char sig[SIG_LEN] = " ";
 char base64_sig[100] =" ";
-char encoding_aes_key[EncodingAESKey_LEN] = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG=";
-char aes_key[32] = " ";
-char sNeedEncrypt_info[100] = "aaaa";
+char encoding_aes_key[EncodingAESKey_LEN] = "0123456789abcdef";//"abcdefghijklmnopqrstuvwxyz0123456789ABCDEFG=";
+char aes_key[16] = "0123456789abcdef";
+char key[] = "0123456789abcdef";
+char sNeedEncrypt_info[100] = "mac=04A316E03AEE&timestamp=1410349438&type=normal";
 char sAesData[200] = " ";
 char sBase64Data[200] = " ";
 char sEncryptMsg[EncodingAESKey_LEN]="QGUlgqDyIh6AlRvofZDcqzWgCURll+qcgPW4czwghqo=";
+//char sEncryptMsg[2048]="oGHlPDbhmdZuuQCckqBnJkJljSKiWiEMO3IaKNUX2BS+3Nzolp3xjNRXhYlc73/XH0LmshpwM744RoQrXLS/v2y1FGpiOSCXjgGNSEuCa7VQwgmgJsGxp6QWRwR0IA3iZpvWRw2iPo+vaAIjSMPZmeqqHItV8Jpsc4Vw+3M+AmA=";
+
+//char sEncryptMsg[EncodingAESKey_LEN]="aAExMDAwMDAwMDAwMDAwMDExBACyAAcAEDFhP6EgbwtdFit79Drute8AzRY=";
+
+
+char mac[13] = "04A316E03AEE";
+char type[8] = "normal";
+int  timestamp = 1410349438;
+char sig_key[EncodingAESKey_LEN] = "0123456789abcdef";
+
+
 
 
 static char *pt(unsigned char *md, unsigned int len)
@@ -174,12 +191,20 @@ int getcurrenttime(char *thiz,char *LengthL2)
     }//长度为两个字节
 #endif
     length_data(strlen(thiz),LengthL2);//长度为两个字节
-
-
     printf("time===%s LengthL2==%s\ngetcurrenttime end\n",tmptime,LengthL2);
 
     return strlen(thiz);
 }
+
+int getver(char *thiz,char *LengthL2)
+{
+    //操作序列号//软件版本号
+    //memcpy(thiz,command_c_ver,sizeof(struct command_ver));
+    length_data(strlen(thiz),LengthL2);//长度为两个字节
+    printf("LengthL2==%s\ngetver end\n",LengthL2);
+    return strlen(thiz);
+}
+
 
 int aes_128_cbc()
 {
@@ -216,6 +241,7 @@ int DecodeBase64(const char *sSrc, char *sTarget)
     int iTargetSize = 0;
     iTargetSize =  EVP_DecodeBlock((unsigned char*)pcOutBuf, (const unsigned char*)sSrc, iOutBufSize);
     printf("pcOutBuf===%s\n",pcOutBuf);
+    printf("111iTargetSize==%d  iEqualNum==%d\n",iTargetSize,iEqualNum);
     if(iTargetSize > iEqualNum && iTargetSize < iOutBufSize)
     {
         printf("iTargetSize==%d  iEqualNum==%d\n",iTargetSize,iEqualNum);
@@ -344,8 +370,8 @@ int AES_CBCDecrypt( const char * sSource, const uint32_t iSize,
 }
 
 
-#if 0
-void encryptmsg()
+#if 1
+void encryptmsg_test()
 {
     aes_key_len = DecodeBase64(encoding_aes_key, &aes_key);
     //printf("aes_key==%s  len==%d\n",aes_key,strlen(aes_key));
@@ -359,27 +385,34 @@ void encryptmsg()
     return strlen(sBase64Data);
 }
 
-void decryptmsg()
+void decryptmsg_test()
 {
     DecodeBase64(sEncryptMsg,&sAesData);
     pt(&sAesData,32);
 
+//    aes_key_len = DecodeBase64(key, &aes_key);
+//    pt(&aes_key,32);
+
     aes_key_len = DecodeBase64(encoding_aes_key, &aes_key);
     pt(&aes_key,32);
-
+    //aes_key_len = strlen(aes_key);
     AES_CBCDecrypt(sAesData, strlen(sAesData),aes_key,aes_key_len, &sNeedEncrypt_info);//aes_key_len != strlen(aes_key)
     printf("sNeedEncrypt_info==%s\n",sNeedEncrypt_info);
 
 }
-#else
+//#else
 int encryptmsg(char *sNeedEncrypt_info,char *sBase64Data)
 {
     char tmpbase64[200] =" ";
+#if 1
     aes_key_len = DecodeBase64(encoding_aes_key, &aes_key);
     //printf("aes_key==%s  len==%d\n",aes_key,strlen(aes_key));
     pt(&aes_key,32);
     AES_CBCEncrypt(sNeedEncrypt_info, strlen(sNeedEncrypt_info),aes_key,aes_key_len/*strlen(aes_key)*/, &sAesData);//aes_key_len != strlen(aes_key)
     //printf("sAesData==%s len==%d\n",sAesData,strlen(sAesData));
+#endif
+    //AES_CBCEncrypt(sNeedEncrypt_info, strlen(sNeedEncrypt_info),sig_key,strlen(sig_key), &sAesData);//aes_key_len != strlen(aes_key)
+
     pt(&sAesData,32);
     EncodeBase64(sAesData,tmpbase64);
     memcpy(sBase64Data,tmpbase64,strlen(tmpbase64));
@@ -450,29 +483,63 @@ int packet_echong_command_c_thb(struct echong_pack *outRulerInfo)//充电桩心�
     return tmpLenL3;
 }//返回加密数据长度
 
-int packet_echong_command_c_ver(struct command_ver * thiz)//充电桩返回软件版本号
+int packet_echong_command_c_ver(struct echong_pack *outRulerInfo)//充电桩返回软件版本号
 {
 //打包版本号
+    int tmpLenL1 = 0;
+    int tmpLenL2 = 0;
+    int tmpLenL3 = 0;
 
-    aes_128_cbc();//加密数据
-}
+    tmpLenL2 = getver(outRulerInfo->data_pack,outRulerInfo->LengthL2);//未加密数据长度
 
-int packet_echong_command_c_login(struct command_c_time * thiz)//充电桩发送登录指令
+    tmpLenL3 = encryptmsg(outRulerInfo->data_pack,outRulerInfo->data_aes_pack);//加密数据长度
+    length_data(tmpLenL3,outRulerInfo->LengthL3);//长度为两个字节
+
+    tmpLenL1 = tmpLenL3 + FRAME_LEN;//未补齐
+    lengthL1_data(tmpLenL1,outRulerInfo->LengthL1);//长度为两个字节
+
+    decryptmsg(sEncryptMsg,outRulerInfo->data_pack);
+   // decryptmsg(outRulerInfo->data_aes_pack,outRulerInfo->data_pack);
+
+    return tmpLenL3;
+
+}//返回加密数据长度
+
+int packet_echong_command_c_login(struct echong_pack *outRulerInfo)//充电桩发送登录指令
 {
 //获取当前时间
-    //getcurrenttime(thiz);
-    aes_128_cbc();//加密数据
+    int tmpLenL1 = 0;
+    int tmpLenL2 = 0;
+    int tmpLenL3 = 0;
+
+    tmpLenL2 = getcurrenttime(outRulerInfo->data_pack,outRulerInfo->LengthL2);//未加密数据长度
+    tmpLenL3 = encryptmsg(outRulerInfo->data_pack,outRulerInfo->data_aes_pack);//加密数据长度
+    length_data(tmpLenL3,outRulerInfo->LengthL3);//长度为两个字节
+
+    tmpLenL1 = tmpLenL3 + FRAME_LEN;//未补齐
+    lengthL1_data(tmpLenL1,outRulerInfo->LengthL1);//长度为两个字节
+
+    decryptmsg(sEncryptMsg,outRulerInfo->data_pack);
+   // decryptmsg(outRulerInfo->data_aes_pack,outRulerInfo->data_pack);
+
+    return tmpLenL3;
 }
 
 //=======================================================================================
 //=============查询参数 ===================================================================
 
-int packet_echong_command_c_clock_inf(struct command_c_clock * thiz)//返回充电桩时钟及当前执行电价
+int packet_echong_command_c_clock_inf(struct echong_pack *outRulerInfo)//返回充电桩时钟及当前执行电价
 {
 //打包
-    //操作序列号
-    //getcurrenttime(thiz->command_c_currenttime);//充电桩当前时间
-    //getcurrenttime(thiz->command_c_changetime);//电价开始变更时间
+    struct timeval timenow;
+
+    gettimeofday(&timenow,NULL);
+    sprintf(outRulerInfo->data_pack,"%s",command_c_clock_inf.Operation_sequence_num);//操作序列号
+    //strcat(outRulerInfo->data_pack,timenow.tv_sec);
+    printf("timenow==%s\n",timenow.tv_sec);//充电桩当前时间
+    //getcurrenttime(command_c_clock_inf.command_c_changetime);//电价开始变更时间
+    //strcat(outRulerInfo->data_pack,command_c_clock_inf.command_c_changetime);
+
     //尖费率   xx.xxxx元
     //峰费率
     //平费率
@@ -673,7 +740,7 @@ int get_echong_ruler_info(int CommandID, struct echong_pack *outRulerInfo)//根�
     case COMMAND_C_VER://充电桩返回软件版本号
         //packet_echong_command_c_thb(command_c_ver);
         //memcpy(outRulerInfo->data_pack,command_c_ver,sizeof(struct command_ver));
-        packet_echong_command_c_ver(outRulerInfo->data_pack);
+        packet_echong_command_c_ver(outRulerInfo);
 
         break;
     case COMMAND_P_REBOOT: // 0x07,//平台下发重启充电桩
@@ -758,7 +825,7 @@ int pack_echong_frame_by_data(struct echong_AES_pack *in_aes_data,struct echong_
     int i;
     int len = 0; /* 计算包的总字节长 */
     unsigned char ucCheckSum = 0;
-    char    pile_code[16]="0000000000000000";
+    char    pile_code[16]="1000000000000011";
 
     if(NULL == outBuffer || NULL == in_data ||  NULL == outLength)
     {
@@ -829,6 +896,7 @@ int pack_echong_frame_by_data(struct echong_AES_pack *in_aes_data,struct echong_
 
     printf("ucCheckSum==%02X\n",ucCheckSum);
     // 9 帧检验和
+    outBuffer[len++] = 0x00;
     outBuffer[len++] = ucCheckSum;
 
     // 10 结束符
@@ -912,7 +980,11 @@ void mongoose_data()
 
       /* Process command line arguments */
    do{
-        mg_connect_http(&mgr, ev_handler, "http://192.168.122.38:8080", "Content-Type: application/x-www-form-urlencoded\r\n", "appid=111111111&info=aaaa&sig=P8B2OK/f/HK6WIcb3cSpsP7kfO8=");
+        //mg_connect_http(&mgr, ev_handler, "http://192.168.122.204:8080", "Content-Type: application/x-www-form-urlencoded\r\n", "appid=111111111&info=aaaa&sig=P8B2OK/f/HK6WIcb3cSpsP7kfO8=");
+        mg_connect_http(&mgr, ev_handler, "http://123.56.113.123:8002/register", "Content-Type: application/x-www-form-urlencoded\r\n", "mac=04a316e03aee&type=normal&timestamp=1410349438&sig=c6+9h2687GbXIaEWgEtrCus7W2c=");
+
+          //mg_connect_http(&mgr, ev_handler, "http://123.56.113.123:8002/register", "Content-Type: application/x-www-form-urlencoded\r\n", "mac=20112233ef00&type=normal&timestamp=1410349438&sig=QAUheeaw0UCYYpsFYzCAfjSyZEY=");
+
     }while(0);
 
       while (s_exit_flag == 0) {
@@ -927,8 +999,27 @@ void http_post_data()
 {
     char *p;
     char  data[100] = " ";
-#if 0
+#if 1
+    printf("http_post_data\n");
 
+    sprintf(data,"mac=%s",MAC);//mac
+    sprintf(data,"%s&timestamp=%d",data,TIMESTAMP);//timestamp
+    sprintf(data,"%s&type=%s",data,TYPE);//type
+
+    //EncodingAESKey
+
+    p = pt(HMAC(  EVP_sha1(),
+           /*key data*/ sig_key,
+           /*key len*/  EncodingAESKey_LEN - 1,
+           /*data  */data,
+           /*data len*/strlen(data),
+           /*digest*/sig,
+           &sig_len),SHA_DIGEST_LENGTH);//sig  HMAC openssl
+
+  printf("HMAC\n");
+  EVP_EncodeBlock(base64_sig,sig,sig_len);
+  printf("base64_sig==%s\n",base64_sig);
+#else
     printf("http_post_data\n");
     //appid
     sprintf(data,"app_id=%s",APP_ID);
@@ -950,7 +1041,8 @@ void http_post_data()
 #endif
 
   //encryptmsg();
-  //decryptmsg();
+  encryptmsg_test();
+  decryptmsg_test();
 }
 
 char * http_get(const char *url);
@@ -975,12 +1067,16 @@ void *thread_echong_send_service(void *arg) ___THREAD_ENTRY___
 
     const char url[200];
     const char post_str[200];
-    strcpy(url, "http://192.168.122.38");
+    strcpy(url, "http://192.168.122.204");
     strcpy(post_str,"22222222222222");
 
-    mongoose_data();
+
+    //encryptmsg_test();
+     decryptmsg_test();
+   // http_post_data();
+    //mongoose_data();
     //http_post(url,post_str);
-    //http_post_data();
+
 #if 0
     if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0 ) {
             printf("创建网络连接失败,本线程即将终止---socket error!\n");
