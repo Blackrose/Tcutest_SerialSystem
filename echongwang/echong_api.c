@@ -27,9 +27,9 @@
 
 #include "echong_api.h"
 #include "error.h"
-#include "hmac.h"
-#include "sha.h"
-#include "aes.h"
+#include "openssl/include/openssl/hmac.h"
+#include "openssl/include/openssl/sha.h"
+#include "openssl/include/openssl/aes.h"
 #include "mongoose/mongoose.h"
 
 #include "tcu.h"
@@ -1046,7 +1046,7 @@ void http_post_data()
 }
 
 char * http_get(const char *url);
-char * http_post(const char *url,const char * post_str);
+char * http_post1(const char *url,const char * post_str);
 
 void *thread_echong_send_service(void *arg) ___THREAD_ENTRY___
 {
@@ -1072,7 +1072,7 @@ void *thread_echong_send_service(void *arg) ___THREAD_ENTRY___
 
 
     //encryptmsg_test();
-     decryptmsg_test();
+     //decryptmsg_test();
    // http_post_data();
     //mongoose_data();
     //http_post(url,post_str);
@@ -1314,7 +1314,7 @@ static char *http_parse_result(const char*lpbuf)
     return response;
 }
 
-char * http_post(const char *url,const char *post_str){
+char * http_post1(const char *url,const char *post_str){
 
     char post[BUFFER_SIZE] = {'\0'};
 

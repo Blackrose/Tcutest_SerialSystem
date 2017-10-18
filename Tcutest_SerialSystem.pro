@@ -64,7 +64,6 @@ HEADERS += global.h \
            mythread.h \
            define/define.h \
            echongwang/echong_api.h \
-           echongwang/WXBizMsgCrypt.h \
            gprs/gprs.h \
            gps/gps.h \
            keyboard/imframe.h \
@@ -212,7 +211,12 @@ HEADERS += global.h \
            openssl/include/openssl/x509v3.h \
            /usr/include/png.h \
            /usr/include/libpng12/pngconf.h \
-    mongoose/mongoose.h
+    mongoose/mongoose.h \
+    echongwang/aes.h \
+    echongwang/base64.h \
+    echongwang/hmac.h \
+    echongwang/jsmn.h \
+    echongwang/sha1.h
 FORMS += gprs/gprs.ui \
          gps/gps.ui \
          message/message.ui \
@@ -251,7 +255,6 @@ SOURCES += global.cpp \
            mysigals_slots.cpp \
            mythread.cpp \
            echongwang/echong_api.c \
-           echongwang/WXBizMsgCrypt.cpp \
            gprs/gprs.cpp \
            gps/gps.cpp \
            keyboard/imframe.cpp \
@@ -318,7 +321,15 @@ SOURCES += global.cpp \
            qcom/dlt645_2007/dlt645_api_test.c \
            qcom/qextserial/qextserialport.cpp \
            qcom/qextserial/qextserialport_unix.cpp \
-    mongoose/mongoose.c
+    mongoose/mongoose.c \
+    echongwang/Base64Decode.c \
+    echongwang/Base64Encode.c \
+    echongwang/aes.c \
+    echongwang/base64.c \
+    echongwang/hmac.c \
+    echongwang/http_client.c \
+    echongwang/sha1.c \
+    echongwang/jsmn.c
 RESOURCES += img.qrc syszuxpinyin.qrc qcom/images.qrc
 
 DEFINES += HAVE_CONFIG_H
@@ -329,4 +340,6 @@ UI_DIR = ./ui_forms
 
 
 LIBS += -L$$PWD/openssl/lib/ -lcrypto
+#LIBS += -L$$PWD/echongwang/lib/  -ljsmn
+#LIBS += echongwang/lib/libjsmn.a
 LIBS += -lrt
