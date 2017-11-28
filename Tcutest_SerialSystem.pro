@@ -339,6 +339,9 @@ MOC_DIR = ./moc
 UI_DIR = ./ui_forms
 
 
+QMAKE_CXXFLAGS += -g
+
+
 LIBS += -L$$PWD/openssl/lib/ -lcrypto
 #LIBS += -L$$PWD/echongwang/lib/  -ljsmn
 #LIBS += echongwang/lib/libjsmn.a

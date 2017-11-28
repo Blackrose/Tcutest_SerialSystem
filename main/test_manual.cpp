@@ -12,12 +12,13 @@
 #include "first_interface.h"
 #include "card_operation.h"
 
+
 //mythread  test_Manual::mythread_can ;
 
 #include "serialsystem.h"
 
-#define MYTHREAD
-#undef  MYTHREAD
+//#define MYTHREAD
+//#undef  MYTHREAD
 
 test_Manual::test_Manual(QWidget *parent) :
     QWidget(parent),
@@ -58,6 +59,7 @@ test_Manual::~test_Manual()
 void test_Manual::slot_hide()
 {
     hide();
+
 #ifdef MYTHREAD
     mythread_can.stop();
 #endif
@@ -83,9 +85,10 @@ void test_Manual::slot_canbus()
     }
     mythread_can.start();
 #endif
+#ifndef MYTHREAD
     connect_charge *w_connect = new connect_charge(this);
     w_connect->show();
-
+#endif
 //    widget_tmp = new Widget;
 //    widget_tmp->show();
     //widget_tmp->showFullScreen();   

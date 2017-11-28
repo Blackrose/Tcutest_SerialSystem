@@ -9,6 +9,9 @@
 
 #define  EMTER
 #undef  EMTER
+//#define AC_CHARGER
+#undef AC_CHARGER
+
 
 Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(new Ui::Charging_monitoring)
 {
@@ -37,7 +40,9 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
     ui->charge_vol->setText(task->emter_info.emter_vol);
     ui->charge_current->setText(task->emter_info.emter_current);
     ui->charge_power->setText(task->emter_info.emter_power);
+#ifdef AC_CHARGER
     charge_inf();
+#endif
     slot_chargingtimer();
     initBtnNode();
 
@@ -410,7 +415,9 @@ void Charging_monitoring::set_data()
 //    ui->charge_current();
 //    ui->charge_vol();
 //    ui->charge_time();
+#ifdef AC_CHARGER
     charge_inf();
+#endif
 }
 
 void Charging_monitoring::slot_tmptimer()

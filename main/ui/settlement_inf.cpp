@@ -7,6 +7,7 @@
 #include "message/message.h"
 #include "tcu.h"
 #include "first_interface.h"
+#include "test_auto.h"
 
 settlement_inf::settlement_inf(QWidget *parent) :
     QWidget(parent),
@@ -34,8 +35,14 @@ void settlement_inf::slot_hide()
      //mythread_can.stop();
 //    equipment_testing *w_equ = new equipment_testing;
 //    w_equ->show();
-    First_interface *w_first = new First_interface;
-    w_first->show();
+
+//    First_interface *w_first = new First_interface;
+//    w_first->show();
+    task->tcu_stage == TCU_STAGE_WAITCONNECT;//跳过版本校验充电参数
+    connect_charge *w_connect = new connect_charge(this);
+    w_connect->show();
+//        test_auto *w_test_auto = new test_auto;
+//        w_test_auto->show();
 }
 
 void settlement_inf::slot_timer()

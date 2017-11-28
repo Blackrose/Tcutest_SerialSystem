@@ -1,5 +1,6 @@
 #include "test_auto.h"
 #include "ui_test_auto.h"
+#include "tcu.h"
 
 test_auto::test_auto(QWidget *parent) :
     QWidget(parent),
@@ -24,4 +25,11 @@ test_auto::~test_auto()
 void test_auto::slot_hide()
 {
     hide();
+}
+
+void test_auto::on_start_but_clicked()
+{
+    task->tcu_stage == TCU_STAGE_WAITCONNECT;
+    my_sigals.SetValue(task->tcu_stage);
+
 }

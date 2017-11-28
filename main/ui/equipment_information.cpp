@@ -7,6 +7,7 @@
 #include "tcu.h"
 
 #include <stdio.h>
+#undef AC_CHARGER
 
 
 Equipment_information::Equipment_information(QWidget *parent) :
@@ -33,8 +34,10 @@ Equipment_information::Equipment_information(QWidget *parent) :
 void Equipment_information::slot_timer()
 {
         charger_sn(ui->charger_sn);
+#ifdef AC_CHARGER
         spn_port(ui->charger_interface_ID);
         equ_inf();
+#endif
 }
 
 void Equipment_information::charger_sn(QLineEdit* lbl)// 充电机编号

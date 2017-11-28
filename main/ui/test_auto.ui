@@ -75,6 +75,24 @@
     <string>Back</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="start_but">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>190</y>
+     <width>111</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>17</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>启动充电</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
