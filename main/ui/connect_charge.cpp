@@ -111,7 +111,7 @@ void connect_charge::check_ver(QLineEdit* lbl)
             task->tcv_info.spn_tcu_version[0],
             task->tcv_info.spn_tcu_version[1]);
     lbl->setText(ch);
-    TDDebug("tcv_info.spn_tcu_version=%02x.%02x ",task->tcv_info.spn_tcu_version[0],task->tcv_info.spn_tcu_version[1]);
+    //TDDebug("tcv_info.spn_tcu_version=%02x.%02x ",task->tcv_info.spn_tcu_version[0],task->tcv_info.spn_tcu_version[1]);
     //timer.start();
 }
 
@@ -147,7 +147,7 @@ void connect_charge::newTimeNoSec(QLabel* lbl)
              task->tts_info.spn1280_bcd_min,
              ((task->tts_info.spn1280_bcd_sec_h)<<8 | (task->tts_info.spn1280_bcd_sec_l))/1000,
              ((task->tts_info.spn1280_bcd_sec_h)<<8 | (task->tts_info.spn1280_bcd_sec_l))%1000);
-    TDDebug("tts_info=%s",tmp);
+    //TDDebug("tts_info=%s",tmp);
     tcv_timer.start();
 }
 

@@ -5,8 +5,7 @@
 TEMPLATE = app
 TARGET = 
 DEPENDPATH += . \
-              define \
-              echongwang \
+              define \              
               gprs \
               gps \
               keyboard \
@@ -19,7 +18,6 @@ DEPENDPATH += . \
               startUp \
               SYSZUXpinyin \
               tcu_canbus \
-              tinyxml2 \
               ui_forms \
               keyboard/ui \
               main/ui \
@@ -38,9 +36,6 @@ INCLUDEPATH += . \
                main/ui \
                qcom \
                qcom/qextserial \
-               echongwang \
-               openssl/include/openssl \
-               tinyxml2 \
                gprs \
                gps \
                keyboard \
@@ -63,7 +58,6 @@ HEADERS += global.h \
            mysigals_slots.h \
            mythread.h \
            define/define.h \
-           echongwang/echong_api.h \
            gprs/gprs.h \
            gps/gps.h \
            keyboard/imframe.h \
@@ -135,88 +129,7 @@ HEADERS += global.h \
            qcom/dlt645_2007/dlt645_api_07.h \
            qcom/qextserial/qextserialport.h \
            qcom/qextserial/qextserialport_global.h \
-           qcom/qextserial/qextserialport_p.h \
-           openssl/include/openssl/aes.h \
-           openssl/include/openssl/asn1.h \
-           openssl/include/openssl/asn1_mac.h \
-           openssl/include/openssl/asn1t.h \
-           openssl/include/openssl/async.h \
-           openssl/include/openssl/bio.h \
-           openssl/include/openssl/blowfish.h \
-           openssl/include/openssl/bn.h \
-           openssl/include/openssl/buffer.h \
-           openssl/include/openssl/camellia.h \
-           openssl/include/openssl/cast.h \
-           openssl/include/openssl/cmac.h \
-           openssl/include/openssl/cms.h \
-           openssl/include/openssl/comp.h \
-           openssl/include/openssl/conf.h \
-           openssl/include/openssl/conf_api.h \
-           openssl/include/openssl/crypto.h \
-           openssl/include/openssl/ct.h \
-           openssl/include/openssl/des.h \
-           openssl/include/openssl/dh.h \
-           openssl/include/openssl/dsa.h \
-           openssl/include/openssl/dtls1.h \
-           openssl/include/openssl/e_os2.h \
-           openssl/include/openssl/ebcdic.h \
-           openssl/include/openssl/ec.h \
-           openssl/include/openssl/ecdh.h \
-           openssl/include/openssl/ecdsa.h \
-           openssl/include/openssl/engine.h \
-           openssl/include/openssl/err.h \
-           openssl/include/openssl/evp.h \
-           openssl/include/openssl/hmac.h \
-           openssl/include/openssl/idea.h \
-           openssl/include/openssl/kdf.h \
-           openssl/include/openssl/lhash.h \
-           openssl/include/openssl/md2.h \
-           openssl/include/openssl/md4.h \
-           openssl/include/openssl/md5.h \
-           openssl/include/openssl/mdc2.h \
-           openssl/include/openssl/modes.h \
-           openssl/include/openssl/obj_mac.h \
-           openssl/include/openssl/objects.h \
-           openssl/include/openssl/ocsp.h \
-           openssl/include/openssl/opensslconf.h \
-           openssl/include/openssl/opensslv.h \
-           openssl/include/openssl/ossl_typ.h \
-           openssl/include/openssl/pem.h \
-           openssl/include/openssl/pem2.h \
-           openssl/include/openssl/pkcs12.h \
-           openssl/include/openssl/pkcs7.h \
-           openssl/include/openssl/rand.h \
-           openssl/include/openssl/rc2.h \
-           openssl/include/openssl/rc4.h \
-           openssl/include/openssl/rc5.h \
-           openssl/include/openssl/ripemd.h \
-           openssl/include/openssl/rsa.h \
-           openssl/include/openssl/safestack.h \
-           openssl/include/openssl/seed.h \
-           openssl/include/openssl/sha.h \
-           openssl/include/openssl/srp.h \
-           openssl/include/openssl/srtp.h \
-           openssl/include/openssl/ssl.h \
-           openssl/include/openssl/ssl2.h \
-           openssl/include/openssl/ssl3.h \
-           openssl/include/openssl/stack.h \
-           openssl/include/openssl/symhacks.h \
-           openssl/include/openssl/tls1.h \
-           openssl/include/openssl/ts.h \
-           openssl/include/openssl/txt_db.h \
-           openssl/include/openssl/ui.h \
-           openssl/include/openssl/whrlpool.h \
-           openssl/include/openssl/x509.h \
-           openssl/include/openssl/x509_vfy.h \
-           openssl/include/openssl/x509v3.h \
-           /usr/include/png.h \
-           /usr/include/libpng12/pngconf.h \
-    mongoose/mongoose.h \
-    echongwang/aes.h \
-    echongwang/base64.h \
-    echongwang/hmac.h \
-    echongwang/jsmn.h \
-    echongwang/sha1.h
+           qcom/qextserial/qextserialport_p.h
 FORMS += gprs/gprs.ui \
          gps/gps.ui \
          message/message.ui \
@@ -254,7 +167,6 @@ SOURCES += global.cpp \
            myerr_sigals_slots.cpp \
            mysigals_slots.cpp \
            mythread.cpp \
-           echongwang/echong_api.c \
            gprs/gprs.cpp \
            gps/gps.cpp \
            keyboard/imframe.cpp \
@@ -289,7 +201,6 @@ SOURCES += global.cpp \
            tcu_canbus/log.c \
            tcu_canbus/serialsystem.c \
            tcu_canbus/tcu.c \
-           tinyxml2/tinyxml2.cpp \
            main/ui/account_code.cpp \
            main/ui/bat_information.cpp \
            main/ui/billing_info.cpp \
@@ -320,16 +231,7 @@ SOURCES += global.cpp \
            qcom/dlt645_2007/dlt645_api_07.c \
            qcom/dlt645_2007/dlt645_api_test.c \
            qcom/qextserial/qextserialport.cpp \
-           qcom/qextserial/qextserialport_unix.cpp \
-    mongoose/mongoose.c \
-    echongwang/Base64Decode.c \
-    echongwang/Base64Encode.c \
-    echongwang/aes.c \
-    echongwang/base64.c \
-    echongwang/hmac.c \
-    echongwang/http_client.c \
-    echongwang/sha1.c \
-    echongwang/jsmn.c
+           qcom/qextserial/qextserialport_unix.cpp
 RESOURCES += img.qrc syszuxpinyin.qrc qcom/images.qrc
 
 DEFINES += HAVE_CONFIG_H
@@ -342,7 +244,7 @@ UI_DIR = ./ui_forms
 QMAKE_CXXFLAGS += -g
 
 
-LIBS += -L$$PWD/openssl/lib/ -lcrypto
+#LIBS += -L$$PWD/openssl/lib/ -lcrypto
 #LIBS += -L$$PWD/echongwang/lib/  -ljsmn
 #LIBS += echongwang/lib/libjsmn.a
 LIBS += -lrt
