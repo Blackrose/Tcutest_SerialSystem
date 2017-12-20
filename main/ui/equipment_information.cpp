@@ -37,6 +37,9 @@ void Equipment_information::slot_timer()
 #ifdef AC_CHARGER
         spn_port(ui->charger_interface_ID);
         equ_inf();
+#else
+        spn_port_DC(ui->charger_interface_ID);
+        equ_inf_DC();
 #endif
 }
 
@@ -55,6 +58,13 @@ void Equipment_information::spn_port(QLineEdit* lbl)
 {
     char ch[50];
     sprintf(ch,"%d",task->crf_info.spn8448_port);
+    lbl->setText(ch);
+}
+
+void Equipment_information::spn_port_DC(QLineEdit* lbl)
+{
+    char ch[50];
+    sprintf(ch,"%d",task->crf_DC_info.spn8448_port);
     lbl->setText(ch);
 }
 
@@ -92,6 +102,45 @@ void Equipment_information::equ_inf()
     }
     ui->charger_status->setText(ch);
 }
+
+void Equipment_information::equ_inf_DC()
+{
+    char ch[50];
+
+    //sprintf(ch,"%5.1f",(float)(task->ctf_DC_info.spn8704_out_vol[1] + task->ctf_DC_info.spn8704_out_vol[0]*256)/10);
+    sprintf(ch,"%5.1f",(float)(task->ctf_DC_info.spn8704_out_vol)/10);
+    ui->charge_vol->setText(ch);
+
+    //sprintf(ch,"%4.2f",(float)(task->ctf_DC_info.spn8704_out_cur[1] + task->ctf_DC_info.spn8704_out_cur[0]*256)/100);
+    sprintf(ch,"%4.2f",(float)(task->ctf_DC_info.spn8704_out_cur)/100);
+    ui->charge_current->setText(ch);
+
+    //sprintf(ch,"%7.3f",(float)(task->ctf_DC_info.spn8704_out_vol[1] + task->ctf_DC_info.spn8704_out_vol[0]*256)*(task->ctf_DC_info.spn8704_out_cur[1] + task->ctf_info.spn8704_out_cur[0]*256)/1000000);
+    sprintf(ch,"%7.3f",(float)(task->ctf_DC_info.spn8704_out_vol)*(task->ctf_DC_info.spn8704_out_cur)/1000000);
+    ui->charge_power->setText(ch);
+
+    int cc_status;
+    cc_status = task->crf_DC_info.spn8448_status_1 & 0x0F;
+
+    if(cc_status == CC_WAIT)
+    {
+        sprintf(ch,"待机");
+    }else if(cc_status == CC_WORK)
+    {
+            sprintf(ch,"工作");
+    }else if(cc_status == CC_FULL)
+    {
+            sprintf(ch,"充满");
+    }else if(cc_status == CC_WARN)
+    {
+            sprintf(ch,"告警");
+    }else if(cc_status == CC_ERROR)
+    {
+            sprintf(ch,"故障");
+    }
+    ui->charger_status->setText(ch);
+}
+
 
 void Equipment_information::slot_statustimer()
 {

@@ -47,6 +47,7 @@ public:
     void set_soc();
     void set_data();
     void charge_inf();
+    void charge_inf_DC();
     int   mytime_substract(struct timeval *result, struct timeval *begin,struct timeval *end);
     void initBtnNode();
     void setBtnFlag(int flag, QWidget &qw);

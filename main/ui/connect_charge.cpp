@@ -55,7 +55,7 @@ connect_charge::connect_charge(QWidget *parent) :
         p_emter = new EmterWindow;
         p_emter->ComInit();
         connect(&emter_timer,SIGNAL(timeout()),this,SLOT(slot_emtertimer()));//充电信息
-        emter_timer.start(1000);
+        emter_timer.start(2000);
     }
      log_printf(WRN, "TCU: "RED("connect_charge connect_charge"));
 #endif

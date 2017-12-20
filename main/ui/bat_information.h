@@ -22,6 +22,8 @@ public:
     mysigals_slots my_sigals;
     myerr_sigals_slots myerr_sigals;
 
+     void bat_inf_DC();
+
 private:
     Ui::bat_information *ui;
 

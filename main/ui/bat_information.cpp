@@ -4,6 +4,9 @@
 #include "equipment_information.h"
 #include "billing_info.h"
 #include "tcu.h"
+//#define AC_CHARGER
+#undef AC_CHARGER
+
 
 bat_information::bat_information(QWidget *parent) :
     QWidget(parent),
@@ -45,7 +48,58 @@ void bat_information::change_billinf()
 void bat_information::slot_timer()
 {
     //获取信息
+#ifdef AC_CHARGER
+#else
+    bat_inf_DC();
+#endif
 }
+
+void bat_information::bat_inf_DC()
+{
+    char ch[50];
+
+    sprintf(ch,"%d",task->ctf_DC_info.spn8704_soc);
+    ui->bms_soc->setText(ch);
+
+    int bat_type;
+    bat_type = task->csf_DC_info.spn4352_battery_type & 0xFF;
+
+    switch (bat_type) {
+    case battery_type1:
+        sprintf(ch,"铅酸电池");
+        break;
+    case battery_type2:
+        sprintf(ch,"镍氢电池");
+        break;
+    case battery_type3:
+        sprintf(ch,"磷酸铁锂电池");
+        break;
+    case battery_type4:
+        sprintf(ch,"锰酸锂电池");
+        break;
+    case battery_type5:
+        sprintf(ch,"钴酸锂电池");
+        break;
+    case battery_type6:
+        sprintf(ch,"三元材料电池");
+        break;
+    case battery_type7:
+        sprintf(ch,"聚合物锂离子电池");
+        break;
+    case battery_type8:
+        sprintf(ch,"钛酸锂电池");
+        break;
+    case battery_type9:
+        sprintf(ch,"其他电池");
+        break;
+    default:
+        break;
+    }
+    ui->bat_type->setText(ch);
+
+
+}
+
 
 void bat_information::slot_statustimer()
 {

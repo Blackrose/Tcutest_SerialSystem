@@ -27,7 +27,9 @@ public:
 
      void charger_sn(QLineEdit* lbl);
      void spn_port(QLineEdit* lbl);
-      void equ_inf();
+     void equ_inf();
+     void spn_port_DC(QLineEdit* lbl);
+     void equ_inf_DC();
 
 private:
     Ui::Equipment_information *ui;

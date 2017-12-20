@@ -40,8 +40,11 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
     ui->charge_vol->setText(task->emter_info.emter_vol);
     ui->charge_current->setText(task->emter_info.emter_current);
     ui->charge_power->setText(task->emter_info.emter_power);
+
 #ifdef AC_CHARGER
     charge_inf();
+#else
+    charge_inf_DC();
 #endif
     slot_chargingtimer();
     initBtnNode();
@@ -407,6 +410,35 @@ void Charging_monitoring::charge_inf()
     //ui->charge_time->setText(ch);printf("charge_time==%s\n",ch);
 }
 
+void Charging_monitoring::charge_inf_DC()
+{
+    char ch[50];
+
+    int cc_status;
+    cc_status = task->crf_DC_info.spn8448_status_1 & 0x0F;
+
+    if(cc_status == CC_WAIT)
+    {
+        sprintf(ch,"待机");
+    }else if(cc_status == CC_WORK)
+    {
+            sprintf(ch,"工作");
+    }else if(cc_status == CC_FULL)
+    {
+            sprintf(ch,"充满");
+    }else if(cc_status == CC_WARN)
+    {
+            sprintf(ch,"告警");
+    }else if(cc_status == CC_ERROR)
+    {
+            sprintf(ch,"故障");
+    }
+    ui->charge_status->setText(ch);
+
+    sprintf(ch,"%d",task->ctf_DC_info.spn8704_soc);
+    ui->bat_soc->setText(ch);
+}
+
 void Charging_monitoring::set_data()
 {
 //    ui->charge_status();
@@ -417,6 +449,8 @@ void Charging_monitoring::set_data()
 //    ui->charge_time();
 #ifdef AC_CHARGER
     charge_inf();
+#else
+    charge_inf_DC();
 #endif
 }
 
