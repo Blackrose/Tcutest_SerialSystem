@@ -9,7 +9,6 @@
 #include "tcu.h"
 #include "mysigals_slots.h"
 #include "test_manual.h"
-#include "file.h"
 //#include "mythread.h"
 #include <QTextCodec>
 #include "message/message.h"
@@ -71,7 +70,7 @@ void connect_charge::slot_emtertimer()
         p_emter->SendData("02020100");//A项电流
         flag = 2;
     }else if(flag == 2){
-        p_emter->SendData("00000000");//02030100Ａ相瞬时功率
+        p_emter->SendData("00010000");//总正向有功    02030100Ａ相瞬时功率
         flag = 1;
     }
     p_emter->sendEmterMsg();

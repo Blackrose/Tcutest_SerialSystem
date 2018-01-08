@@ -21,10 +21,6 @@ DEPENDPATH += . \
               ui_forms \
               keyboard/ui \
               main/ui \
-              my_debug/comserv \
-              my_debug/js \
-              my_debug/platabs \
-              my_debug/tdevice \
               qcom/cpu_card \
               qcom/dlt645_2007 \
               qcom/qextserial \
@@ -46,12 +42,7 @@ INCLUDEPATH += . \
                SYSZUXpinyin \
                qcom/cpu_card \
                qcom/dlt645_2007 \
-               qrencode-3.4.4 \
-               my_debug/tdevice \
-               my_debug/comserv \
-               my_debug/js \
-               my_debug/platabs
-
+               qrencode-3.4.4
 # Input
 HEADERS += global.h \
            myerr_sigals_slots.h \
@@ -94,7 +85,6 @@ HEADERS += global.h \
            tcu_canbus/log.h \
            tcu_canbus/serialsystem.h \
            tcu_canbus/tcu.h \
-           tinyxml2/tinyxml2.h \
            ui_forms/ui_mywidget.h \
            ui_forms/ui_widget.h \
            main/ui/account_code.h \
@@ -117,14 +107,6 @@ HEADERS += global.h \
            main/ui/suspend_service.h \
            main/ui/swipe_card.h \
            main/ui/tcu_help.h \
-           my_debug/comserv/comserv.h \
-           my_debug/comserv/tdarray.h \
-           my_debug/comserv/tdstr.h \
-           my_debug/comserv/tdstring.h \
-           my_debug/js/tdmalloc.h \
-           my_debug/platabs/tcomdef.h \
-           my_debug/tdevice/file.h \
-           my_debug/tdevice/tdevice.h \
            qcom/cpu_card/card_api.h \
            qcom/dlt645_2007/dlt645_api_07.h \
            qcom/qextserial/qextserialport.h \
@@ -221,11 +203,6 @@ SOURCES += global.cpp \
            main/ui/suspend_service.cpp \
            main/ui/swipe_card.cpp \
            main/ui/tcu_help.cpp \
-           my_debug/comserv/tdarray.c \
-           my_debug/comserv/tdstr.c \
-           my_debug/comserv/tdstring.c \
-           my_debug/js/tdmalloc.c \
-           my_debug/tdevice/file.c \
            qcom/cpu_card/card_api.c \
            qcom/cpu_card/card_test.c \
            qcom/dlt645_2007/dlt645_api_07.c \
