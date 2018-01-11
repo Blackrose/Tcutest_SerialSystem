@@ -59,8 +59,15 @@ void Billing_info::slot_timer()
     ui->valley_power->setText("");
     ui->valley_price->setText("");
 #endif
-    ui->total_power->setText(task->emter_info.emter_power);
-    //ui->total_cost->setText("");
+
+    if(task->gun_num == GUN_NUM1 && task->gun_sn == GUN_SN0){
+        ui->total_power->setText(task->emter_info[EMTER_NUM0].emter_power);
+    }else if(task->gun_num == GUN_NUM1 && task->gun_sn == GUN_SN1){
+        ui->total_power->setText(task->emter_info[EMTER_NUM1].emter_power);
+    }else if(task->gun_num == GUN_NUM2 && task->gun_sn == GUN_SN2){
+        ui->total_power->setText(task->emter_info[EMTER_NUM2].emter_power);
+    }
+        //ui->total_cost->setText("");
 }
 
 void Billing_info::slot_statustimer()

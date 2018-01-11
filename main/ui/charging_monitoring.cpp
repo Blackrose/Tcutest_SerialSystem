@@ -37,10 +37,19 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
     ui->emter_power->setVisible(false);
     ui->emter_vol->setVisible(false);
 
-    ui->charge_vol->setText(task->emter_info.emter_vol);
-    ui->charge_current->setText(task->emter_info.emter_current);
-    ui->charge_power->setText(task->emter_info.emter_power);
-
+    if(task->gun_num == GUN_NUM1 && task->gun_sn == GUN_SN0){
+        ui->charge_vol->setText(task->emter_info[EMTER_NUM0].emter_vol);
+        ui->charge_current->setText(task->emter_info[EMTER_NUM0].emter_current);
+        ui->charge_power->setText(task->emter_info[EMTER_NUM0].emter_power);
+    }else if(task->gun_num == GUN_NUM1 && task->gun_sn == GUN_SN1){
+        ui->charge_vol->setText(task->emter_info[EMTER_NUM1].emter_vol);
+        ui->charge_current->setText(task->emter_info[EMTER_NUM1].emter_current);
+        ui->charge_power->setText(task->emter_info[EMTER_NUM1].emter_power);
+    }else if(task->gun_num == GUN_NUM2 && task->gun_sn == GUN_SN2){
+        ui->charge_vol->setText(task->emter_info[EMTER_NUM2].emter_vol);
+        ui->charge_current->setText(task->emter_info[EMTER_NUM2].emter_current);
+        ui->charge_power->setText(task->emter_info[EMTER_NUM2].emter_power);
+    }
 #ifdef AC_CHARGER
     charge_inf();
 #else
@@ -481,14 +490,23 @@ void Charging_monitoring::slot_tmptimer()
     p_emter->sendEmterMsg();
     //p_emter->readEmterCom();
 
-//    ui->emter_vol->setText(task->emter_info.emter_vol);
-//    ui->emter_current->setText(task->emter_info.emter_current);
-//    ui->emter_power->setText(task->emter_info.emter_power);
+//    ui->emter_vol->setText(task->emter_info[EMTER_NUM0].emter_vol);
+//    ui->emter_current->setText(task->emter_info[EMTER_NUM0].emter_current);
+//    ui->emter_power->setText(task->emter_info[EMTER_NUM0].emter_power);
 #endif
-    ui->charge_vol->setText(task->emter_info.emter_vol);
-    ui->charge_current->setText(task->emter_info.emter_current);
-    ui->charge_power->setText(task->emter_info.emter_power);
-
+    if(task->gun_num == GUN_NUM1 && task->gun_sn == GUN_SN0){
+        ui->charge_vol->setText(task->emter_info[EMTER_NUM0].emter_vol);
+        ui->charge_current->setText(task->emter_info[EMTER_NUM0].emter_current);
+        ui->charge_power->setText(task->emter_info[EMTER_NUM0].emter_power);
+    }else if(task->gun_num == GUN_NUM1 && task->gun_sn == GUN_SN1){
+        ui->charge_vol->setText(task->emter_info[EMTER_NUM1].emter_vol);
+        ui->charge_current->setText(task->emter_info[EMTER_NUM1].emter_current);
+        ui->charge_power->setText(task->emter_info[EMTER_NUM1].emter_power);
+    }else if(task->gun_num == GUN_NUM2 && task->gun_sn == GUN_SN2){
+        ui->charge_vol->setText(task->emter_info[EMTER_NUM2].emter_vol);
+        ui->charge_current->setText(task->emter_info[EMTER_NUM2].emter_current);
+        ui->charge_power->setText(task->emter_info[EMTER_NUM2].emter_power);
+    }
 }
 
 int   Charging_monitoring::mytime_substract(struct timeval *result, struct timeval *begin,struct timeval *end)

@@ -63,6 +63,9 @@ connect_charge::connect_charge(QWidget *parent) :
 void connect_charge::slot_emtertimer()
 {
 #ifndef EMTER_1
+    strcpy(task->emter_info[EMTER_NUM0].emter_addr,"000000000001");
+    strcpy(task->emter_info[EMTER_NUM1].emter_addr,"709140060001");
+    strcpy(task->emter_info[EMTER_NUM2].emter_addr,"709140060002");
     if(flag == 1){
         p_emter->SendData("02010100");//A项电压 //0201FF00
         flag = 0;
