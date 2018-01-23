@@ -79,7 +79,7 @@ void Message::display()
 }
 void Message::_show(QString str)
 {
-    static_msg->setGeometry(550, 50, 250, 150);//800-250
+    static_msg->setGeometry(550, 90, 250, 150);//800-250
 	static_msg->setText(str);
     static_msg->display();
 

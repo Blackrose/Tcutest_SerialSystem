@@ -33,6 +33,8 @@ public slots:
 
 signals:
     void display(int number);
+private slots:
+    void on_pushButton_clicked();
 };
 
 #endif // SETTLEMENT_INF_H

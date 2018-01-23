@@ -107,6 +107,7 @@ HEADERS += global.h \
            main/ui/suspend_service.h \
            main/ui/swipe_card.h \
            main/ui/tcu_help.h \
+           main/ui/double_gun.h \
            qcom/cpu_card/card_api.h \
            qcom/dlt645_2007/dlt645_api_07.h \
            qcom/qextserial/qextserialport.h \
@@ -144,7 +145,8 @@ FORMS += gprs/gprs.ui \
          main/ui/swipe_card.ui \
          main/ui/tcu_help.ui \
          main/ui/test_auto.ui \
-         main/ui/test_manual.ui
+         main/ui/test_manual.ui \
+         main/ui/double_gun.ui
 SOURCES += global.cpp \
            myerr_sigals_slots.cpp \
            mysigals_slots.cpp \
@@ -203,6 +205,7 @@ SOURCES += global.cpp \
            main/ui/suspend_service.cpp \
            main/ui/swipe_card.cpp \
            main/ui/tcu_help.cpp \
+           main/ui/double_gun.cpp \
            qcom/cpu_card/card_api.c \
            qcom/cpu_card/card_test.c \
            qcom/dlt645_2007/dlt645_api_07.c \

@@ -9,6 +9,7 @@ class myerr_sigals_slots : public QWidget
     Q_OBJECT
 public:
     explicit myerr_sigals_slots(QWidget *parent = 0);
+    //int oldvalue;
     void SetValue(int );
     QMessageBox msgBox;
 signals:

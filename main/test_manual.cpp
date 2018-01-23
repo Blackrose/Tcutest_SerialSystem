@@ -11,7 +11,7 @@
 #include "qr_code.h"
 #include "first_interface.h"
 #include "card_operation.h"
-
+#include "double_gun.h"
 
 //mythread  test_Manual::mythread_can ;
 
@@ -117,9 +117,12 @@ void test_Manual::slot_touch()
 {
 //    QProcess *pro = new QProcess;
 //    pro->start("ts_calibrate");
-    ::system("ts_calibrate");
+   // ::system("ts_calibrate");
 //    QR_code *w_qrcode = new QR_code;
 //    w_qrcode->show();
+
+    double_gun *w_double_gun = new double_gun;
+    w_double_gun->show();
 }
 
 void test_Manual::slot_pwm()

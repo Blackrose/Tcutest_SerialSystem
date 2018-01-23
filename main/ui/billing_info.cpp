@@ -60,9 +60,9 @@ void Billing_info::slot_timer()
     ui->valley_price->setText("");
 #endif
 
-    if(task->gun_num == GUN_NUM1 && task->gun_sn == GUN_SN0){
+    if(task->gun_sn == GUN_SN0){
         ui->total_power->setText(task->emter_info[EMTER_NUM0].emter_power);
-    }else if(task->gun_num == GUN_NUM1 && task->gun_sn == GUN_SN1){
+    }else if(task->gun_sn == GUN_SN1){
         ui->total_power->setText(task->emter_info[EMTER_NUM1].emter_power);
     }else if(task->gun_num == GUN_NUM2 && task->gun_sn == GUN_SN2){
         ui->total_power->setText(task->emter_info[EMTER_NUM2].emter_power);

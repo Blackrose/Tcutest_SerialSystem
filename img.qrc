@@ -1,31 +1,5 @@
 <RCC>
     <qresource prefix="/img">
-        <file>images/btnerror.png</file>
-        <file>images/btnnormal.png</file>
-        <file>images/logo.png</file>
-        <file>images/btnwarn.png</file>
-        <file>images/netBtn1.png</file>
-        <file>images/btn1.png</file>
-        <file>images/printer.png</file>
-        <file>images/err.png</file>
-        <file>images/warn1.png</file>
-        <file>images/help.png</file>
-        <file>images/normal1.png</file>
-        <file>images/normal.png</file>
-        <file>images/warn.png</file>
-        <file>images/btn.png</file>
-        <file>images/query.png</file>
-        <file>images/noN.png</file>
-        <file>images/user.png</file>
-        <file>images/png-0749.png</file>
-        <file>images/png-0804.png</file>
-        <file>images/png-0049.png</file>
-        <file>images/png-0651.png</file>
-        <file>images/reboot.png</file>
-        <file>images/cut.png</file>
-        <file>images/monSet.png</file>
-        <file>images/unable.png</file>
-        <file>images/btnunable.png</file>
         <file>images/0.png</file>
         <file>images/1.png</file>
         <file>images/2.png</file>
@@ -48,12 +22,10 @@
         <file>images/Eall44.png</file>
         <file>images/F7main.png</file>
         <file>images/F7main1.png</file>
-        <file>images/false.png</file>
         <file>images/G1.png</file>
         <file>images/gif.gif</file>
         <file>images/Main.png</file>
         <file>images/Main1.png</file>
-        <file>images/netBtn1_f.png</file>
         <file>images/new1dianci.png</file>
         <file>images/new2dianci.png</file>
         <file>images/new3dianci.png</file>
@@ -86,5 +58,14 @@
         <file>images/serial_logo.png</file>
         <file>images/serial_logo_bak.png</file>
         <file>images/loading1.gif</file>
+        <file>images/charginggif.gif</file>
+        <file>images/devinfo-c.png</file>
+        <file>images/devinfo.png</file>
+        <file>images/priceinfo-c.png</file>
+        <file>images/priceinfo.png</file>
+        <file>images/monitore.png</file>
+        <file>images/monitore-c.png</file>
+        <file>images/stop-p.png</file>
+        <file>images/stop.png</file>
     </qresource>
 </RCC>

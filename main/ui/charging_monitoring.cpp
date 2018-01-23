@@ -37,11 +37,11 @@ Charging_monitoring::Charging_monitoring(QWidget *parent) : QWidget(parent), ui(
     ui->emter_power->setVisible(false);
     ui->emter_vol->setVisible(false);
 
-    if(task->gun_num == GUN_NUM1 && task->gun_sn == GUN_SN0){
+    if(task->gun_sn == GUN_SN0){
         ui->charge_vol->setText(task->emter_info[EMTER_NUM0].emter_vol);
         ui->charge_current->setText(task->emter_info[EMTER_NUM0].emter_current);
         ui->charge_power->setText(task->emter_info[EMTER_NUM0].emter_power);
-    }else if(task->gun_num == GUN_NUM1 && task->gun_sn == GUN_SN1){
+    }else if(task->gun_sn == GUN_SN1){
         ui->charge_vol->setText(task->emter_info[EMTER_NUM1].emter_vol);
         ui->charge_current->setText(task->emter_info[EMTER_NUM1].emter_current);
         ui->charge_power->setText(task->emter_info[EMTER_NUM1].emter_power);
@@ -494,11 +494,11 @@ void Charging_monitoring::slot_tmptimer()
 //    ui->emter_current->setText(task->emter_info[EMTER_NUM0].emter_current);
 //    ui->emter_power->setText(task->emter_info[EMTER_NUM0].emter_power);
 #endif
-    if(task->gun_num == GUN_NUM1 && task->gun_sn == GUN_SN0){
+    if(task->gun_sn == GUN_SN0){
         ui->charge_vol->setText(task->emter_info[EMTER_NUM0].emter_vol);
         ui->charge_current->setText(task->emter_info[EMTER_NUM0].emter_current);
         ui->charge_power->setText(task->emter_info[EMTER_NUM0].emter_power);
-    }else if(task->gun_num == GUN_NUM1 && task->gun_sn == GUN_SN1){
+    }else if(task->gun_sn == GUN_SN1){
         ui->charge_vol->setText(task->emter_info[EMTER_NUM1].emter_vol);
         ui->charge_current->setText(task->emter_info[EMTER_NUM1].emter_current);
         ui->charge_power->setText(task->emter_info[EMTER_NUM1].emter_power);
@@ -531,15 +531,15 @@ void Charging_monitoring::slot_chargingtimer()
 {
     char ch[50];
 
-    memset(&task->charging_time.stop,0,sizeof(struct timeval));
-    memset(&task->charging_time.tcu_charging_time,0,sizeof(struct timeval));
-    gettimeofday(&task->charging_time.stop,NULL);
+    memset(&task->charging_time[0].stop,0,sizeof(struct timeval));
+    memset(&task->charging_time[0].tcu_charging_time,0,sizeof(struct timeval));
+    gettimeofday(&task->charging_time[0].stop,NULL);
 
-    mytime_substract(&task->charging_time.tcu_charging_time,&task->charging_time.start,&task->charging_time.stop);
+    mytime_substract(&task->charging_time[0].tcu_charging_time,&task->charging_time[0].start,&task->charging_time[0].stop);
 
-    printf("Total time : %d min %d s,%d us\n",(int)task->charging_time.tcu_charging_time.tv_sec/60,(int)task->charging_time.tcu_charging_time.tv_sec,(int)task->charging_time.tcu_charging_time.tv_usec);
-    sprintf(ch,"%02d:%02d",(int)task->charging_time.tcu_charging_time.tv_sec/60,(int)task->charging_time.tcu_charging_time.tv_sec%60);
-    sprintf(task->thb_info.spn12544_time,"%d",(int)task->charging_time.tcu_charging_time.tv_sec/60);
+    printf("Total time : %d min %d s,%d us\n",(int)task->charging_time[0].tcu_charging_time.tv_sec/60,(int)task->charging_time[0].tcu_charging_time.tv_sec,(int)task->charging_time[0].tcu_charging_time.tv_usec);
+    sprintf(ch,"%02d:%02d",(int)task->charging_time[0].tcu_charging_time.tv_sec/60,(int)task->charging_time[0].tcu_charging_time.tv_sec%60);
+    sprintf(task->thb_info.spn12544_time,"%d",(int)task->charging_time[0].tcu_charging_time.tv_sec/60);
 
     ui->charge_time->setText(ch);
 

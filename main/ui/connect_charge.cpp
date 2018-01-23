@@ -54,7 +54,7 @@ connect_charge::connect_charge(QWidget *parent) :
         p_emter = new EmterWindow;
         p_emter->ComInit();
         connect(&emter_timer,SIGNAL(timeout()),this,SLOT(slot_emtertimer()));//充电信息
-        emter_timer.start(2000);
+        emter_timer.start(1000);
     }
      log_printf(WRN, "TCU: "RED("connect_charge connect_charge"));
 #endif
@@ -62,20 +62,60 @@ connect_charge::connect_charge(QWidget *parent) :
 
 void connect_charge::slot_emtertimer()
 {
+    char addr[50];
+
 #ifndef EMTER_1
-    strcpy(task->emter_info[EMTER_NUM0].emter_addr,"000000000001");
-    strcpy(task->emter_info[EMTER_NUM1].emter_addr,"709140060001");
-    strcpy(task->emter_info[EMTER_NUM2].emter_addr,"709140060002");
-    if(flag == 1){
-        p_emter->SendData("02010100");//A项电压 //0201FF00
-        flag = 0;
-    }else if(flag == 0){
-        p_emter->SendData("02020100");//A项电流
-        flag = 2;
-    }else if(flag == 2){
-        p_emter->SendData("00010000");//总正向有功    02030100Ａ相瞬时功率
-        flag = 1;
+    strcpy(task->emter_info[EMTER_NUM0].emter_addr,"000000000001");// 0#
+    strcpy(task->emter_info[EMTER_NUM1].emter_addr,"709140060001");// 1#
+    strcpy(task->emter_info[EMTER_NUM2].emter_addr,"709140060002");// 2#
+
+    if(task->gun_sn == GUN_SN0){
+        strcpy(addr,task->emter_info[EMTER_NUM0].emter_addr);
+    }else if(task->gun_sn == GUN_SN1){
+        strcpy(addr,task->emter_info[EMTER_NUM1].emter_addr);
+    }else if(task->gun_sn == GUN_SN2){
+        strcpy(addr,task->emter_info[EMTER_NUM2].emter_addr);
     }
+
+//    if(flag == 1){
+//        p_emter->SendData("02010100");//A项电压 //0201FF00
+//        flag = 0;
+//    }else if(flag == 0){
+//        p_emter->SendData("02020100");//A项电流
+//        flag = 2;
+//    }else if(flag == 2){
+//        p_emter->SendData("00010000");//总正向有功    02030100Ａ相瞬时功率
+//        flag = 1;
+//    }
+    printf("flag====%d\n",flag);
+    switch(flag){
+        case 0:
+            p_emter->SendData("02020100",addr);//A项电流
+            break;
+        case 1:
+            p_emter->SendData("02010100",addr);//A项电压 //0201FF00
+            break;
+        case 2:
+            p_emter->SendData("00010000",addr);//总正向有功
+            break;
+        case 3:
+            p_emter->SendData("00010100",addr);//正向有功费率1
+            break;
+        case 4:
+            p_emter->SendData("00010200",addr);//正向有功费率2
+            break;
+        case 5:
+            p_emter->SendData("00010300",addr);//正向有功费率3
+            break;
+        case 6:
+            p_emter->SendData("00010400",addr);//正向有功费率4
+            break;
+        default:
+            flag = -1;
+            break;
+    }
+    flag ++;
+
     p_emter->sendEmterMsg();
 #endif
 }
@@ -209,6 +249,8 @@ void connect_charge::slot_nextscreen_timer()
     if(task->tcu_stage == TCU_STAGE_CHECKVER)
     {
         ui->label_inf->setText("版本校验中．．．");
+        my_sigals.SetValue(task->tcu_stage);
+        nextscreen_timer.stop();
     }
     if(task->tcu_stage == TCU_STAGE_PARAMETER)
     {
