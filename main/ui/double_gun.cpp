@@ -364,14 +364,26 @@ void  double_gun::c_moni_msg()
         ui->c_vol_1->setText(task->emter_info[EMTER_NUM0].emter_vol);
         ui->c_current_1->setText(task->emter_info[EMTER_NUM0].emter_current);
         ui->c_power_1->setText(task->emter_info[EMTER_NUM0].emter_power);
+        ui->tip_power->setText(QString::number(task->emter_info[EMTER_NUM0].emter_tip));
+        ui->peak_power->setText(QString::number(task->emter_info[EMTER_NUM0].emter_peak));
+        ui->flat_power->setText(QString::number(task->emter_info[EMTER_NUM0].emter_flat));
+        ui->valley_power->setText(QString::number(task->emter_info[EMTER_NUM0].emter_valley));
     }else if(task->gun_sn == GUN_SN1){
         ui->c_vol_1->setText(task->emter_info[EMTER_NUM1].emter_vol);
         ui->c_current_1->setText(task->emter_info[EMTER_NUM1].emter_current);
         ui->c_power_1->setText(task->emter_info[EMTER_NUM1].emter_power);
+        ui->tip_power->setText(QString::number(task->emter_info[EMTER_NUM1].emter_tip));
+        ui->peak_power->setText(QString::number(task->emter_info[EMTER_NUM1].emter_peak));
+        ui->flat_power->setText(QString::number(task->emter_info[EMTER_NUM1].emter_flat));
+        ui->valley_power->setText(QString::number(task->emter_info[EMTER_NUM1].emter_valley));
     }else{
         ui->c_vol_2->setText(task->emter_info[EMTER_NUM2].emter_vol);
         ui->c_current_2->setText(task->emter_info[EMTER_NUM2].emter_current);
         ui->c_power_2->setText(task->emter_info[EMTER_NUM2].emter_power);
+        ui->tip_power_2->setText(QString::number(task->emter_info[EMTER_NUM2].emter_tip));
+        ui->peak_power_2->setText(QString::number(task->emter_info[EMTER_NUM2].emter_peak));
+        ui->flat_power_2->setText(QString::number(task->emter_info[EMTER_NUM2].emter_flat));
+        ui->valley_power_2->setText(QString::number(task->emter_info[EMTER_NUM2].emter_valley));
     }
 
     if(BMS_COMMUNICATION_ERROR == (task->crf_DC_info.spn8448_status_1 & BMS_COMMUNICATION_ERROR)){
@@ -438,6 +450,11 @@ void  double_gun::c_moni_msg_2()
     ui->c_vol_2->setText(task->emter_info[EMTER_NUM2].emter_vol);
     ui->c_current_2->setText(task->emter_info[EMTER_NUM2].emter_current);
     ui->c_power_2->setText(task->emter_info[EMTER_NUM2].emter_power);
+    ui->tip_power_2->setText(QString::number(task->emter_info[EMTER_NUM2].emter_tip));
+    ui->peak_power_2->setText(QString::number(task->emter_info[EMTER_NUM2].emter_peak));
+    ui->flat_power_2->setText(QString::number(task->emter_info[EMTER_NUM2].emter_flat));
+    ui->valley_power_2->setText(QString::number(task->emter_info[EMTER_NUM2].emter_valley));
+
 
 
     if(BMS_COMMUNICATION_ERROR == (task->crf_DC_info.spn8448_status_1 & BMS_COMMUNICATION_ERROR)){

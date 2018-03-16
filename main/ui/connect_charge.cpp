@@ -110,6 +110,9 @@ void connect_charge::slot_emtertimer()
         case 6:
             p_emter->SendData("00010400",addr);//正向有功费率4
             break;
+        case 7:
+            p_emter->SendData("0001FF00",addr);//正向有功费率4
+            break;
         default:
             flag = -1;
             break;
@@ -250,7 +253,7 @@ void connect_charge::slot_nextscreen_timer()
     {
         ui->label_inf->setText("版本校验中．．．");
         my_sigals.SetValue(task->tcu_stage);
-        nextscreen_timer.stop();
+        //nextscreen_timer.stop();
     }
     if(task->tcu_stage == TCU_STAGE_PARAMETER)
     {
